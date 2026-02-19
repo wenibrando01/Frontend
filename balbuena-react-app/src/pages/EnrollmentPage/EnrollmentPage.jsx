@@ -16,12 +16,12 @@ export default function EnrollmentPage() {
           <div className="page-kicker">Workflow</div>
           <h2 className="page-title">Enrollment</h2>
           <div className="page-subtitle">
-            Mock enrollment records. Future endpoints: `GET /api/enrollments`, `POST /api/enrollments`.
+            Mock enrollment records. Planned API endpoints: GET /api/enrollments and POST /api/enrollments.
           </div>
         </div>
       </div>
 
-      <div className="grid two-col">
+      <div className="grid">
         <Card title="Quick Actions" description="Prototype controls">
           <div className="stack">
             <button className="button primary" type="button">
