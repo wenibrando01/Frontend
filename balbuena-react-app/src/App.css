@@ -1,9 +1,4 @@
-#root {
-  max-width: 1280px;
-  margin: 0 auto;
-  padding: 2rem;
-  text-align: center;
-}
+/* Global #root layout overridden by index.css for full-viewport login */
 
 .logo {
   height: 6em;
