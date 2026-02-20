@@ -24,16 +24,42 @@ export const auth = {
     return readAuth()?.user ?? null;
   },
 
-  login({ email }) {
+  login({ email, password, role = 'admin' }) {
+    const trimmedEmail = email?.trim() || (role === 'student' ? 'student@school.edu' : 'admin@school.edu');
+
+    const user =
+      role === 'student'
+        ? {
+            id: 101,
+            name: trimmedEmail.split('@')[0].replace(/\./g, ' ') || 'Student User',
+            email: trimmedEmail,
+            role: 'Student',
+          }
+        : {
+            id: 1,
+            name: 'Registrar Admin',
+            email: trimmedEmail,
+            role: 'Admin',
+          };
+
+    // Mock token; ignore password and replace with Laravel auth later.
+    writeAuth({ token: 'mock-token', user });
+    return user;
+  },
+
+  registerStudent({ name, email, password }) {
+    const trimmedEmail = email?.trim() || 'student@school.edu';
+    const displayName = name?.trim() || trimmedEmail.split('@')[0].replace(/\./g, ' ') || 'Student User';
+
     const user = {
-      id: 1,
-      name: 'Registrar Admin',
-      email: email?.trim() || 'admin@school.edu',
-      role: 'Registrar',
+      id: Date.now(),
+      name: displayName,
+      email: trimmedEmail,
+      role: 'Student',
     };
 
-    // Mock token; replace with Laravel Sanctum/JWT later.
-    writeAuth({ token: 'mock-token', user });
+    // In a real app this would POST to Laravel then store returned token/user.
+    writeAuth({ token: 'mock-student-token', user });
     return user;
   },
 
