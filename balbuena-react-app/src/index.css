@@ -386,6 +386,10 @@ select.input {
   grid-column: span 2;
 }
 
+.programs-layout {
+  grid-template-columns: 0.9fr 1.6fr;
+}
+
 /* Cards */
 .cardx {
   border-radius: var(--radius);
@@ -786,6 +790,179 @@ select.input {
 .field.row {
   grid-template-columns: 1fr auto;
   align-items: center;
+}
+
+/* Filter bar */
+.filter-bar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+/* Programs */
+.program-list {
+  display: grid;
+  gap: 8px;
+}
+
+.program-card {
+  width: 100%;
+  text-align: left;
+  padding: 10px 12px;
+  border-radius: 14px;
+  border: 1px solid rgba(255, 255, 255, 0.10);
+  background: rgba(255, 255, 255, 0.04);
+  color: inherit;
+  cursor: pointer;
+}
+
+.program-card.is-active {
+  border-color: rgba(99, 102, 241, 0.8);
+  background: rgba(99, 102, 241, 0.18);
+}
+
+.program-card-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  margin-bottom: 4px;
+}
+
+.program-code {
+  font-weight: 700;
+}
+
+.program-name {
+  font-size: 0.95rem;
+  margin-bottom: 2px;
+}
+
+.program-meta {
+  font-size: 0.82rem;
+  color: var(--muted);
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+}
+
+.program-details {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.program-summary {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 10px;
+  margin-bottom: 4px;
+}
+
+.program-years {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px;
+}
+
+.program-year-card {
+  padding: 10px 12px;
+  border-radius: 14px;
+  border: 1px solid rgba(255, 255, 255, 0.10);
+  background: rgba(255, 255, 255, 0.04);
+}
+
+.program-year-title {
+  font-weight: 700;
+  margin-bottom: 6px;
+}
+
+.program-year-subjects {
+  list-style: none;
+  margin: 0;
+  padding-left: 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  font-size: 0.82rem;
+}
+
+/* Make BSIT curriculum tables fit without horizontal scroll */
+.program-year-card .table-wrap {
+  overflow: visible;
+}
+
+.program-year-card .table {
+  min-width: 100%;
+  table-layout: fixed;
+  font-size: 0.8rem;
+}
+
+.program-year-card .table th,
+.program-year-card .table td {
+  white-space: normal;
+  word-break: break-word;
+}
+
+/* Subjects */
+.subject-list {
+  display: grid;
+  gap: 8px;
+}
+
+.subject-card {
+  width: 100%;
+  text-align: left;
+  padding: 10px 12px;
+  border-radius: 14px;
+  border: 1px solid rgba(255, 255, 255, 0.10);
+  background: rgba(255, 255, 255, 0.04);
+  color: inherit;
+  cursor: pointer;
+}
+
+.subject-card.is-active {
+  border-color: rgba(6, 182, 212, 0.8);
+  background: rgba(6, 182, 212, 0.18);
+}
+
+.subject-card-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  margin-bottom: 4px;
+}
+
+.subject-title {
+  font-size: 0.95rem;
+  margin-bottom: 2px;
+}
+
+.subject-meta {
+  font-size: 0.82rem;
+  color: var(--muted);
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+}
+
+.subject-details {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.subject-summary {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px;
+}
+
+.subject-meta-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px;
 }
 
 /* Responsive */

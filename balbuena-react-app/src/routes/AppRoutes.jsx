@@ -9,6 +9,8 @@ import CoursesPage from '../pages/CoursesPage/CoursesPage';
 import EnrollmentPage from '../pages/EnrollmentPage/EnrollmentPage';
 import ReportsPage from '../pages/ReportsPage/ReportsPage';
 import SettingsPage from '../pages/SettingsPage/SettingsPage';
+import ProgramOfferingsPage from '../pages/ProgramOfferingsPage/ProgramOfferingsPage';
+import SubjectOfferingsPage from '../pages/SubjectOfferingsPage/SubjectOfferingsPage';
 import NotFoundPage from '../pages/NotFoundPage/NotFoundPage';
 
 export default function AppRoutes() {
@@ -25,6 +27,8 @@ export default function AppRoutes() {
         }
       >
         <Route index element={<DashboardPage />} />
+        <Route path="programs" element={<ProgramOfferingsPage />} />
+        <Route path="subjects" element={<SubjectOfferingsPage />} />
         <Route path="students" element={<StudentsPage />} />
         <Route path="courses" element={<CoursesPage />} />
         <Route path="enrollment" element={<EnrollmentPage />} />

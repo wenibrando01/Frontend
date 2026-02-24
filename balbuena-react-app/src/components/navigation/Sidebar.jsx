@@ -5,14 +5,14 @@ import {
   FileText,
   GraduationCap,
   Home,
+  Layers3,
   Settings,
-  Users,
 } from 'lucide-react';
 
 const navItems = [
   { to: '/', label: 'Dashboard', icon: Home, end: true },
-  { to: '/students', label: 'Students', icon: Users },
-  { to: '/courses', label: 'Courses', icon: BookOpen },
+  { to: '/programs', label: 'Programs', icon: Layers3 },
+  { to: '/subjects', label: 'Subjects', icon: BookOpen },
   { to: '/enrollment', label: 'Enrollment', icon: GraduationCap },
   { to: '/reports', label: 'Reports', icon: FileText },
   { to: '/settings', label: 'Settings', icon: Settings },
