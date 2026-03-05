@@ -21,10 +21,11 @@ export default function LoginPage() {
     setLoading(true);
     try {
       if (mode === 'register') {
-        auth.registerStudent({ name: undefined, email, password });
+        await auth.registerStudent({ name: undefined, email, password });
       } else {
-        auth.login({ email, password, role });
+        await auth.login({ email, password, role });
       }
+
       navigate(redirectTo, { replace: true });
     } finally {
       setLoading(false);
@@ -200,4 +201,3 @@ export default function LoginPage() {
     </div>
   );
 }
-
