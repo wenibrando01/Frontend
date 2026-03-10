@@ -1,4 +1,6 @@
-const STORAGE_KEY = 'enrollsys_auth_v1';
+import { api } from "./api";
+
+const STORAGE_KEY = "enrollsys_auth_v1";
 
 function readAuth() {
   try {
@@ -15,6 +17,7 @@ function writeAuth(value) {
 }
 
 export const auth = {
+
   isAuthenticated() {
     const data = readAuth();
     return Boolean(data?.token);
@@ -24,47 +27,58 @@ export const auth = {
     return readAuth()?.user ?? null;
   },
 
-  login({ email, password, role = 'admin' }) {
-    const trimmedEmail = email?.trim() || (role === 'student' ? 'student@school.edu' : 'admin@school.edu');
+  async login({ email, password, role }) {
 
-    const user =
-      role === 'student'
-        ? {
-            id: 101,
-            name: trimmedEmail.split('@')[0].replace(/\./g, ' ') || 'Student User',
-            email: trimmedEmail,
-            role: 'Student',
-          }
-        : {
-            id: 1,
-            name: 'Registrar Admin',
-            email: trimmedEmail,
-            role: 'Admin',
-          };
-
-    // Mock token; ignore password and replace with Laravel auth later.
-    writeAuth({ token: 'mock-token', user });
-    return user;
-  },
-
-  registerStudent({ name, email, password }) {
-    const trimmedEmail = email?.trim() || 'student@school.edu';
-    const displayName = name?.trim() || trimmedEmail.split('@')[0].replace(/\./g, ' ') || 'Student User';
-
-    const user = {
-      id: Date.now(),
-      name: displayName,
-      email: trimmedEmail,
-      role: 'Student',
+    const payload = {
+      email,
+      password,
+      device_name: "react",
     };
 
-    // In a real app this would POST to Laravel then store returned token/user.
-    writeAuth({ token: 'mock-student-token', user });
-    return user;
+    // Only include role if your backend expects it
+    if (role) payload.role = role;
+
+    const res = await api.post("/login", payload);
+
+    const data = res.data;
+
+    writeAuth({
+      token: data.token,
+      user: data.user
+    });
+
+    // Also store raw token for interceptor simplicity
+    if (data?.token) localStorage.setItem("token", data.token);
+
+    return data.user;
   },
 
-  logout() {
+  async registerStudent({ name, email, password }) {
+
+    const res = await api.post("/register", {
+      name,
+      email,
+      password
+    });
+
+    const data = res.data;
+
+    writeAuth({
+      token: data.token,
+      user: data.user
+    });
+
+    if (data?.token) localStorage.setItem("token", data.token);
+
+    return data.user;
+  },
+
+  async logout() {
+
+    await api.post("/logout");
+
     localStorage.removeItem(STORAGE_KEY);
-  },
-};
+    localStorage.removeItem("token");
+  }
 
+};

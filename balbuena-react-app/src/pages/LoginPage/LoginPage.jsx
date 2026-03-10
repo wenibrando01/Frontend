@@ -7,26 +7,40 @@ import './login.css';
 export default function LoginPage() {
   const navigate = useNavigate();
   const location = useLocation();
-  const redirectTo = useMemo(() => location.state?.from || '/', [location.state]);
+  const redirectTo = useMemo(() => location.state?.from || '/app', [location.state]);
 
   const [mode, setMode] = useState('login'); // 'login' | 'register'
   const [role, setRole] = useState('admin'); // 'admin' | 'student'
+  const [name, setName] = useState('');
   const [email, setEmail] = useState('admin@school.edu');
   const [password, setPassword] = useState('admin123');
   const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [error, setError] = useState('');
+
+  const getErrorMessage = (err) => {
+    const msg =
+      err?.response?.data?.message ||
+      (typeof err?.response?.data === 'string' ? err.response.data : '') ||
+      err?.message ||
+      'Request failed.';
+    return msg;
+  };
 
   const onSubmit = async (e) => {
     e.preventDefault();
+    setError('');
     setLoading(true);
     try {
       if (mode === 'register') {
-        await auth.registerStudent({ name: undefined, email, password });
+        await auth.registerStudent({ name, email, password });
       } else {
         await auth.login({ email, password, role });
       }
 
       navigate(redirectTo, { replace: true });
+    } catch (err) {
+      setError(getErrorMessage(err));
     } finally {
       setLoading(false);
     }
@@ -85,6 +99,7 @@ export default function LoginPage() {
                 onClick={() => {
                   setMode('login');
                   setRole('admin');
+                  setName('');
                   setEmail('admin@school.edu');
                 }}
               >
@@ -96,12 +111,30 @@ export default function LoginPage() {
                 onClick={() => {
                   setMode('login');
                   setRole('student');
+                  setName('');
                   setEmail('student@school.edu');
                 }}
               >
                 Student login
               </button>
             </div>
+
+            {mode === 'register' ? (
+              <div className="input-group">
+                <label htmlFor="name">Full name</label>
+                <div className="input-with-icon">
+                  <input
+                    id="name"
+                    type="text"
+                    placeholder="Juan Dela Cruz"
+                    value={name}
+                    onChange={(e) => setName(e.target.value)}
+                    required
+                    autoComplete="name"
+                  />
+                </div>
+              </div>
+            ) : null}
 
             <div className="input-group">
               <label htmlFor="email">Email</label>
@@ -130,7 +163,7 @@ export default function LoginPage() {
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   required
-                  autoComplete="current-password"
+                  autoComplete={mode === 'register' ? 'new-password' : 'current-password'}
                 />
                 <button
                   type="button"
@@ -147,6 +180,12 @@ export default function LoginPage() {
                   : 'Prototype login accepts any credentials.'}
               </div>
             </div>
+
+            {error ? (
+              <div className="login-hint" role="alert" style={{ color: '#b42318' }}>
+                {error}
+              </div>
+            ) : null}
 
             <button type="submit" className="login-button" disabled={loading}>
               {loading
@@ -167,7 +206,9 @@ export default function LoginPage() {
                   onClick={() => {
                     setMode('register');
                     setRole('student');
+                    setName('');
                     setEmail('');
+                    setPassword('');
                   }}
                 >
                   Create student account
@@ -182,6 +223,7 @@ export default function LoginPage() {
                   onClick={() => {
                     setMode('login');
                     setRole('student');
+                    setName('');
                     setEmail('student@school.edu');
                   }}
                 >

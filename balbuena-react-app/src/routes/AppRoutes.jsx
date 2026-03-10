@@ -16,10 +16,11 @@ import NotFoundPage from '../pages/NotFoundPage/NotFoundPage';
 export default function AppRoutes() {
   return (
     <Routes>
-      <Route path="/login" element={<LoginPage />} />
+      <Route path="/" element={<LoginPage />} />
+      <Route path="/login" element={<Navigate to="/" replace />} />
 
       <Route
-        path="/"
+        path="/app"
         element={
           <RequireAuth>
             <AppLayout />
@@ -36,7 +37,7 @@ export default function AppRoutes() {
         <Route path="settings" element={<SettingsPage />} />
       </Route>
 
-      <Route path="/dashboard" element={<Navigate to="/" replace />} />
+      <Route path="/dashboard" element={<Navigate to="/app" replace />} />
       <Route path="*" element={<NotFoundPage />} />
     </Routes>
   );
