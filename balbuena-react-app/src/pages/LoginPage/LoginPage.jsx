@@ -79,7 +79,7 @@ export default function LoginPage() {
 
           <form className="login-form login-form-pane" onSubmit={onSubmit}>
             <div className="login-header">
-              <div className="login-badge">Sign in</div>
+             
               <h1 className="login-title">
                 {mode === 'register' ? 'Create student account' : role === 'admin' ? 'Admin sign in' : 'Student sign in'}
               </h1>

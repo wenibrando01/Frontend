@@ -1,6 +1,12 @@
-import { api } from "./api";
+import api from "./api";
 
 const STORAGE_KEY = "enrollsys_auth_v1";
+
+/*
+|--------------------------------------------------------------------------
+| Storage Helpers
+|--------------------------------------------------------------------------
+*/
 
 function readAuth() {
   try {
@@ -16,17 +22,38 @@ function writeAuth(value) {
   localStorage.setItem(STORAGE_KEY, JSON.stringify(value));
 }
 
+/*
+|--------------------------------------------------------------------------
+| Auth Service
+|--------------------------------------------------------------------------
+*/
+
 export const auth = {
 
+  /*
+  |--------------------------------------------------------------------------
+  | Check if user is logged in
+  |--------------------------------------------------------------------------
+  */
   isAuthenticated() {
     const data = readAuth();
     return Boolean(data?.token);
   },
 
+  /*
+  |--------------------------------------------------------------------------
+  | Get current user
+  |--------------------------------------------------------------------------
+  */
   getUser() {
     return readAuth()?.user ?? null;
   },
 
+  /*
+  |--------------------------------------------------------------------------
+  | Login
+  |--------------------------------------------------------------------------
+  */
   async login({ email, password, role }) {
 
     const payload = {
@@ -35,7 +62,7 @@ export const auth = {
       device_name: "react",
     };
 
-    // Only include role if your backend expects it
+    // include role only if backend expects it
     if (role) payload.role = role;
 
     const res = await api.post("/login", payload);
@@ -47,12 +74,19 @@ export const auth = {
       user: data.user
     });
 
-    // Also store raw token for interceptor simplicity
-    if (data?.token) localStorage.setItem("token", data.token);
+    // store raw token (for axios interceptor)
+    if (data?.token) {
+      localStorage.setItem("token", data.token);
+    }
 
     return data.user;
   },
 
+  /*
+  |--------------------------------------------------------------------------
+  | Register Student
+  |--------------------------------------------------------------------------
+  */
   async registerStudent({ name, email, password }) {
 
     const res = await api.post("/register", {
@@ -68,14 +102,25 @@ export const auth = {
       user: data.user
     });
 
-    if (data?.token) localStorage.setItem("token", data.token);
+    if (data?.token) {
+      localStorage.setItem("token", data.token);
+    }
 
     return data.user;
   },
 
+  /*
+  |--------------------------------------------------------------------------
+  | Logout
+  |--------------------------------------------------------------------------
+  */
   async logout() {
 
-    await api.post("/logout");
+    try {
+      await api.post("/logout");
+    } catch (error) {
+      console.warn("Logout API failed, clearing local session anyway.");
+    }
 
     localStorage.removeItem(STORAGE_KEY);
     localStorage.removeItem("token");
