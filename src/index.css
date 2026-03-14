@@ -1,0 +1,6772 @@
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  height: 100%;
+}
+
+body {
+  margin: 0;
+  min-height: 100%;
+  font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji",
+    "Segoe UI Emoji";
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+#root {
+  min-height: 100vh;
+  width: 100%;
+}
+
+:root {
+  --bg: #070a12;
+  --panel: rgba(255, 255, 255, 0.06);
+  --panel-2: rgba(255, 255, 255, 0.08);
+  --stroke: rgba(255, 255, 255, 0.1);
+  --stroke-2: rgba(255, 255, 255, 0.14);
+  --text: rgba(255, 255, 255, 0.92);
+  --muted: rgba(255, 255, 255, 0.6);
+  --muted-2: rgba(255, 255, 255, 0.45);
+  --brand: #6366f1;
+  --brand-2: #06b6d4;
+  --shadow: 0 20px 50px rgba(0, 0, 0, 0.45);
+  --radius: 16px;
+}
+
+body {
+  color: var(--text);
+  background:
+    radial-gradient(1000px 500px at 20% -10%, rgba(99, 102, 241, 0.28), transparent 55%),
+    radial-gradient(900px 450px at 110% 25%, rgba(6, 182, 212, 0.14), transparent 50%),
+    radial-gradient(900px 450px at 20% 110%, rgba(34, 197, 94, 0.09), transparent 55%),
+    var(--bg);
+}
+
+a {
+  color: inherit;
+}
+
+.muted {
+  color: var(--muted);
+}
+
+.mono {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+}
+
+/* Topbar */
+.topbar {
+  position: sticky;
+  top: 0;
+  z-index: 20;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 14px 20px;
+  border-bottom: 1px solid var(--stroke);
+  background: rgba(7, 10, 18, 0.55);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+}
+
+.topbar-title {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.topbar-heading {
+  font-weight: 850;
+  letter-spacing: -0.02em;
+}
+
+.topbar-breadcrumb {
+  font-size: 0.82rem;
+  color: var(--muted);
+}
+
+.topbar-spacer {
+  flex: 1;
+}
+
+/* Buttons / inputs */
+.input {
+  width: 100%;
+  min-width: 220px;
+  padding: 10px 12px;
+  border-radius: 12px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  background: rgba(255, 255, 255, 0.05);
+  color: rgba(255, 255, 255, 0.92);
+  outline: none;
+}
+
+.input:focus {
+  border-color: rgba(99, 102, 241, 0.55);
+  box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.18);
+}
+
+.button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  padding: 10px 14px;
+  border-radius: 12px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  background: rgba(255, 255, 255, 0.06);
+  color: rgba(255, 255, 255, 0.92);
+  cursor: pointer;
+  text-decoration: none;
+}
+
+.button:hover {
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.button.primary {
+  background: linear-gradient(135deg, rgba(99, 102, 241, 0.95), rgba(6, 182, 212, 0.85));
+  border-color: rgba(99, 102, 241, 0.2);
+  box-shadow: 0 14px 40px rgba(99, 102, 241, 0.22);
+}
+
+/* Page / layout */
+.page {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+.app-content {
+  padding: 20px 20px 42px;
+}
+
+.grid {
+  display: grid;
+  gap: 16px;
+}
+
+.dashboard-grid {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.span-2 {
+  grid-column: span 2;
+}
+
+/* Skeleton loaders for charts and cards */
+.skeleton {
+  position: relative;
+  overflow: hidden;
+  background: linear-gradient(
+    90deg,
+    rgba(255, 255, 255, 0.06) 25%,
+    rgba(255, 255, 255, 0.14) 37%,
+    rgba(255, 255, 255, 0.06) 63%
+  );
+  background-size: 400% 100%;
+  animation: skeleton-shimmer 1.4s ease-in-out infinite;
+  border-radius: 12px;
+}
+
+.skeleton-line {
+  height: 12px;
+  margin-bottom: 8px;
+}
+
+.skeleton-block {
+  height: 180px;
+}
+
+@keyframes skeleton-shimmer {
+  0% {
+    background-position: -200% 0;
+  }
+  100% {
+    background-position: 200% 0;
+  }
+}
+
+/* Cards */
+.cardx {
+  border-radius: var(--radius);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  background: rgba(255, 255, 255, 0.05);
+  box-shadow: var(--shadow);
+  overflow: hidden;
+}
+
+.cardx-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 14px;
+  padding: 16px 16px 10px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.cardx-title {
+  font-weight: 850;
+  letter-spacing: -0.02em;
+}
+
+.cardx-description {
+  margin-top: 4px;
+  font-size: 0.9rem;
+  color: var(--muted);
+}
+
+.cardx-body {
+  padding: 16px;
+}
+
+.chart {
+  width: 100%;
+  height: 260px;
+}
+
+/* Status pills */
+.pill {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 6px 10px;
+  border-radius: 999px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  background: rgba(255, 255, 255, 0.06);
+  font-size: 0.82rem;
+  white-space: nowrap;
+}
+
+.pill.warn {
+  border-color: rgba(245, 158, 11, 0.22);
+  background: rgba(245, 158, 11, 0.12);
+}
+
+.pill.success {
+  border-color: rgba(34, 197, 94, 0.3);
+  background: rgba(34, 197, 94, 0.12);
+  color: #166534;
+}
+
+.educo-dashboard-dark .pill.success {
+  color: #86efac;
+}
+
+/* Weather */
+.filter-bar,
+.weather-search-bar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.weather.weather-shell {
+  display: grid;
+  gap: 16px;
+  padding: 14px;
+  border-radius: 24px;
+  border: 1px solid rgba(148, 163, 184, 0.24);
+  background:
+    radial-gradient(520px 220px at 0% 0%, rgba(14, 165, 233, 0.16), transparent 62%),
+    radial-gradient(560px 220px at 100% 0%, rgba(59, 130, 246, 0.12), transparent 64%),
+    linear-gradient(180deg, #081326 0%, #061124 100%);
+  box-shadow: 0 24px 44px rgba(2, 6, 23, 0.45);
+}
+
+.weather-shell-grid {
+  display: grid;
+  grid-template-columns: 72px minmax(0, 1fr);
+  gap: 14px;
+}
+
+.weather-shell-content {
+  display: grid;
+  gap: 14px;
+}
+
+.weather-rail {
+  border-radius: 18px;
+  border: 1px solid rgba(148, 163, 184, 0.26);
+  background: rgba(30, 41, 59, 0.68);
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 12px 8px;
+  align-items: center;
+}
+
+.weather-rail-item {
+  width: 100%;
+  border: 1px solid transparent;
+  background: transparent;
+  color: #cbd5e1;
+  border-radius: 12px;
+  padding: 8px 4px;
+  display: grid;
+  justify-items: center;
+  gap: 5px;
+  font-size: 0.73rem;
+  cursor: pointer;
+}
+
+.weather-rail-item.active {
+  border-color: rgba(56, 189, 248, 0.35);
+  background: rgba(14, 165, 233, 0.18);
+  color: #e0f2fe;
+}
+
+.weather-rail-item:hover {
+  background: rgba(51, 65, 85, 0.55);
+}
+
+.weather-search-input {
+  flex: 1;
+  min-width: 220px;
+  background: rgba(30, 41, 59, 0.85) !important;
+  border-color: rgba(148, 163, 184, 0.24) !important;
+  color: #f8fafc !important;
+}
+
+.weather-search-input::placeholder {
+  color: rgba(226, 232, 240, 0.7);
+}
+
+.weather-action-btn {
+  border-radius: 12px;
+}
+
+.weather-action-btn.ghost {
+  background: rgba(15, 23, 42, 0.72);
+  border-color: rgba(148, 163, 184, 0.3);
+  color: #e2e8f0;
+}
+
+.weather-layout {
+  display: grid;
+  gap: 14px;
+  overflow: hidden;
+}
+
+.weather-hero-panel {
+  border-radius: 20px;
+  border: 1px solid rgba(148, 163, 184, 0.22);
+  background: rgba(15, 23, 42, 0.78);
+  padding: 16px;
+}
+
+.weather-main {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.weather-hero-text {
+  display: grid;
+  gap: 6px;
+}
+
+.weather-city {
+  font-size: 2rem;
+  font-weight: 800;
+  color: #f8fafc;
+  letter-spacing: -0.02em;
+}
+
+.weather-hero-icon {
+  width: 160px;
+  height: 160px;
+  display: grid;
+  place-items: center;
+  border-radius: 999px;
+  background: radial-gradient(circle at 40% 30%, rgba(250, 204, 21, 0.22), rgba(250, 204, 21, 0.03));
+}
+
+.weather-hero-weather-image {
+  animation: weather-float 4.6s ease-in-out infinite;
+}
+
+.weather-temp {
+  font-size: 3rem;
+  font-weight: 850;
+  letter-spacing: -0.03em;
+  color: #f8fafc;
+}
+
+.weather-label {
+  color: #94a3b8;
+  margin-top: 2px;
+}
+
+.weather-hero-meta,
+.weather-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 10px;
+  margin-top: 12px;
+}
+
+.weather-chip {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  padding: 10px 12px;
+  border-radius: 12px;
+  border: 1px solid rgba(148, 163, 184, 0.22);
+  background: rgba(30, 41, 59, 0.62);
+}
+
+.weather-chip .muted,
+.weather-chip .mono {
+  color: #e2e8f0;
+}
+
+.weather-forecast-layout {
+  display: grid;
+  gap: 12px;
+  grid-template-columns: minmax(0, 2fr) minmax(260px, 1fr);
+}
+
+.weather-card {
+  border-radius: 16px;
+  border: 1px solid rgba(148, 163, 184, 0.22);
+  background: rgba(30, 41, 59, 0.74);
+  padding: 14px;
+  overflow: hidden;
+}
+
+.weather-section-title {
+  color: #94a3b8;
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  margin-bottom: 10px;
+}
+
+.weather-hourly-strip {
+  display: grid;
+  grid-template-columns: repeat(6, minmax(0, 1fr));
+  gap: 8px;
+}
+
+.weather-hourly-strip {
+  overflow-y: hidden;
+}
+
+.weather-hourly-strip::-webkit-scrollbar {
+  height: 0;
+  width: 0;
+}
+
+.weather-hourly-strip {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+.weather-hour-item {
+  text-align: center;
+  padding: 10px 6px;
+  border-radius: 12px;
+  border: 1px solid rgba(148, 163, 184, 0.2);
+  background: rgba(15, 23, 42, 0.46);
+}
+
+.weather-hour-time {
+  color: #94a3b8;
+  font-size: 0.77rem;
+}
+
+.weather-hour-icon {
+  width: 50px;
+  height: 50px;
+  animation: weather-pulse 3.2s ease-in-out infinite;
+}
+
+.weather-hour-temp {
+  color: #f8fafc;
+  font-weight: 700;
+}
+
+.weather-air-card {
+  grid-column: 1 / 2;
+}
+
+.weather-air-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px;
+}
+
+.weather-air-item {
+  border-radius: 12px;
+  padding: 10px;
+  border: 1px solid rgba(148, 163, 184, 0.2);
+  background: rgba(15, 23, 42, 0.44);
+}
+
+.weather-air-label {
+  color: #94a3b8;
+  font-size: 0.76rem;
+  margin-bottom: 4px;
+}
+
+.weather-air-value {
+  color: #f8fafc;
+  font-size: 1.35rem;
+  font-weight: 800;
+}
+
+.weather-weekly-card {
+  grid-column: 2 / 3;
+  grid-row: 1 / 3;
+}
+
+.weather-week-list {
+  display: grid;
+  gap: 8px;
+}
+.course-dist-wrap {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  gap: 8px;
+  height: 100%;
+  min-height: 0;
+  align-items: stretch;
+}
+.course-dist-donut-wrap {
+  display: grid;
+  place-items: center;
+  position: relative;
+  --course-center-ring-a: rgba(56, 189, 248, 0.34);
+  --course-center-ring-b: rgba(59, 130, 246, 0.08);
+  --course-center-dot: #67e8f9;
+  --course-center-orbit-duration: 7s;
+  border: 1px solid rgba(99, 123, 255, 0.35);
+  border-radius: 10px;
+  background: radial-gradient(circle at 50% 38%, #f1f5ff 0%, #f8fbff 62%);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.8), 0 8px 20px rgba(92, 116, 230, 0.16);
+  min-height: 236px;
+}
+.course-dist-center-text {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
+  text-align: center;
+}
+.course-dist-center-core {
+  width: 88px;
+  height: 88px;
+  border-radius: 999px;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0;
+  background: radial-gradient(circle at 35% 30%, #0f1d3f 0%, #060f27 78%);
+  border: 1px solid rgba(120, 148, 205, 0.34);
+  box-shadow: inset 0 1px 0 rgba(184, 214, 255, 0.2), 0 4px 12px rgba(5, 10, 24, 0.34);
+}
+.course-dist-center-core::before {
+  content: "";
+  position: absolute;
+  inset: -6px;
+  border-radius: 999px;
+  background: conic-gradient(
+    from 0deg,
+    var(--course-center-ring-a),
+    var(--course-center-ring-b),
+    var(--course-center-ring-a)
+  );
+  -webkit-mask: radial-gradient(circle, transparent 62%, #000 64%);
+  mask: radial-gradient(circle, transparent 62%, #000 64%);
+  opacity: 0.72;
+  animation: course-center-orbit var(--course-center-orbit-duration) linear infinite;
+}
+.course-dist-center-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 999px;
+  background: var(--course-center-dot);
+  box-shadow: 0 0 10px rgba(103, 232, 249, 0.7);
+  margin-bottom: 1px;
+  animation: course-center-pulse 2.3s ease-in-out infinite;
+}
+.course-dist-center-label {
+  color: #a9c2ef;
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+.course-dist-center-value {
+  color: #f8fbff;
+  font-size: 27px;
+  font-weight: 800;
+  line-height: 1;
+  text-shadow: 0 1px 8px rgba(59, 130, 246, 0.2);
+}
+.course-dist-center-sub {
+  color: #bcd3f6;
+  font-size: 8px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  margin-top: 1px;
+}
+.course-dist-center-meta {
+  color: #8db4f4;
+  font-size: 8px;
+  font-weight: 600;
+  letter-spacing: 0.01em;
+  margin-top: 1px;
+}
+
+@keyframes course-center-pulse {
+  0%,
+  100% {
+    transform: scale(1);
+    opacity: 0.95;
+  }
+  50% {
+    transform: scale(1.18);
+    opacity: 0.72;
+  }
+}
+
+@keyframes course-center-orbit {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .course-dist-center-core::before,
+  .course-dist-center-dot {
+    animation: none !important;
+  }
+}
+.course-dist-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  color: #1e293b;
+  gap: 6px;
+  min-height: 0;
+  max-height: 100%;
+  overflow-y: auto;
+  overflow-x: hidden;
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+.course-dist-grid::-webkit-scrollbar {
+  width: 0;
+  height: 0;
+}
+.course-dist-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  min-height: 30px;
+  padding: 0 9px;
+  border-radius: 8px;
+  border: 1px solid rgba(148, 163, 184, 0.26);
+  background: #f5f8fd;
+}
+.course-dist-left {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  min-width: 0;
+}
+.course-dist-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 999px;
+  flex-shrink: 0;
+}
+.course-dist-name {
+  color: #475569;
+  font-size: 12px;
+  font-weight: 500;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.course-dist-right {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  flex-shrink: 0;
+}
+.course-dist-count {
+  color: #334155;
+  font-size: 13px;
+  font-weight: 700;
+  line-height: 1;
+}
+.course-dist-mini {
+  display: inline-block;
+  height: 3px;
+  width: 14px;
+  min-width: 10px;
+  border-radius: 999px;
+  background: #bfdbfe;
+  opacity: 0.95;
+}
+
+html[data-educo-theme="light"] .course-dist-donut-wrap {
+  --course-center-ring-a: rgba(56, 189, 248, 0.3);
+  --course-center-ring-b: rgba(59, 130, 246, 0.06);
+  --course-center-dot: #67e8f9;
+  --course-center-orbit-duration: 6.2s;
+}
+
+html[data-educo-theme="dark"] .course-dist-donut-wrap {
+  --course-center-ring-a: rgba(125, 211, 252, 0.52);
+  --course-center-ring-b: rgba(59, 130, 246, 0.16);
+  --course-center-dot: #a5f3fc;
+  --course-center-orbit-duration: 8.4s;
+}
+
+@media (max-width: 760px) {
+  .course-dist-wrap {
+    grid-template-columns: 1fr;
+  }
+  .course-dist-grid {
+    grid-template-columns: 1fr;
+  }
+  .course-dist-donut-wrap {
+    border-radius: 10px;
+  }
+  .course-dist-row {
+    min-height: 32px;
+  }
+}
+
+.weather-week-row {
+  display: grid;
+  grid-template-columns: 60px minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 0;
+  border-bottom: 1px solid rgba(148, 163, 184, 0.2);
+}
+
+.weather-week-row:last-child {
+  border-bottom: none;
+}
+
+.weather-week-day,
+.weather-week-temp {
+  color: #e2e8f0;
+  font-size: 0.9rem;
+  font-weight: 600;
+}
+
+.weather-week-meta {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  color: #cbd5e1;
+}
+
+.weather-week-icon {
+  width: 34px;
+  height: 34px;
+}
+
+@keyframes weather-float {
+  0% {
+    transform: translateY(0px) scale(1);
+  }
+  50% {
+    transform: translateY(-6px) scale(1.02);
+  }
+  100% {
+    transform: translateY(0px) scale(1);
+  }
+}
+
+@keyframes weather-pulse {
+  0% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.05);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+@media (max-width: 920px) {
+  .dashboard-grid {
+    grid-template-columns: 1fr;
+  }
+  .span-2 {
+    grid-column: auto;
+  }
+  .weather-grid,
+  .weather-hero-meta {
+    grid-template-columns: 1fr;
+  }
+
+  .weather-main {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .weather-hero-icon {
+    width: 120px;
+    height: 120px;
+  }
+
+  .weather-shell-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .weather-rail {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    width: 100%;
+  }
+
+  .weather-rail-item {
+    font-size: 0.7rem;
+    padding: 8px 2px;
+  }
+
+  .weather-forecast-layout {
+    grid-template-columns: 1fr;
+  }
+
+  .weather-air-card,
+  .weather-weekly-card {
+    grid-column: auto;
+    grid-row: auto;
+  }
+
+  .weather-hourly-strip {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
+  .weather-search-bar {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+  }
+
+  .weather-search-input {
+    grid-column: 1 / -1;
+  }
+}
+
+@media (max-width: 640px) {
+  .weather.weather-shell {
+    max-width: 380px;
+    margin-inline: auto;
+    padding: 10px;
+    border-radius: 20px;
+    gap: 10px;
+  }
+
+  .weather-search-bar {
+    gap: 8px;
+  }
+
+  .weather-search-input {
+    min-width: 0;
+    width: 100%;
+  }
+
+  .weather-action-btn {
+    min-height: 34px;
+    padding: 6px 10px;
+    font-size: 0.82rem;
+  }
+
+  .weather-hero-panel,
+  .weather-card {
+    border-radius: 14px;
+    padding: 10px;
+  }
+
+  .weather-city {
+    font-size: 1.35rem;
+  }
+
+  .weather-temp {
+    font-size: 2.15rem;
+  }
+
+  .weather-label {
+    font-size: 0.82rem;
+  }
+
+  .weather-hero-icon {
+    width: 88px;
+    height: 88px;
+  }
+
+  .weather-hero-weather-image {
+    width: 86px !important;
+    height: 86px !important;
+  }
+
+  .weather-hero-meta {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 6px;
+    margin-top: 8px;
+  }
+
+  .weather-chip {
+    padding: 7px 8px;
+    border-radius: 10px;
+    font-size: 0.78rem;
+  }
+
+  .weather-section-title {
+    font-size: 0.7rem;
+    margin-bottom: 8px;
+  }
+
+  .weather-hourly-strip {
+    display: flex;
+    overflow-x: auto;
+    overflow-y: hidden;
+    gap: 6px;
+    padding-bottom: 4px;
+    margin-bottom: -4px;
+  }
+
+  .weather-hour-item {
+    min-width: 72px;
+    padding: 8px 4px;
+    border-radius: 10px;
+  }
+
+  .weather-hour-icon {
+    width: 36px;
+    height: 36px;
+  }
+
+  .weather-hour-time {
+    font-size: 0.7rem;
+  }
+
+  .weather-hour-temp {
+    font-size: 0.9rem;
+  }
+
+  .weather-air-grid {
+    grid-template-columns: 1fr;
+    gap: 8px;
+  }
+
+  .weather-air-item {
+    padding: 8px;
+    border-radius: 10px;
+  }
+
+  .weather-air-value {
+    font-size: 1.05rem;
+  }
+
+  .weather-week-row {
+    grid-template-columns: 44px minmax(0, 1fr) auto;
+    gap: 6px;
+    padding: 6px 0;
+  }
+
+  .weather-week-meta {
+    gap: 6px;
+    font-size: 0.8rem;
+    min-width: 0;
+  }
+
+  .weather-week-meta span {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 90px;
+    display: inline-block;
+  }
+
+  .weather-week-icon {
+    width: 26px;
+    height: 26px;
+  }
+
+  .weather-week-day,
+  .weather-week-temp {
+    font-size: 0.8rem;
+  }
+}
+
+@media (max-width: 420px) {
+  .weather.weather-shell {
+    max-width: 340px;
+    padding: 8px;
+    border-radius: 16px;
+  }
+
+  .weather-hero-meta {
+    grid-template-columns: 1fr;
+  }
+
+  .weather-main {
+    gap: 10px;
+  }
+
+  .weather-city {
+    font-size: 1.18rem;
+  }
+
+  .weather-temp {
+    font-size: 1.85rem;
+  }
+
+  .weather-search-bar {
+    grid-template-columns: 1fr;
+  }
+
+  .weather-action-btn {
+    width: 100%;
+    justify-content: center;
+  }
+
+  .weather-week-row {
+    grid-template-columns: 42px 1fr;
+    row-gap: 2px;
+  }
+
+  .weather-week-temp {
+    grid-column: 2 / 3;
+    justify-self: end;
+  }
+}
+
+/* Educo-style dashboard layout (light theme) */
+.educo-dashboard {
+  display: flex;
+  min-height: 100vh;
+  background: #f0f4f8;
+}
+
+.educo-sidebar {
+  position: fixed;
+  left: 0;
+  top: 0;
+  width: 260px;
+  min-width: 260px;
+  height: 100vh;
+  overflow: hidden;
+  background: linear-gradient(180deg, #e0e7f4 0%, #d4dceb 100%);
+  border-right: 1px solid rgba(0, 0, 0, 0.06);
+  display: flex;
+  flex-direction: column;
+  padding: 20px 0;
+  z-index: 30;
+}
+
+.educo-main {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  margin-left: 260px;
+}
+
+.educo-sidebar-brand {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 0 20px 24px;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.06);
+  margin-bottom: 16px;
+}
+
+.educo-sidebar-logo {
+  width: 42px;
+  height: 42px;
+  border-radius: 12px;
+  background: #3b82f6;
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.educo-sidebar-title {
+  font-size: 1.35rem;
+  font-weight: 700;
+  color: #1e293b;
+}
+
+.educo-sidebar-nav {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: 0 12px;
+  min-height: 0;
+  overflow-y: auto;
+}
+
+.educo-sidebar-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+  padding: 12px 14px;
+  border: none;
+  border-radius: 12px;
+  background: transparent;
+  color: #334155;
+  font-size: 0.95rem;
+  cursor: pointer;
+  text-align: left;
+  transition: background 0.2s, color 0.2s;
+}
+
+.educo-sidebar-item-label {
+  flex: 1;
+}
+
+.educo-sidebar-badge {
+  min-width: 22px;
+  height: 22px;
+  padding: 0 6px;
+  border-radius: 999px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.75rem;
+  font-weight: 700;
+  background: #dc2626;
+  color: #fff;
+}
+
+.educo-sidebar-item:hover {
+  background: rgba(59, 130, 246, 0.1);
+  color: #1e40af;
+}
+
+.educo-sidebar-item.active {
+  background: #3b82f6;
+  color: #fff;
+}
+
+.educo-sidebar-bottom {
+  position: sticky;
+  bottom: 0;
+  z-index: 2;
+  background: inherit;
+  margin-top: auto;
+  flex-shrink: 0;
+  padding: 12px 12px 16px;
+  border-top: 1px solid rgba(0, 0, 0, 0.06);
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.educo-content {
+  flex: 1;
+  padding: 24px;
+}
+
+.educo-header {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  padding: 18px 24px;
+  background: #fff;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.06);
+  flex-wrap: wrap;
+  position: relative;
+  z-index: 320;
+  overflow: visible;
+}
+
+.educo-header-left {
+  flex-shrink: 0;
+}
+
+.educo-header-welcome {
+  margin: 0;
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: #1e293b;
+}
+
+.educo-header-search-wrap {
+  flex: 1;
+  min-width: 200px;
+  max-width: 400px;
+  position: relative;
+}
+
+.educo-header-search-icon {
+  position: absolute;
+  left: 14px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #94a3b8;
+  pointer-events: none;
+}
+
+.educo-header-search {
+  width: 100%;
+  padding: 10px 14px 10px 42px;
+  border: 1px solid #e2e8f0;
+  border-radius: 12px;
+  background: #f8fafc;
+  color: #1e293b;
+  font-size: 0.95rem;
+  outline: none;
+}
+
+.educo-header-search:focus {
+  border-color: #3b82f6;
+  background: #fff;
+}
+
+.educo-header-search-panel {
+  position: absolute;
+  top: calc(100% + 8px);
+  left: 0;
+  width: min(560px, 92vw);
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 12px;
+  box-shadow: 0 16px 40px rgba(15, 23, 42, 0.16);
+  padding: 10px;
+  z-index: 130;
+}
+
+.educo-header-search-title {
+  font-size: 12px;
+  font-weight: 700;
+  color: #64748b;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  margin-bottom: 8px;
+}
+
+.educo-header-search-list {
+  display: grid;
+  gap: 6px;
+}
+
+.educo-header-search-item {
+  width: 100%;
+  text-align: left;
+  border: 1px solid #e2e8f0;
+  background: #f8fafc;
+  border-radius: 10px;
+  padding: 9px 10px;
+  cursor: pointer;
+  display: grid;
+  gap: 2px;
+}
+
+.educo-header-search-item:hover {
+  border-color: #bfdbfe;
+  background: #eff6ff;
+}
+
+.educo-header-search-item-label {
+  font-size: 13px;
+  font-weight: 700;
+  color: #1e293b;
+}
+
+.educo-header-search-item-hint {
+  font-size: 12px;
+  color: #64748b;
+}
+
+.educo-header-search-footer {
+  margin-top: 8px;
+  font-size: 12px;
+  color: #94a3b8;
+}
+
+.announcement-focus {
+  border-color: #60a5fa !important;
+  box-shadow: 0 0 0 3px rgba(96, 165, 250, 0.2) !important;
+  animation: annFocusPulse 1.1s ease;
+}
+
+@keyframes annFocusPulse {
+  0% { transform: scale(1); }
+  40% { transform: scale(1.01); }
+  100% { transform: scale(1); }
+}
+
+.educo-header-right {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-left: auto;
+  position: relative;
+  z-index: 340;
+  overflow: visible;
+}
+
+.educo-header-icon-btn {
+  width: 40px;
+  height: 40px;
+  border-radius: 12px;
+  border: 1px solid #e2e8f0;
+  background: #fff;
+  color: #64748b;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  position: relative;
+}
+
+.educo-header-icon-btn:hover {
+  background: #f1f5f9;
+  color: #334155;
+}
+
+.educo-header-badge {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #ef4444;
+}
+
+.educo-header-profile-wrap {
+  position: relative;
+  z-index: 350;
+}
+
+.educo-header-messages-wrap {
+  position: relative;
+}
+
+.educo-header-messages-panel {
+  position: absolute;
+  top: calc(100% + 8px);
+  right: 0;
+  width: min(420px, 90vw);
+  max-height: 420px;
+  overflow: auto;
+  background: #fff;
+  border: 1px solid #e2e8f0;
+  border-radius: 12px;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.12);
+  padding: 12px;
+  z-index: 120;
+}
+
+.educo-header-messages-title {
+  font-weight: 700;
+  color: #1e293b;
+  margin-bottom: 10px;
+}
+
+.educo-header-messages-list {
+  display: grid;
+  gap: 10px;
+}
+
+.educo-header-message-item {
+  border: 1px solid #e2e8f0;
+  border-radius: 10px;
+  padding: 10px;
+  background: #f8fafc;
+}
+
+.educo-header-message-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.educo-header-user {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 6px 12px 6px 6px;
+  border-radius: 12px;
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+}
+
+.educo-header-user-btn {
+  cursor: pointer;
+  font: inherit;
+  color: inherit;
+  background: inherit;
+  border: none;
+  width: 100%;
+  text-align: left;
+  transition: background 0.2s, border-color 0.2s;
+}
+
+.educo-header-user-btn:hover {
+  background: #f1f5f9;
+  border-color: #e2e8f0;
+}
+
+.educo-header-dropdown {
+  position: absolute;
+  top: 100%;
+  right: 0;
+  margin-top: 8px;
+  min-width: 240px;
+  max-width: min(360px, calc(100vw - 20px));
+  background: #fff;
+  border: 1px solid #e2e8f0;
+  border-radius: 12px;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.12);
+  padding: 8px 0;
+  z-index: 420;
+}
+
+.educo-header-dropdown-section {
+  padding: 8px 12px 12px;
+  border-bottom: 1px solid #f1f5f9;
+}
+
+.educo-header-dropdown-label {
+  display: block;
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: #64748b;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  margin-bottom: 8px;
+}
+
+.educo-header-dropdown-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 0.95rem;
+  color: #1e293b;
+}
+
+.educo-header-dropdown-row .educo-toggle {
+  margin-left: auto;
+}
+
+.educo-header-dropdown-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  padding: 10px 16px;
+  border: none;
+  background: none;
+  font-size: 0.95rem;
+  color: #1e293b;
+  cursor: pointer;
+  text-align: left;
+  transition: background 0.2s;
+}
+
+.educo-header-dropdown-item:hover {
+  background: #f8fafc;
+}
+
+.educo-header-dropdown-item.danger:hover {
+  background: #fef2f2;
+  color: #b91c1c;
+}
+
+.educo-toggle {
+  position: relative;
+  width: 44px;
+  height: 24px;
+  border-radius: 999px;
+  background: #cbd5e1;
+  border: none;
+  cursor: pointer;
+  flex-shrink: 0;
+  transition: background 0.2s;
+}
+
+.educo-toggle.on {
+  background: #3b82f6;
+}
+
+.educo-toggle-track {
+  position: absolute;
+  inset: 0;
+  border-radius: 999px;
+}
+
+.educo-toggle-thumb {
+  position: absolute;
+  top: 2px;
+  left: 2px;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background: #fff;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+  transition: transform 0.2s;
+}
+
+.educo-toggle.on .educo-toggle-thumb {
+  transform: translateX(20px);
+}
+
+.educo-header-avatar {
+  width: 40px;
+  height: 40px;
+  border-radius: 10px;
+  background: #3b82f6;
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.educo-header-user-info {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0;
+}
+
+.educo-header-user-name {
+  font-weight: 600;
+  color: #1e293b;
+  font-size: 0.95rem;
+}
+
+.educo-header-user-role {
+  font-size: 0.8rem;
+  color: #64748b;
+}
+
+/* Summary cards (Educo) */
+.educo-summary-row {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 20px;
+  margin-bottom: 24px;
+}
+
+.educo-summary-card {
+  background: #fff;
+  border-radius: 16px;
+  padding: 20px;
+  border: 1px solid rgba(0, 0, 0, 0.06);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06);
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.educo-summary-icon {
+  width: 52px;
+  height: 52px;
+  border-radius: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.educo-summary-content {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.educo-summary-label {
+  font-size: 0.9rem;
+  color: #64748b;
+}
+
+.educo-summary-value {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #1e293b;
+}
+
+.educo-summary-error {
+  padding: 16px;
+  background: #fef2f2;
+  border: 1px solid #fecaca;
+  border-radius: 12px;
+  color: #b91c1c;
+  margin-bottom: 24px;
+}
+
+/* Dashboard content cards (light) */
+.educo-content .cardx {
+  background: #fff;
+  border: 1px solid rgba(0, 0, 0, 0.06);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06);
+}
+
+.educo-content .cardx-title {
+  color: #1e293b;
+}
+
+.educo-content .cardx-description {
+  color: #64748b;
+}
+
+.educo-content .pill.warn {
+  border-color: #fcd34d;
+  background: #fef3c7;
+  color: #92400e;
+}
+
+.educo-content .muted {
+  color: #64748b;
+}
+
+.educo-content,
+.educo-content p,
+.educo-content span,
+.educo-content td,
+.educo-content th,
+.educo-content strong,
+.educo-content label,
+.educo-content h1,
+.educo-content h2,
+.educo-content h3,
+.educo-content h4 {
+  color: #1e293b;
+}
+
+.educo-content .button {
+  background: #f8fafc;
+  border-color: #cbd5e1;
+  color: #1e293b;
+}
+
+.educo-content .button:hover {
+  background: #eef2f7;
+  color: #0f172a;
+}
+
+.educo-content .button.primary {
+  color: #ffffff;
+}
+
+.educo-content .admin-table-wrap {
+  background: #ffffff;
+  border-color: #e2e8f0;
+}
+
+.educo-content .admin-table th {
+  background: #f8fafc;
+  color: #475569;
+}
+
+.educo-content .admin-table td {
+  color: #1e293b;
+}
+
+/* Visible inputs in dashboard (light and dark) */
+.educo-input,
+.educo-content .input {
+  background: #fff !important;
+  border: 1px solid #e2e8f0 !important;
+  color: #1e293b !important;
+}
+
+.educo-input::placeholder,
+.educo-content .input::placeholder {
+  color: #94a3b8;
+}
+
+.educo-input:focus,
+.educo-content .input:focus {
+  border-color: #3b82f6 !important;
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.2);
+  outline: none;
+}
+
+.educo-content .filter-bar .educo-input,
+.educo-content .filter-bar .input {
+  min-width: 200px;
+}
+
+/* Change password form in settings */
+.change-password-form .educo-input,
+.change-password-form input[type="password"],
+.change-password-form input[type="text"] {
+  display: block;
+  width: 100%;
+  margin-bottom: 12px;
+  padding: 10px 12px;
+  border-radius: 12px;
+}
+
+.change-password-form .checkbox-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 12px 0;
+  color: #475569;
+}
+
+.educo-dashboard-dark .change-password-form .checkbox-row {
+  color: #94a3b8;
+}
+
+.change-password-form .button.primary {
+  margin-top: 8px;
+  width: 100%;
+}
+
+/* Settings page */
+.educo-settings-title {
+  margin: 0 0 24px;
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #1e293b;
+}
+
+.educo-settings-card {
+  margin-bottom: 24px;
+}
+
+.educo-settings-msg {
+  margin-bottom: 12px;
+}
+
+.educo-settings-form {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+
+.educo-form-row {
+  margin-bottom: 16px;
+}
+
+.educo-form-label {
+  display: block;
+  font-size: 0.9rem;
+  font-weight: 500;
+  color: #475569;
+  margin-bottom: 6px;
+}
+
+.educo-form-row .educo-input {
+  width: 100%;
+  max-width: none;
+  padding: 10px 12px;
+}
+
+.educo-settings-form .button.primary {
+  width: 100%;
+}
+
+/* Dark mode */
+.educo-dashboard-dark {
+  background: #0f172a;
+}
+
+.educo-dashboard-dark .educo-sidebar {
+  background: linear-gradient(180deg, #1e293b 0%, #0f172a 100%);
+  border-right-color: rgba(255, 255, 255, 0.08);
+}
+
+.educo-dashboard-dark .educo-sidebar-brand,
+.educo-dashboard-dark .educo-sidebar-title {
+  color: #f1f5f9;
+}
+
+.educo-dashboard-dark .educo-sidebar-item {
+  color: #e2e8f0;
+}
+
+.educo-dashboard-dark .educo-sidebar-item:hover {
+  background: rgba(59, 130, 246, 0.15);
+  color: #e2e8f0;
+}
+
+.educo-dashboard-dark .educo-sidebar-item.active {
+  background: #3b82f6;
+  color: #fff;
+}
+
+.educo-dashboard-dark .educo-sidebar-badge {
+  background: #ef4444;
+  color: #fff;
+}
+
+.educo-dashboard-dark .educo-header {
+  background: #1e293b;
+  border-bottom-color: rgba(255, 255, 255, 0.08);
+}
+
+.educo-dashboard-dark .educo-header-welcome {
+  color: #f1f5f9;
+}
+
+.educo-dashboard-dark .educo-header-search {
+  background: #0f172a;
+  border-color: #334155;
+  color: #f1f5f9;
+}
+
+.educo-dashboard-dark .educo-header-search:focus {
+  background: #0f172a;
+  border-color: #3b82f6;
+}
+
+.educo-dashboard-dark .educo-header-search-panel {
+  background: #1e293b;
+  border-color: #334155;
+  box-shadow: 0 16px 40px rgba(2, 6, 23, 0.45);
+}
+
+.educo-dashboard-dark .educo-header-search-title {
+  color: #94a3b8;
+}
+
+.educo-dashboard-dark .educo-header-search-item {
+  background: #0f172a;
+  border-color: #334155;
+}
+
+.educo-dashboard-dark .educo-header-search-item:hover {
+  background: #172554;
+  border-color: #1d4ed8;
+}
+
+.educo-dashboard-dark .educo-header-search-item-label {
+  color: #e2e8f0;
+}
+
+.educo-dashboard-dark .educo-header-search-item-hint,
+.educo-dashboard-dark .educo-header-search-footer {
+  color: #94a3b8;
+}
+
+.educo-dashboard-dark .announcement-focus {
+  border-color: #3b82f6 !important;
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.3) !important;
+}
+
+.educo-dashboard-dark .educo-header-search::placeholder {
+  color: #64748b;
+}
+
+.educo-dashboard-dark .educo-header-icon-btn {
+  background: #0f172a;
+  border-color: #334155;
+  color: #94a3b8;
+}
+
+.educo-dashboard-dark .educo-header-user,
+.educo-dashboard-dark .educo-header-user-btn {
+  background: #0f172a;
+  border-color: #334155;
+}
+
+.educo-dashboard-dark .educo-header-user-name {
+  color: #f1f5f9;
+}
+
+.educo-dashboard-dark .educo-header-user-role {
+  color: #94a3b8;
+}
+
+.educo-dashboard-dark .educo-header-dropdown {
+  background: #1e293b;
+  border-color: #334155;
+}
+
+.educo-dashboard-dark .educo-header-messages-panel {
+  background: #1e293b;
+  border-color: #334155;
+}
+
+.educo-dashboard-dark .educo-header-messages-title {
+  color: #f1f5f9;
+}
+
+.educo-dashboard-dark .educo-header-message-item {
+  background: #0f172a;
+  border-color: #334155;
+}
+
+.educo-dashboard-dark .educo-header-dropdown-label {
+  color: #94a3b8;
+}
+
+.educo-dashboard-dark .educo-header-dropdown-row {
+  color: #f1f5f9;
+}
+
+.educo-dashboard-dark .educo-header-dropdown-item {
+  color: #f1f5f9;
+}
+
+.educo-dashboard-dark .educo-header-dropdown-item:hover {
+  background: #334155;
+}
+
+.educo-dashboard-dark .educo-content {
+  background: #0f172a;
+}
+
+.educo-dashboard-dark .cardx {
+  background: #1e293b;
+  border-color: rgba(255, 255, 255, 0.08);
+}
+
+.educo-dashboard-dark .cardx-title,
+.educo-dashboard-dark .educo-settings-title {
+  color: #f1f5f9;
+}
+
+.educo-dashboard-dark .cardx-description,
+.educo-dashboard-dark .muted {
+  color: #cbd5e1;
+}
+
+.educo-dashboard-dark .educo-content,
+.educo-dashboard-dark .educo-content p,
+.educo-dashboard-dark .educo-content span,
+.educo-dashboard-dark .educo-content td,
+.educo-dashboard-dark .educo-content th,
+.educo-dashboard-dark .educo-content strong,
+.educo-dashboard-dark .educo-content label,
+.educo-dashboard-dark .educo-content h1,
+.educo-dashboard-dark .educo-content h2,
+.educo-dashboard-dark .educo-content h3,
+.educo-dashboard-dark .educo-content h4 {
+  color: #f1f5f9;
+}
+
+.educo-dashboard-dark .educo-content .button {
+  background: #1e293b;
+  border-color: #334155;
+  color: #f1f5f9;
+}
+
+.educo-dashboard-dark .educo-content .button:hover {
+  background: #334155;
+  color: #ffffff;
+}
+
+.educo-dashboard-dark .educo-content .button.primary {
+  color: #ffffff;
+}
+
+.educo-dashboard-dark .educo-content .admin-table-wrap {
+  background: #0f172a;
+  border-color: rgba(148, 163, 184, 0.28);
+}
+
+.educo-dashboard-dark .educo-content .admin-table th {
+  background: #1e293b;
+  color: #e2e8f0;
+  border-bottom-color: rgba(148, 163, 184, 0.2);
+}
+
+.educo-dashboard-dark .educo-content .admin-table td {
+  color: #f8fafc;
+  border-bottom-color: rgba(148, 163, 184, 0.15);
+}
+
+.educo-dashboard-dark .educo-content .admin-table tbody tr:hover {
+  background: rgba(148, 163, 184, 0.1);
+}
+
+.educo-dashboard-dark .educo-content select option {
+  background: #0f172a;
+  color: #f1f5f9;
+}
+
+.educo-dashboard-dark .educo-summary-card {
+  background: #1e293b;
+  border-color: rgba(255, 255, 255, 0.08);
+}
+
+.educo-dashboard-dark .educo-summary-label {
+  color: #94a3b8;
+}
+
+.educo-dashboard-dark .educo-summary-value {
+  color: #f1f5f9;
+}
+
+.educo-dashboard-dark .educo-input,
+.educo-dashboard-dark .educo-content .input {
+  background: #0f172a !important;
+  border-color: #334155 !important;
+  color: #f1f5f9 !important;
+}
+
+.educo-dashboard-dark .educo-input::placeholder,
+.educo-dashboard-dark .educo-content .input::placeholder {
+  color: #64748b;
+}
+
+.educo-dashboard-dark .educo-form-label {
+  color: #94a3b8;
+}
+
+@media (max-width: 1200px) {
+  .educo-summary-row {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 768px) {
+  .educo-dashboard {
+    flex-direction: column;
+  }
+
+  .educo-main {
+    margin-left: 0;
+  }
+
+  .educo-sidebar {
+    position: relative;
+    width: 100%;
+    min-width: 0;
+    height: auto;
+    overflow: visible;
+    flex-direction: row;
+    flex-wrap: wrap;
+    padding: 12px;
+    gap: 8px;
+    justify-content: center;
+  }
+
+  .educo-sidebar-brand {
+    width: 100%;
+    margin-bottom: 8px;
+    padding-bottom: 12px;
+  }
+
+  .educo-sidebar-nav,
+  .educo-sidebar-bottom {
+    flex-direction: row;
+    flex-wrap: wrap;
+    border: none;
+    padding: 0;
+    overflow: visible;
+    position: static;
+  }
+
+  .educo-sidebar-item {
+    flex: 0 0 auto;
+  }
+
+  .educo-header {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .educo-header-search-wrap {
+    max-width: none;
+  }
+
+  .educo-summary-row {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* Admin layout */
+.admin-layout {
+  display: flex;
+  height: 100vh;
+  background: #f1f5f9;
+  overflow: hidden;
+  overflow-x: hidden;
+  max-width: 100%;
+}
+
+.admin-sidebar {
+  width: 220px;
+  height: 100vh;
+  position: sticky;
+  top: 0;
+  background: #1e293b;
+  color: #e2e8f0;
+  display: flex;
+  flex-direction: column;
+  padding: 16px 0;
+  overflow: hidden;
+}
+
+.admin-sidebar-brand {
+  padding: 0 16px 16px;
+  font-weight: 700;
+  font-size: 1.2rem;
+}
+
+.admin-theme-switch {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  margin: 0 12px 12px;
+  padding: 10px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 10px;
+  color: #e2e8f0;
+  font-size: 0.9rem;
+}
+
+.admin-theme-switch .admin-btn {
+  padding: 6px 10px;
+  border-color: rgba(255, 255, 255, 0.22);
+  background: rgba(255, 255, 255, 0.12);
+  color: #f8fafc;
+}
+
+.admin-sidebar-nav {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  min-height: 0;
+  overflow-y: auto;
+}
+
+.admin-sidebar-bottom {
+  position: sticky;
+  bottom: 0;
+  z-index: 2;
+  background: inherit;
+  flex-shrink: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding-top: 12px;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.admin-nav-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 16px;
+  border: none;
+  background: none;
+  color: #94a3b8;
+  text-decoration: none;
+  font-size: 0.95rem;
+  cursor: pointer;
+  text-align: left;
+  width: 100%;
+  transition: background 0.2s, color 0.2s;
+}
+
+.admin-nav-item:hover {
+  background: rgba(255, 255, 255, 0.08);
+  color: #f1f5f9;
+}
+
+.admin-nav-item.active {
+  background: #3b82f6;
+  color: #fff;
+}
+
+.admin-main {
+  flex: 1;
+  overflow: auto;
+  min-width: 0;
+  overflow-x: hidden;
+}
+
+.admin-content {
+  padding: 24px;
+  min-width: 0;
+}
+
+.admin-page-title {
+  margin: 0 0 20px;
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #1e293b;
+}
+
+.admin-page-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-bottom: 20px;
+}
+
+.admin-page-header .admin-page-title {
+  margin: 0;
+}
+
+.admin-stats-row {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 16px;
+  margin-bottom: 24px;
+}
+
+.admin-stat-card {
+  background: #fff;
+  border-radius: 12px;
+  padding: 20px;
+  border: 1px solid #e2e8f0;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06);
+}
+
+.admin-stat-icon {
+  width: 48px;
+  height: 48px;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.admin-stat-label {
+  font-size: 0.9rem;
+  color: #64748b;
+}
+
+.admin-stat-value {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #1e293b;
+}
+
+.admin-quick-actions,
+.admin-recent-activity {
+  margin-bottom: 24px;
+}
+
+.admin-quick-actions h2,
+.admin-recent-activity h2 {
+  margin: 0 0 12px;
+  font-size: 1.1rem;
+  color: #475569;
+}
+
+.admin-quick-actions-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.admin-quick-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 16px;
+  border-radius: 10px;
+  border: 1px solid #e2e8f0;
+  background: #fff;
+  color: #334155;
+  cursor: pointer;
+  font-size: 0.95rem;
+}
+
+.admin-quick-btn:hover {
+  background: #f8fafc;
+  border-color: #3b82f6;
+  color: #3b82f6;
+}
+
+.admin-activity-list {
+  margin: 0;
+  padding-left: 20px;
+  color: #475569;
+}
+
+.admin-muted {
+  color: #64748b;
+}
+
+.admin-toolbar {
+  margin-bottom: 16px;
+}
+
+.admin-search-wrap {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  max-width: 320px;
+  padding: 8px 12px;
+  border: 1px solid #e2e8f0;
+  border-radius: 10px;
+  background: #fff;
+}
+
+.admin-search-wrap .admin-input {
+  border: none;
+  padding: 0;
+  min-width: 0;
+}
+
+.admin-input {
+  padding: 8px 12px;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  font-size: 0.95rem;
+  color: #1e293b;
+  background: #fff;
+  width: 100%;
+}
+
+.admin-table-wrap {
+  background: #fff;
+  border-radius: 12px;
+  border: 1px solid #e2e8f0;
+  overflow: hidden;
+}
+
+.admin-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.admin-table th,
+.admin-table td {
+  padding: 12px 16px;
+  text-align: left;
+  border-bottom: 1px solid #f1f5f9;
+}
+
+.admin-table th {
+  background: #f8fafc;
+  font-weight: 600;
+  color: #475569;
+  font-size: 0.85rem;
+}
+
+.admin-table tbody tr:hover {
+  background: #fafafa;
+}
+
+.admin-btn {
+  padding: 8px 14px;
+  border-radius: 8px;
+  border: 1px solid #e2e8f0;
+  background: #fff;
+  color: #334155;
+  cursor: pointer;
+  font-size: 0.9rem;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.admin-btn:hover {
+  background: #f1f5f9;
+}
+
+.admin-btn.primary {
+  background: #3b82f6;
+  border-color: #3b82f6;
+  color: #fff;
+}
+
+.admin-btn.primary:hover {
+  background: #2563eb;
+}
+
+.admin-btn.icon {
+  padding: 6px 10px;
+}
+
+.admin-btn.danger:hover {
+  background: #fef2f2;
+  border-color: #fecaca;
+  color: #b91c1c;
+}
+
+.student-picker-menu {
+  z-index: 120;
+  border-radius: 12px;
+  border: 1px solid #e2e8f0;
+  background: #ffffff;
+  box-shadow: 0 10px 24px rgba(2, 6, 23, 0.18);
+}
+
+.student-picker-option {
+  padding: 10px 12px;
+  border-radius: 8px;
+  border: 1px solid #e2e8f0;
+  background: #ffffff;
+  color: #1e293b;
+  cursor: pointer;
+  font-size: 0.95rem;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.student-picker-option:hover {
+  background: #f1f5f9;
+}
+
+.admin-pill.warn {
+  padding: 8px 12px;
+  border-radius: 8px;
+  background: #fef3c7;
+  border: 1px solid #fcd34d;
+  color: #92400e;
+  margin-bottom: 12px;
+}
+
+.admin-modal-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 200;
+  padding: 20px;
+}
+
+.admin-modal {
+  background: #fff;
+  border-radius: 16px;
+  padding: 24px;
+  max-width: 440px;
+  width: 100%;
+  max-height: 90vh;
+  overflow: auto;
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.2);
+}
+
+.admin-modal h3 {
+  margin: 0 0 16px;
+  font-size: 1.25rem;
+  color: #1e293b;
+}
+
+.admin-form-row {
+  margin-bottom: 14px;
+}
+
+.admin-form-row label {
+  display: block;
+  font-size: 0.9rem;
+  font-weight: 500;
+  color: #475569;
+  margin-bottom: 4px;
+}
+
+.admin-modal-actions {
+  display: flex;
+  gap: 10px;
+  margin-top: 20px;
+}
+
+.admin-settings-card {
+  max-width: 720px;
+  border: 1px solid #e2e8f0;
+  border-radius: 12px;
+  background: #fff;
+  padding: 18px;
+}
+
+.admin-settings-title {
+  margin: 0 0 6px;
+  font-size: 1.1rem;
+  color: #1e293b;
+}
+
+.admin-settings-theme-row {
+  display: flex;
+  gap: 10px;
+  margin-top: 14px;
+}
+
+.admin-layout.admin-theme-light {
+  background: #f1f5f9;
+  color: #0f172a;
+}
+
+.admin-layout.admin-theme-dark {
+  background: #020617;
+  color: #e2e8f0;
+}
+
+.admin-layout.admin-theme-dark .admin-sidebar {
+  background: #0f172a;
+  color: #e2e8f0;
+  border-right: 1px solid rgba(148, 163, 184, 0.2);
+}
+
+.admin-layout.admin-theme-dark .admin-sidebar-brand {
+  color: #f8fafc;
+}
+
+.admin-layout.admin-theme-dark .admin-theme-switch {
+  border-color: rgba(148, 163, 184, 0.3);
+  color: #cbd5e1;
+}
+
+.admin-layout.admin-theme-dark .admin-nav-item {
+  color: #cbd5e1;
+}
+
+.admin-layout.admin-theme-dark .admin-nav-item:hover {
+  background: rgba(148, 163, 184, 0.2);
+  color: #f8fafc;
+}
+
+.admin-layout.admin-theme-dark .admin-nav-item.active {
+  background: #2563eb;
+  color: #fff;
+}
+
+.admin-layout.admin-theme-dark .admin-main {
+  background: #020617;
+}
+
+.admin-layout.admin-theme-dark .admin-page-title,
+.admin-layout.admin-theme-dark .admin-settings-title,
+.admin-layout.admin-theme-dark .admin-quick-actions h2,
+.admin-layout.admin-theme-dark .admin-recent-activity h2,
+.admin-layout.admin-theme-dark .admin-modal h3,
+.admin-layout.admin-theme-dark .admin-table td,
+.admin-layout.admin-theme-dark .admin-stat-value {
+  color: #f8fafc;
+}
+
+.admin-layout.admin-theme-dark .admin-muted,
+.admin-layout.admin-theme-dark .admin-stat-label,
+.admin-layout.admin-theme-dark .admin-activity-list,
+.admin-layout.admin-theme-dark .admin-form-row label {
+  color: #cbd5e1;
+}
+
+.admin-layout.admin-theme-dark .admin-stat-card,
+.admin-layout.admin-theme-dark .admin-table-wrap,
+.admin-layout.admin-theme-dark .admin-quick-btn,
+.admin-layout.admin-theme-dark .admin-search-wrap,
+.admin-layout.admin-theme-dark .admin-modal,
+.admin-layout.admin-theme-dark .admin-settings-card {
+  background: #0f172a;
+  border-color: rgba(148, 163, 184, 0.28);
+  color: #e2e8f0;
+}
+
+.admin-layout.admin-theme-dark .admin-input,
+.admin-layout.admin-theme-dark .admin-search-wrap .admin-input {
+  background: #020617;
+  border-color: rgba(148, 163, 184, 0.35);
+  color: #f8fafc;
+}
+
+.admin-layout.admin-theme-dark .admin-input::placeholder {
+  color: #94a3b8;
+}
+
+.admin-layout.admin-theme-dark .admin-table th {
+  background: #1e293b;
+  color: #e2e8f0;
+  border-bottom-color: rgba(148, 163, 184, 0.2);
+}
+
+.admin-layout.admin-theme-dark .admin-table td {
+  border-bottom-color: rgba(148, 163, 184, 0.15);
+}
+
+.admin-layout.admin-theme-dark .admin-table tbody tr:hover {
+  background: rgba(148, 163, 184, 0.1);
+}
+
+.admin-layout.admin-theme-dark .admin-btn {
+  background: #1e293b;
+  border-color: rgba(148, 163, 184, 0.35);
+  color: #f8fafc;
+}
+
+.admin-layout.admin-theme-dark .admin-btn:hover {
+  background: #334155;
+}
+
+.admin-layout.admin-theme-dark .admin-btn.primary {
+  background: #2563eb;
+  border-color: #2563eb;
+  color: #fff;
+}
+
+.admin-layout.admin-theme-dark .admin-btn.primary:hover {
+  background: #1d4ed8;
+}
+
+.admin-layout.admin-theme-dark .admin-btn.danger:hover {
+  background: rgba(239, 68, 68, 0.18);
+  border-color: rgba(239, 68, 68, 0.45);
+  color: #fecaca;
+}
+
+.admin-layout.admin-theme-dark .student-picker-menu {
+  background: #0f172a;
+  border-color: rgba(148, 163, 184, 0.28);
+  box-shadow: 0 14px 28px rgba(2, 6, 23, 0.7);
+}
+
+.admin-layout.admin-theme-dark .student-picker-option {
+  background: #1e293b;
+  border-color: rgba(148, 163, 184, 0.35);
+  color: #f8fafc;
+}
+
+.admin-layout.admin-theme-dark .student-picker-option:hover {
+  background: #334155;
+}
+
+.admin-layout.admin-theme-dark .admin-quick-btn:hover {
+  background: #1e293b;
+  border-color: #3b82f6;
+  color: #93c5fd;
+}
+
+.admin-layout.admin-theme-dark .admin-pill.warn {
+  background: rgba(245, 158, 11, 0.2);
+  border-color: rgba(245, 158, 11, 0.42);
+  color: #fde68a;
+}
+
+/* Reference-based UI refresh for existing student/admin pages */
+.educo-dashboard {
+  background: #eef2f7;
+}
+
+.educo-main {
+  background: linear-gradient(180deg, #f5f7fb 0%, #edf2f8 100%);
+}
+
+.educo-header {
+  border-bottom: 1px solid #dbe4f0;
+  background: rgba(255, 255, 255, 0.9);
+  backdrop-filter: blur(10px);
+}
+
+.educo-content {
+  padding: 26px;
+}
+
+.educo-content .cardx {
+  border: 1px solid #e1e8f3;
+  border-radius: 16px;
+  box-shadow: 0 8px 24px rgba(15, 23, 42, 0.08);
+}
+
+.educo-content .cardx-header {
+  padding: 16px 18px 10px;
+}
+
+.educo-content .cardx-title {
+  font-size: 1rem;
+  font-weight: 700;
+}
+
+.educo-content .button.primary,
+.educo-content .admin-btn.primary {
+  background: linear-gradient(135deg, #3a7afe, #2dd4bf);
+  border-color: transparent;
+  box-shadow: 0 10px 20px rgba(58, 122, 254, 0.22);
+}
+
+.educo-dashboard-dark {
+  background: #060d1d;
+}
+
+.educo-dashboard-dark .educo-main {
+  background:
+    radial-gradient(700px 320px at 0% -8%, rgba(16, 185, 129, 0.12), transparent 58%),
+    radial-gradient(600px 320px at 100% 0%, rgba(59, 130, 246, 0.13), transparent 60%),
+    #050b18;
+}
+
+.educo-dashboard-dark .educo-header {
+  background: rgba(8, 15, 32, 0.82);
+  border-bottom-color: rgba(148, 163, 184, 0.22);
+}
+
+.educo-dashboard-dark .educo-content {
+  background: transparent;
+}
+
+.educo-dashboard-dark .cardx {
+  background: linear-gradient(165deg, rgba(15, 23, 42, 0.96), rgba(12, 19, 36, 0.96));
+  border-color: rgba(148, 163, 184, 0.25);
+  box-shadow: 0 14px 28px rgba(2, 6, 23, 0.36);
+}
+
+.educo-dashboard-dark .button.primary,
+.educo-dashboard-dark .admin-btn.primary {
+  background: linear-gradient(135deg, #22c55e, #10b981);
+  box-shadow: 0 12px 24px rgba(16, 185, 129, 0.26);
+}
+
+.educo-dashboard-dark .educo-header-icon-btn,
+.educo-dashboard-dark .educo-header-user,
+.educo-dashboard-dark .educo-header-user-btn {
+  border-color: rgba(148, 163, 184, 0.33);
+  background: #0c1731;
+}
+
+.educo-dashboard-dark .educo-header-messages-panel {
+  background: #0c1731;
+  border-color: rgba(148, 163, 184, 0.28);
+  box-shadow: 0 20px 40px rgba(2, 6, 23, 0.6);
+}
+
+.admin-layout.admin-theme-dark {
+  background: #060d1d;
+}
+
+.admin-layout.admin-theme-dark .admin-main {
+  background:
+    radial-gradient(700px 320px at 0% -6%, rgba(16, 185, 129, 0.11), transparent 58%),
+    radial-gradient(700px 320px at 100% 0%, rgba(59, 130, 246, 0.11), transparent 58%),
+    #050b18;
+}
+
+.admin-layout.admin-theme-dark .admin-sidebar {
+  background: linear-gradient(180deg, #081226 0%, #060d1f 100%);
+}
+
+.admin-layout.admin-theme-dark .admin-nav-item.active {
+  background: linear-gradient(135deg, #22c55e, #0ea5a3);
+  box-shadow: 0 12px 24px rgba(16, 185, 129, 0.25);
+}
+
+.admin-layout.admin-theme-dark .admin-stat-card,
+.admin-layout.admin-theme-dark .admin-table-wrap,
+.admin-layout.admin-theme-dark .cardx,
+.admin-layout.admin-theme-dark .admin-modal,
+.admin-layout.admin-theme-dark .admin-search-wrap,
+.admin-layout.admin-theme-dark .admin-settings-card {
+  border-color: rgba(148, 163, 184, 0.25);
+  box-shadow: 0 14px 28px rgba(2, 6, 23, 0.42);
+}
+
+.admin-layout.admin-theme-dark .admin-btn.primary {
+  background: linear-gradient(135deg, #22c55e, #10b981);
+  border: none;
+  box-shadow: 0 12px 24px rgba(16, 185, 129, 0.25);
+}
+
+/* WiselQ-style clean light direction */
+.educo-dashboard:not(.educo-dashboard-dark) {
+  background: #eef1f6;
+}
+
+.educo-dashboard:not(.educo-dashboard-dark) .educo-main {
+  background: #f5f7fb;
+}
+
+.educo-dashboard:not(.educo-dashboard-dark) .educo-header {
+  padding: 14px 22px;
+  background: #ffffff;
+  border-bottom: 1px solid #e6ebf3;
+}
+
+.educo-dashboard:not(.educo-dashboard-dark) .educo-content {
+  padding: 22px;
+}
+
+.educo-dashboard:not(.educo-dashboard-dark) .educo-header-search,
+.educo-dashboard:not(.educo-dashboard-dark) .educo-header-icon-btn,
+.educo-dashboard:not(.educo-dashboard-dark) .educo-header-user,
+.educo-dashboard:not(.educo-dashboard-dark) .educo-header-user-btn {
+  border-radius: 12px;
+  border-color: #e2e8f0;
+  background: #fbfcff;
+}
+
+.educo-dashboard:not(.educo-dashboard-dark) .educo-header-search:focus {
+  border-color: #5b37ff;
+  box-shadow: 0 0 0 3px rgba(91, 55, 255, 0.12);
+}
+
+.educo-dashboard:not(.educo-dashboard-dark) .educo-content .cardx,
+.educo-dashboard:not(.educo-dashboard-dark) .educo-header-dropdown,
+.educo-dashboard:not(.educo-dashboard-dark) .educo-header-messages-panel {
+  border: 1px solid #e2e8f0;
+  border-radius: 14px;
+  box-shadow: 0 10px 24px rgba(15, 23, 42, 0.08);
+  background: #ffffff;
+}
+
+.educo-dashboard:not(.educo-dashboard-dark) .cardx-header {
+  border-bottom: 1px solid #edf2f7;
+}
+
+.educo-dashboard:not(.educo-dashboard-dark) .cardx-title,
+.educo-dashboard:not(.educo-dashboard-dark) .educo-header-welcome,
+.educo-dashboard:not(.educo-dashboard-dark) .educo-header-user-name {
+  color: #0f172a;
+}
+
+.educo-dashboard:not(.educo-dashboard-dark) .cardx-description,
+.educo-dashboard:not(.educo-dashboard-dark) .muted,
+.educo-dashboard:not(.educo-dashboard-dark) .educo-header-user-role {
+  color: #64748b;
+}
+
+.educo-dashboard:not(.educo-dashboard-dark) .button,
+.educo-dashboard:not(.educo-dashboard-dark) .admin-btn {
+  border-radius: 10px;
+}
+
+.educo-dashboard:not(.educo-dashboard-dark) .button.primary,
+.educo-dashboard:not(.educo-dashboard-dark) .admin-btn.primary {
+  background: linear-gradient(135deg, #5b37ff, #7c3aed);
+  border-color: transparent;
+  box-shadow: 0 10px 20px rgba(91, 55, 255, 0.25);
+}
+
+.educo-dashboard:not(.educo-dashboard-dark) .educo-sidebar {
+  background: #ffffff;
+  border-right: 1px solid #e2e8f0;
+}
+
+.educo-dashboard:not(.educo-dashboard-dark) .educo-sidebar-title {
+  color: #0f172a;
+}
+
+.educo-dashboard:not(.educo-dashboard-dark) .educo-sidebar-item {
+  color: #475569;
+  border-radius: 10px;
+}
+
+.educo-dashboard:not(.educo-dashboard-dark) .educo-sidebar-item:hover {
+  background: #f1f5f9;
+  color: #0f172a;
+}
+
+.educo-dashboard:not(.educo-dashboard-dark) .educo-sidebar-item.active {
+  background: linear-gradient(135deg, #5b37ff, #7c3aed);
+  color: #ffffff;
+  box-shadow: 0 10px 22px rgba(91, 55, 255, 0.24);
+}
+
+.admin-layout.admin-theme-light {
+  background: #edf1f6;
+}
+
+.admin-layout.admin-theme-light .admin-theme-switch {
+  background: #f8fafc;
+  border-color: #e2e8f0;
+  color: #475569;
+}
+
+.admin-layout.admin-theme-light .admin-stat-card,
+.admin-layout.admin-theme-light .admin-table-wrap,
+.admin-layout.admin-theme-light .cardx,
+.admin-layout.admin-theme-light .admin-modal,
+.admin-layout.admin-theme-light .admin-search-wrap,
+.admin-layout.admin-theme-light .admin-settings-card {
+  border: 1px solid #e2e8f0;
+  background: #ffffff;
+  box-shadow: 0 10px 24px rgba(15, 23, 42, 0.08);
+}
+
+.admin-layout.admin-theme-light .admin-input {
+  border-color: #dbe3ef;
+}
+
+.admin-layout.admin-theme-light .admin-input:focus {
+  outline: none;
+  border-color: #5b37ff;
+  box-shadow: 0 0 0 3px rgba(91, 55, 255, 0.12);
+}
+
+.admin-layout.admin-theme-light .admin-btn.primary {
+  background: linear-gradient(135deg, #5b37ff, #7c3aed);
+  border: none;
+  box-shadow: 0 10px 22px rgba(91, 55, 255, 0.24);
+}
+
+/* WiselQ light fine-tune pass */
+body {
+  font-family: "Poppins", "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.educo-dashboard:not(.educo-dashboard-dark) .educo-sidebar {
+  width: 248px;
+  min-width: 248px;
+}
+
+.educo-dashboard:not(.educo-dashboard-dark) .educo-main {
+  margin-left: 248px;
+}
+
+.educo-dashboard:not(.educo-dashboard-dark) .educo-header {
+  min-height: 72px;
+}
+
+.educo-dashboard:not(.educo-dashboard-dark) .educo-header-welcome {
+  font-size: 1.1rem;
+  font-weight: 700;
+}
+
+.educo-dashboard:not(.educo-dashboard-dark) .educo-sidebar-item {
+  font-size: 0.92rem;
+  padding: 11px 13px;
+}
+
+.educo-dashboard:not(.educo-dashboard-dark) .educo-content .cardx,
+.educo-dashboard:not(.educo-dashboard-dark) .educo-stat-card,
+.educo-dashboard:not(.educo-dashboard-dark) .educo-summary-card {
+  border-radius: 12px;
+}
+
+.educo-dashboard:not(.educo-dashboard-dark) .cardx-header {
+  padding: 14px 16px 8px;
+}
+
+.educo-dashboard:not(.educo-dashboard-dark) .cardx-body {
+  padding: 14px;
+}
+
+.admin-layout.admin-theme-light .admin-page-title {
+  font-size: 1.35rem;
+  margin-bottom: 14px;
+}
+
+.admin-layout.admin-theme-light .admin-page-header {
+  margin-bottom: 14px;
+}
+
+.admin-layout.admin-theme-light .admin-stat-card {
+  padding: 16px;
+}
+
+.admin-layout.admin-theme-light .admin-table th,
+.admin-layout.admin-theme-light .admin-table td {
+  padding: 10px 12px;
+}
+
+.admin-layout.admin-theme-light .admin-table th {
+  font-size: 0.8rem;
+  font-weight: 600;
+}
+
+.admin-layout.admin-theme-light .admin-table td {
+  font-size: 0.9rem;
+}
+
+.admin-layout.admin-theme-light .admin-btn,
+.admin-layout.admin-theme-light .button {
+  min-height: 36px;
+  padding: 7px 12px;
+  border-radius: 9px;
+}
+
+.admin-layout.admin-theme-light .admin-toolbar {
+  margin-bottom: 12px;
+}
+
+.admin-layout.admin-theme-light .admin-search-wrap {
+  min-height: 40px;
+}
+
+.sidebar-backdrop {
+  position: fixed;
+  inset: 0;
+  border: 0;
+  background: rgba(2, 6, 23, 0.45);
+  z-index: 85;
+}
+
+.educo-sidebar-toggle,
+.admin-sidebar-toggle {
+  display: none;
+  border: 1px solid #dbe3ef;
+  background: #ffffff;
+  color: #334155;
+  border-radius: 10px;
+  width: 36px;
+  height: 36px;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+}
+
+.admin-mobile-topbar {
+  display: none;
+}
+
+@media (max-width: 1200px) {
+  .educo-sidebar,
+  .admin-sidebar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 100vh;
+    width: min(82vw, 300px);
+    min-width: min(82vw, 300px);
+    transform: translateX(-105%);
+    transition: transform 0.24s ease;
+    z-index: 95;
+    overflow-y: auto;
+  }
+
+  .educo-sidebar.open,
+  .admin-sidebar.open {
+    transform: translateX(0);
+  }
+
+  .educo-main,
+  .admin-main {
+    margin-left: 0 !important;
+    width: 100%;
+  }
+
+  .educo-sidebar-toggle,
+  .admin-sidebar-toggle {
+    display: inline-flex;
+  }
+
+  .educo-header-left {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .admin-mobile-topbar {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 12px 16px 0;
+  }
+
+  .admin-mobile-title {
+    font-weight: 700;
+    color: inherit;
+  }
+}
+
+@media (max-width: 900px) {
+  .educo-header {
+    justify-content: space-between;
+    align-items: flex-start;
+  }
+
+  .educo-header-profile-wrap {
+    position: static;
+  }
+
+  .educo-header-dropdown {
+    position: fixed;
+    top: 74px;
+    right: 12px;
+    left: auto;
+    width: min(360px, calc(100vw - 24px));
+    max-height: calc(100vh - 90px);
+    overflow: auto;
+    z-index: 240;
+  }
+
+  .educo-header-left {
+    width: auto;
+    justify-content: flex-start;
+    flex: 1;
+    order: 1;
+  }
+
+  .educo-header-search-wrap {
+    min-width: 0;
+    max-width: none;
+    width: 100%;
+    order: 3;
+  }
+
+  .educo-header-right {
+    margin-left: auto;
+    width: auto;
+    justify-content: flex-end;
+    order: 2;
+  }
+
+  .educo-header-messages-panel {
+    position: fixed;
+    top: 78px;
+    right: 12px;
+    left: 12px;
+    width: auto;
+    max-height: min(62vh, 520px);
+    z-index: 220;
+  }
+
+  .educo-content,
+  .admin-content {
+    padding: 16px;
+  }
+
+  .educo-header-user {
+    gap: 0;
+    padding: 4px;
+    width: 40px;
+    min-width: 40px;
+    justify-content: center;
+    border-radius: 10px;
+  }
+
+  .educo-header-avatar {
+    width: 32px;
+    height: 32px;
+    border-radius: 8px;
+  }
+
+  .educo-header-avatar svg {
+    width: 16px;
+    height: 16px;
+  }
+
+  .educo-header-user-name {
+    font-size: 0.82rem;
+  }
+
+  .educo-header-user-role {
+    font-size: 0.75rem;
+  }
+
+  .educo-header-user-info {
+    display: none;
+  }
+}
+
+/* Modern WiselQ polish layer (existing UI only) */
+.educo-dashboard:not(.educo-dashboard-dark),
+.admin-layout.admin-theme-light {
+  --wq-bg: #f4f6fb;
+  --wq-surface: #ffffff;
+  --wq-border: #e4e9f2;
+  --wq-text: #0f172a;
+  --wq-muted: #64748b;
+  --wq-primary: #5b37ff;
+  --wq-primary-2: #7c3aed;
+  --wq-shadow: 0 12px 28px rgba(15, 23, 42, 0.08);
+}
+
+.educo-dashboard:not(.educo-dashboard-dark) {
+  background: radial-gradient(1000px 420px at -10% -10%, rgba(91, 55, 255, 0.08), transparent 60%), var(--wq-bg);
+}
+
+.educo-dashboard:not(.educo-dashboard-dark) .educo-main,
+.admin-layout.admin-theme-light .admin-main {
+  background: transparent;
+}
+
+.educo-dashboard:not(.educo-dashboard-dark) .educo-header {
+  position: sticky;
+  top: 0;
+  z-index: 40;
+  background: rgba(255, 255, 255, 0.88);
+  border-bottom: 1px solid var(--wq-border);
+  backdrop-filter: blur(10px);
+}
+
+.educo-dashboard:not(.educo-dashboard-dark) .educo-sidebar,
+.admin-layout.admin-theme-light .admin-sidebar {
+  background: var(--wq-surface);
+  border-right: 1px solid var(--wq-border);
+}
+
+.educo-dashboard:not(.educo-dashboard-dark) .educo-sidebar-brand,
+.admin-layout.admin-theme-light .admin-sidebar-brand {
+  padding-bottom: 18px;
+}
+
+.educo-dashboard:not(.educo-dashboard-dark) .educo-sidebar-title,
+.admin-layout.admin-theme-light .admin-sidebar-brand,
+.educo-dashboard:not(.educo-dashboard-dark) .educo-header-welcome,
+.admin-layout.admin-theme-light .admin-page-title {
+  color: var(--wq-text);
+}
+
+.educo-dashboard:not(.educo-dashboard-dark) .educo-sidebar-item,
+.admin-layout.admin-theme-light .admin-nav-item {
+  border: 1px solid transparent;
+  transition: all 0.2s ease;
+}
+
+.educo-dashboard:not(.educo-dashboard-dark) .educo-sidebar-item:hover,
+.admin-layout.admin-theme-light .admin-nav-item:hover {
+  border-color: var(--wq-border);
+  transform: translateY(-1px);
+}
+
+.educo-dashboard:not(.educo-dashboard-dark) .educo-sidebar-item.active,
+.admin-layout.admin-theme-light .admin-nav-item.active {
+  background: linear-gradient(135deg, var(--wq-primary), var(--wq-primary-2));
+  color: #ffffff;
+  border-color: transparent;
+}
+
+.educo-dashboard:not(.educo-dashboard-dark) .educo-content .cardx,
+.educo-dashboard:not(.educo-dashboard-dark) .educo-summary-card,
+.admin-layout.admin-theme-light .cardx,
+.admin-layout.admin-theme-light .admin-stat-card,
+.admin-layout.admin-theme-light .admin-table-wrap,
+.admin-layout.admin-theme-light .admin-modal,
+.admin-layout.admin-theme-light .admin-settings-card {
+  background: var(--wq-surface);
+  border: 1px solid var(--wq-border);
+  box-shadow: var(--wq-shadow);
+}
+
+.educo-dashboard:not(.educo-dashboard-dark) .cardx-title,
+.admin-layout.admin-theme-light .cardx-title,
+.admin-layout.admin-theme-light .admin-stat-value,
+.admin-layout.admin-theme-light .admin-table td {
+  color: var(--wq-text);
+}
+
+.educo-dashboard:not(.educo-dashboard-dark) .cardx-description,
+.educo-dashboard:not(.educo-dashboard-dark) .muted,
+.admin-layout.admin-theme-light .admin-muted,
+.admin-layout.admin-theme-light .admin-stat-label,
+.admin-layout.admin-theme-light .admin-table th {
+  color: var(--wq-muted);
+}
+
+.educo-dashboard:not(.educo-dashboard-dark) .educo-header-search,
+.educo-dashboard:not(.educo-dashboard-dark) .educo-header-icon-btn,
+.educo-dashboard:not(.educo-dashboard-dark) .educo-header-user,
+.admin-layout.admin-theme-light .admin-input,
+.admin-layout.admin-theme-light .admin-search-wrap,
+.admin-layout.admin-theme-light .admin-btn {
+  border: 1px solid var(--wq-border);
+  background: #ffffff;
+}
+
+.educo-dashboard:not(.educo-dashboard-dark) .educo-header-search:focus,
+.admin-layout.admin-theme-light .admin-input:focus {
+  border-color: var(--wq-primary);
+  box-shadow: 0 0 0 3px rgba(91, 55, 255, 0.14);
+}
+
+.educo-dashboard:not(.educo-dashboard-dark) .button.primary,
+.educo-dashboard:not(.educo-dashboard-dark) .admin-btn.primary,
+.admin-layout.admin-theme-light .admin-btn.primary {
+  background: linear-gradient(135deg, var(--wq-primary), var(--wq-primary-2));
+  border-color: transparent;
+  color: #ffffff;
+}
+
+.admin-layout.admin-theme-light .admin-table th {
+  background: #f8faff;
+  border-bottom-color: #ecf1f7;
+}
+
+.admin-layout.admin-theme-light .admin-table tbody tr:hover {
+  background: #fafcff;
+}
+
+/* Admin students course cell alignment */
+.admin-course-cell {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 10px;
+}
+
+.admin-course-name {
+  min-width: 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.admin-btn-course-view {
+  justify-self: end;
+  padding: 4px 10px;
+  border-radius: 999px;
+  white-space: nowrap;
+}
+
+.admin-students-actions {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 8px;
+  min-width: 84px;
+}
+
+.admin-students-col-actions {
+  width: 1%;
+  white-space: nowrap;
+  text-align: right;
+  padding-right: 10px;
+}
+
+.admin-students-col-actions .admin-students-actions {
+  justify-content: flex-end;
+}
+
+@media (max-width: 900px) {
+  .admin-course-cell {
+    grid-template-columns: 1fr;
+    align-items: start;
+  }
+
+  .admin-btn-course-view {
+    justify-self: start;
+  }
+
+  .admin-students-actions {
+    justify-content: flex-start;
+  }
+
+  .admin-students-col-actions {
+    text-align: left;
+  }
+}
+
+/* Theme visibility hardening */
+.educo-dashboard,
+.admin-layout {
+  color: #0f172a;
+}
+
+.educo-dashboard .muted,
+.educo-dashboard .educo-form-label,
+.educo-dashboard .educo-form-row label,
+.educo-dashboard .educo-header-user-role,
+.educo-dashboard .educo-header-dropdown-label,
+.admin-layout .admin-muted,
+.admin-layout .admin-form-row label,
+.admin-layout .admin-stat-label {
+  color: #64748b;
+}
+
+.educo-dashboard .pill.success,
+.admin-layout .pill.success {
+  background: #dcfce7;
+  border-color: #86efac;
+  color: #166534;
+}
+
+.educo-dashboard .pill.warn,
+.admin-layout .pill.warn {
+  background: #fef3c7;
+  border-color: #fcd34d;
+  color: #92400e;
+}
+
+.educo-dashboard .educo-input,
+.educo-dashboard .input,
+.educo-dashboard select,
+.educo-dashboard textarea,
+.admin-layout .admin-input,
+.admin-layout input,
+.admin-layout select,
+.admin-layout textarea {
+  color: #0f172a;
+  background: #ffffff;
+}
+
+.educo-dashboard .educo-input::placeholder,
+.educo-dashboard .input::placeholder,
+.admin-layout .admin-input::placeholder,
+.admin-layout input::placeholder,
+.admin-layout textarea::placeholder {
+  color: #94a3b8;
+}
+
+.educo-dashboard .cardx-title,
+.educo-dashboard .educo-summary-value,
+.educo-dashboard .educo-header-user-name,
+.admin-layout .admin-page-title,
+.admin-layout .admin-settings-title,
+.admin-layout .admin-table td,
+.admin-layout .admin-stat-value {
+  color: #0f172a;
+}
+
+.educo-dashboard-dark,
+.admin-layout.admin-theme-dark {
+  color: #e2e8f0;
+}
+
+.educo-dashboard-dark .cardx-title,
+.educo-dashboard-dark .educo-summary-value,
+.educo-dashboard-dark .educo-header-user-name,
+.educo-dashboard-dark .educo-header-dropdown-item,
+.educo-dashboard-dark .educo-header-search-item-label,
+.admin-layout.admin-theme-dark .admin-page-title,
+.admin-layout.admin-theme-dark .admin-settings-title,
+.admin-layout.admin-theme-dark .admin-table td,
+.admin-layout.admin-theme-dark .admin-stat-value,
+.admin-layout.admin-theme-dark .admin-nav-item {
+  color: #f8fafc;
+}
+
+.educo-dashboard-dark .muted,
+.educo-dashboard-dark .educo-form-label,
+.educo-dashboard-dark .educo-form-row label,
+.educo-dashboard-dark .educo-header-user-role,
+.educo-dashboard-dark .educo-header-dropdown-label,
+.educo-dashboard-dark .educo-header-search-item-hint,
+.admin-layout.admin-theme-dark .admin-muted,
+.admin-layout.admin-theme-dark .admin-form-row label,
+.admin-layout.admin-theme-dark .admin-stat-label,
+.admin-layout.admin-theme-dark .admin-table th {
+  color: #cbd5e1;
+}
+
+.educo-dashboard-dark .pill.success,
+.admin-layout.admin-theme-dark .pill.success {
+  background: rgba(34, 197, 94, 0.18);
+  border-color: rgba(34, 197, 94, 0.44);
+  color: #bbf7d0;
+}
+
+.educo-dashboard-dark .pill.warn,
+.admin-layout.admin-theme-dark .pill.warn {
+  background: rgba(245, 158, 11, 0.2);
+  border-color: rgba(245, 158, 11, 0.46);
+  color: #fde68a;
+}
+
+.educo-dashboard-dark .educo-input,
+.educo-dashboard-dark .input,
+.educo-dashboard-dark select,
+.educo-dashboard-dark textarea,
+.admin-layout.admin-theme-dark .admin-input,
+.admin-layout.admin-theme-dark input,
+.admin-layout.admin-theme-dark select,
+.admin-layout.admin-theme-dark textarea {
+  color: #f8fafc;
+  background: #020617;
+  border-color: rgba(148, 163, 184, 0.35);
+}
+
+.admin-layout.admin-theme-dark .admin-btn {
+  color: #f8fafc;
+}
+
+.admin-layout.admin-theme-dark .admin-btn.danger {
+  color: #fecaca;
+  border-color: rgba(239, 68, 68, 0.5);
+}
+
+.educo-dashboard-dark .educo-input::placeholder,
+.educo-dashboard-dark .input::placeholder,
+.admin-layout.admin-theme-dark .admin-input::placeholder,
+.admin-layout.admin-theme-dark input::placeholder,
+.admin-layout.admin-theme-dark textarea::placeholder {
+  color: #94a3b8;
+}
+
+.educo-dashboard a,
+.admin-layout a {
+  color: inherit;
+}
+
+.educo-dashboard-dark a,
+.admin-layout.admin-theme-dark a {
+  color: #bfdbfe;
+}
+
+/* Route transitions */
+.route-transition {
+  animation: route-fade-slide-in 240ms cubic-bezier(0.2, 0.7, 0.2, 1) both;
+  will-change: opacity;
+}
+
+@keyframes route-fade-slide-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+/* System-wide responsive layer (admin + student) */
+@media (max-width: 1200px) {
+  .admin-content,
+  .educo-content {
+    padding: 18px;
+  }
+
+  .admin-page-header,
+  .educo-header {
+    gap: 10px;
+  }
+
+  .admin-stats-row,
+  .educo-summary-row {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 12px;
+  }
+
+  .dashboard-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .dashboard-grid .span-2 {
+    grid-column: auto;
+  }
+
+  .admin-quick-actions-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 10px;
+  }
+
+  .admin-quick-btn {
+    width: 100%;
+    justify-content: center;
+  }
+}
+
+@media (max-width: 900px) {
+  .admin-content,
+  .educo-content {
+    padding: 14px;
+  }
+
+  .admin-page-header {
+    align-items: stretch;
+  }
+
+  .admin-page-header .admin-btn.primary,
+  .admin-page-header .button.primary {
+    width: 100%;
+    justify-content: center;
+  }
+
+  .admin-toolbar {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+
+  .admin-toolbar .admin-search-wrap,
+  .admin-toolbar .admin-input,
+  .admin-toolbar select,
+  .admin-toolbar .admin-btn {
+    width: 100% !important;
+    max-width: none !important;
+  }
+
+  .admin-search-wrap {
+    max-width: none;
+  }
+
+  .admin-table-wrap {
+    overflow: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .admin-table {
+    min-width: 760px;
+  }
+
+  .admin-modal {
+    width: min(96vw, 560px);
+    max-height: 88vh;
+    padding: 16px;
+  }
+
+  .admin-modal-actions {
+    flex-wrap: wrap;
+  }
+
+  .admin-modal-actions .admin-btn {
+    flex: 1 1 140px;
+    justify-content: center;
+  }
+
+  .educo-header {
+    gap: 10px;
+  }
+
+  .educo-header-search-wrap,
+  .educo-header-search {
+    width: 100%;
+    max-width: none;
+  }
+
+  .educo-content .cardx,
+  .admin-content .cardx,
+  .admin-stat-card,
+  .educo-summary-card {
+    border-radius: 12px;
+  }
+
+  .chart {
+    height: 220px;
+  }
+
+  .weather.weather-shell {
+    padding: 12px;
+  }
+
+  .weather-shell-grid,
+  .weather-hero-meta,
+  .weather-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 640px) {
+  .admin-content,
+  .educo-content {
+    padding: 12px;
+  }
+
+  .admin-page-title,
+  .educo-header-welcome {
+    font-size: 1.15rem;
+  }
+
+  .admin-stats-row,
+  .educo-summary-row,
+  .admin-quick-actions-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .admin-stat-card,
+  .educo-summary-card {
+    padding: 12px;
+    gap: 10px;
+  }
+
+  .admin-stat-value,
+  .educo-summary-value {
+    font-size: 1.2rem;
+  }
+
+  .admin-table th,
+  .admin-table td {
+    padding: 10px;
+    font-size: 0.84rem;
+  }
+
+  .admin-btn,
+  .button,
+  .admin-input,
+  .input {
+    min-height: 40px;
+    font-size: 0.92rem;
+  }
+
+  .admin-form-row {
+    margin-bottom: 10px;
+  }
+
+  .admin-modal-backdrop {
+    padding: 10px;
+  }
+
+  .admin-modal {
+    border-radius: 12px;
+    padding: 14px;
+  }
+
+  .chart {
+    height: 200px;
+  }
+
+  .educo-header-messages-panel,
+  .educo-header-search-panel,
+  .educo-header-dropdown {
+    left: 10px;
+    right: 10px;
+    width: auto;
+  }
+
+  .educo-header-profile-wrap {
+    position: static;
+  }
+
+  .educo-header-dropdown {
+    position: fixed;
+    top: 70px;
+    right: 10px;
+    left: auto;
+    width: min(340px, calc(100vw - 20px));
+    max-height: calc(100vh - 90px);
+    overflow: auto;
+    z-index: 230;
+  }
+}
+
+@media (max-width: 480px) {
+  .educo-sidebar,
+  .admin-sidebar {
+    width: min(92vw, 320px);
+    min-width: min(92vw, 320px);
+  }
+
+  .admin-mobile-topbar {
+    padding: 10px 12px 0;
+  }
+
+  .admin-mobile-title {
+    font-size: 0.95rem;
+  }
+
+  .admin-content,
+  .educo-content {
+    padding: 10px;
+  }
+
+  .admin-page-title,
+  .educo-header-welcome {
+    font-size: 1.05rem;
+    line-height: 1.2;
+  }
+
+  .admin-toolbar,
+  .filter-bar,
+  .weather-search-bar {
+    gap: 6px;
+    margin-bottom: 10px;
+  }
+
+  .admin-btn,
+  .button {
+    min-height: 38px;
+    padding: 7px 10px;
+    font-size: 0.86rem;
+  }
+
+  .admin-input,
+  .input,
+  .educo-header-search {
+    min-height: 38px;
+    font-size: 0.88rem;
+  }
+
+  .admin-search-wrap,
+  .educo-header-search-wrap {
+    padding: 7px 10px;
+  }
+
+  .admin-table {
+    min-width: 680px;
+  }
+
+  .admin-table th,
+  .admin-table td {
+    padding: 8px;
+    font-size: 0.8rem;
+  }
+
+  .admin-stat-card,
+  .educo-summary-card,
+  .cardx {
+    border-radius: 10px;
+  }
+
+  .admin-stat-card,
+  .educo-summary-card {
+    padding: 10px;
+    gap: 8px;
+  }
+
+  .admin-stat-icon,
+  .educo-summary-icon {
+    width: 40px;
+    height: 40px;
+  }
+
+  .admin-stat-value,
+  .educo-summary-value {
+    font-size: 1.05rem;
+  }
+
+  .cardx-header {
+    padding: 10px 10px 8px;
+  }
+
+  .cardx-body {
+    padding: 10px;
+  }
+
+  .cardx-title {
+    font-size: 0.96rem;
+  }
+
+  .cardx-description {
+    font-size: 0.8rem;
+  }
+
+  .chart {
+    height: 185px;
+  }
+
+  .weather-shell-content,
+  .weather-layout,
+  .weather-main {
+    gap: 10px;
+  }
+
+  .weather-city {
+    font-size: 1.4rem;
+  }
+
+  .weather-temp {
+    font-size: 2rem;
+  }
+
+  .weather-hero-icon {
+    width: 110px;
+    height: 110px;
+  }
+
+  .admin-modal {
+    width: 100%;
+    max-width: none;
+    max-height: 92vh;
+    border-radius: 10px;
+    padding: 12px;
+  }
+
+  .admin-modal h2,
+  .admin-modal h3 {
+    font-size: 1.05rem;
+    margin-bottom: 10px;
+  }
+
+  .admin-form-row label {
+    font-size: 0.82rem;
+    margin-bottom: 3px;
+  }
+
+  .educo-header-badge,
+  .educo-sidebar-badge {
+    min-width: 18px;
+    height: 18px;
+    font-size: 0.66rem;
+    padding: 0 4px;
+  }
+}
+
+/* Final modal tone control (system-wide) */
+.admin-modal-backdrop {
+  background: rgba(16, 31, 64, 0.58) !important;
+}
+
+.admin-layout.admin-theme-light .admin-confirm-modal,
+.educo-dashboard:not(.educo-dashboard-dark) .admin-confirm-modal,
+.admin-confirm-modal {
+  background: rgba(223, 231, 243, 0.96) !important;
+  border-color: rgba(160, 180, 216, 0.68) !important;
+  box-shadow: 0 18px 34px rgba(27, 46, 90, 0.28) !important;
+}
+
+.admin-layout.admin-theme-light .admin-confirm-title,
+.educo-dashboard:not(.educo-dashboard-dark) .admin-confirm-title,
+.admin-confirm-title {
+  color: #36598e !important;
+}
+
+.admin-layout.admin-theme-light .admin-confirm-sub,
+.admin-layout.admin-theme-light .admin-confirm-meta,
+.educo-dashboard:not(.educo-dashboard-dark) .admin-confirm-sub,
+.educo-dashboard:not(.educo-dashboard-dark) .admin-confirm-meta,
+.admin-confirm-sub,
+.admin-confirm-meta {
+  color: #4f6791 !important;
+}
+
+.admin-layout.admin-theme-light .admin-confirm-card,
+.educo-dashboard:not(.educo-dashboard-dark) .admin-confirm-card,
+.admin-confirm-card {
+  background: rgba(232, 238, 249, 0.9) !important;
+  border-color: rgba(172, 192, 228, 0.68) !important;
+  box-shadow: none !important;
+}
+
+.admin-layout.admin-theme-dark .admin-confirm-modal,
+.educo-dashboard-dark .admin-confirm-modal {
+  background: rgba(17, 27, 50, 0.95) !important;
+  border-color: rgba(104, 129, 182, 0.48) !important;
+  box-shadow: 0 18px 36px rgba(2, 6, 23, 0.62) !important;
+}
+
+.admin-layout.admin-theme-dark .admin-confirm-title,
+.educo-dashboard-dark .admin-confirm-title {
+  color: #dce8ff !important;
+}
+
+.admin-layout.admin-theme-dark .admin-confirm-sub,
+.admin-layout.admin-theme-dark .admin-confirm-meta,
+.educo-dashboard-dark .admin-confirm-sub,
+.educo-dashboard-dark .admin-confirm-meta {
+  color: #aec4ea !important;
+}
+
+.admin-layout.admin-theme-dark .admin-confirm-card,
+.educo-dashboard-dark .admin-confirm-card {
+  background: rgba(28, 44, 78, 0.74) !important;
+  border-color: rgba(102, 129, 180, 0.46) !important;
+}
+
+/* Final weather UI refresh (reference-aligned, theme-consistent) */
+.weather.weather-shell {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  --weather-sky-image: url("../picture/picture/beautiful-dramatic-scenic-sunset-sky-600nw-2533434607.webp");
+  --weather-image-dim: rgba(39, 66, 132, 0.24);
+  --weather-image-glow-a: rgba(255, 255, 255, 0.45);
+  --weather-image-glow-b: rgba(151, 205, 255, 0.38);
+}
+
+.weather-sky-bg {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  background:
+    radial-gradient(900px 340px at 12% -6%, rgba(255, 255, 255, 0.36), transparent 62%),
+    radial-gradient(900px 360px at 92% -16%, rgba(147, 197, 253, 0.28), transparent 64%),
+    linear-gradient(160deg, rgba(137, 168, 230, 0.24) 0%, rgba(99, 140, 219, 0.18) 35%, rgba(72, 110, 196, 0.2) 100%);
+  background-size: 130% 130%, 130% 130%, 170% 170%;
+  animation: weather-sky-drift 24s ease-in-out infinite alternate;
+}
+
+.weather-cloud {
+  position: absolute;
+  border-radius: 999px;
+  filter: blur(0.2px);
+  opacity: 0.4;
+  background: radial-gradient(circle at 28% 30%, rgba(255, 255, 255, 0.9), rgba(255, 255, 255, 0.18) 72%);
+  animation: weather-cloud-drift linear infinite;
+}
+
+.weather-cloud.cloud-1 {
+  width: 180px;
+  height: 60px;
+  top: 10%;
+  left: -24%;
+  animation-duration: 54s;
+}
+
+.weather-cloud.cloud-2 {
+  width: 240px;
+  height: 78px;
+  top: 24%;
+  left: -32%;
+  opacity: 0.28;
+  animation-duration: 68s;
+  animation-delay: -16s;
+}
+
+.weather-cloud.cloud-3 {
+  width: 160px;
+  height: 52px;
+  top: 40%;
+  left: -20%;
+  opacity: 0.3;
+  animation-duration: 62s;
+  animation-delay: -8s;
+}
+
+.weather.weather-shell.weather-phase-night .weather-cloud {
+  opacity: 0.2;
+}
+
+.weather.weather-shell > * {
+  position: relative;
+  z-index: 1;
+}
+
+.educo-dashboard:not(.educo-dashboard-dark) .weather.weather-shell,
+.admin-layout.admin-theme-light .weather.weather-shell {
+  border: 1px solid rgba(192, 214, 246, 0.55);
+  background:
+    linear-gradient(0deg, var(--weather-image-dim), var(--weather-image-dim)),
+    var(--weather-sky-image),
+    radial-gradient(800px 300px at -10% -24%, var(--weather-image-glow-a), transparent 64%),
+    radial-gradient(700px 260px at 100% -14%, var(--weather-image-glow-b), transparent 66%),
+    linear-gradient(160deg, rgba(90, 128, 210, 0.62) 0%, rgba(87, 120, 195, 0.58) 50%, rgba(77, 108, 182, 0.62) 100%);
+  background-size: cover, cover, auto, auto, auto;
+  background-position: center center, center center, 0% 0%, 100% 0%, center center;
+  box-shadow: 0 26px 46px rgba(46, 70, 128, 0.25), inset 0 1px 0 rgba(255, 255, 255, 0.42), inset 0 -36px 64px rgba(22, 50, 122, 0.14);
+}
+
+.weather.weather-shell.weather-phase-morning {
+  --weather-image-dim: rgba(70, 95, 160, 0.2);
+  --weather-image-glow-a: rgba(255, 249, 222, 0.44);
+  --weather-image-glow-b: rgba(173, 216, 255, 0.36);
+}
+
+.weather.weather-shell.weather-phase-day {
+  --weather-image-dim: rgba(44, 78, 154, 0.2);
+  --weather-image-glow-a: rgba(248, 252, 255, 0.46);
+  --weather-image-glow-b: rgba(158, 213, 255, 0.4);
+}
+
+.weather.weather-shell.weather-phase-evening {
+  --weather-image-dim: rgba(70, 70, 140, 0.28);
+  --weather-image-glow-a: rgba(255, 210, 180, 0.38);
+  --weather-image-glow-b: rgba(196, 180, 255, 0.3);
+}
+
+.weather.weather-shell.weather-phase-night {
+  --weather-image-dim: rgba(26, 45, 102, 0.34);
+  --weather-image-glow-a: rgba(191, 222, 255, 0.24);
+  --weather-image-glow-b: rgba(143, 178, 255, 0.22);
+}
+
+.educo-dashboard:not(.educo-dashboard-dark) .weather-search-bar,
+.admin-layout.admin-theme-light .weather-search-bar {
+  align-items: center;
+  gap: 12px;
+}
+
+.educo-dashboard:not(.educo-dashboard-dark) .weather-search-input,
+.admin-layout.admin-theme-light .weather-search-input {
+  background: rgba(239, 245, 255, 0.86) !important;
+  border-color: rgba(194, 214, 246, 0.72) !important;
+  color: #2f4e89 !important;
+}
+
+.educo-dashboard:not(.educo-dashboard-dark) .weather-search-input::placeholder,
+.admin-layout.admin-theme-light .weather-search-input::placeholder {
+  color: rgba(61, 92, 151, 0.62);
+}
+
+.educo-dashboard:not(.educo-dashboard-dark) .weather-hero-panel,
+.educo-dashboard:not(.educo-dashboard-dark) .weather-card,
+.admin-layout.admin-theme-light .weather-hero-panel,
+.admin-layout.admin-theme-light .weather-card {
+  border: 1px solid rgba(196, 215, 246, 0.48);
+  background: linear-gradient(150deg, rgba(115, 148, 215, 0.48), rgba(83, 116, 193, 0.54));
+  backdrop-filter: blur(11px);
+  -webkit-backdrop-filter: blur(11px);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.32);
+}
+
+.educo-dashboard:not(.educo-dashboard-dark) .weather-weekly-card,
+.admin-layout.admin-theme-light .weather-weekly-card {
+  background: linear-gradient(150deg, rgba(116, 149, 216, 0.5), rgba(86, 119, 196, 0.56));
+}
+
+.educo-dashboard:not(.educo-dashboard-dark) .weather-hero-panel,
+.admin-layout.admin-theme-light .weather-hero-panel {
+  padding: 18px;
+}
+
+.educo-dashboard:not(.educo-dashboard-dark) .weather-city,
+.admin-layout.admin-theme-light .weather-city {
+  font-size: clamp(1.95rem, 1.45rem + 1.1vw, 2.6rem);
+  line-height: 1.05;
+  letter-spacing: -0.02em;
+}
+
+.educo-dashboard:not(.educo-dashboard-dark) .weather-temp,
+.admin-layout.admin-theme-light .weather-temp {
+  font-size: clamp(3.05rem, 2.4rem + 1.8vw, 4.1rem);
+  line-height: 1;
+  letter-spacing: -0.03em;
+}
+
+.educo-dashboard:not(.educo-dashboard-dark) .weather-section-title,
+.admin-layout.admin-theme-light .weather-section-title {
+  font-size: 0.8rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+}
+
+.educo-dashboard:not(.educo-dashboard-dark) .weather-air-value,
+.admin-layout.admin-theme-light .weather-air-value {
+  font-size: clamp(1.55rem, 1.35rem + 0.5vw, 1.9rem);
+  font-weight: 800;
+}
+
+.educo-dashboard:not(.educo-dashboard-dark) .weather-hour-item,
+.admin-layout.admin-theme-light .weather-hour-item {
+  padding: 12px 8px;
+}
+
+.educo-dashboard:not(.educo-dashboard-dark) .weather-hour-icon,
+.admin-layout.admin-theme-light .weather-hour-icon {
+  width: 44px;
+  height: 44px;
+}
+
+.educo-dashboard:not(.educo-dashboard-dark) .weather-week-row,
+.admin-layout.admin-theme-light .weather-week-row {
+  grid-template-columns: 64px minmax(0, 1fr) auto;
+  padding: 10px 0;
+}
+
+.educo-dashboard:not(.educo-dashboard-dark) .weather-week-icon,
+.admin-layout.admin-theme-light .weather-week-icon {
+  width: 30px;
+  height: 30px;
+}
+
+.educo-dashboard:not(.educo-dashboard-dark) .weather-city,
+.educo-dashboard:not(.educo-dashboard-dark) .weather-temp,
+.educo-dashboard:not(.educo-dashboard-dark) .weather-hour-temp,
+.educo-dashboard:not(.educo-dashboard-dark) .weather-air-value,
+.educo-dashboard:not(.educo-dashboard-dark) .weather-week-day,
+.educo-dashboard:not(.educo-dashboard-dark) .weather-week-temp,
+.admin-layout.admin-theme-light .weather-city,
+.admin-layout.admin-theme-light .weather-temp,
+.admin-layout.admin-theme-light .weather-hour-temp,
+.admin-layout.admin-theme-light .weather-air-value,
+.admin-layout.admin-theme-light .weather-week-day,
+.admin-layout.admin-theme-light .weather-week-temp {
+  color: #f8fbff;
+}
+
+.educo-dashboard:not(.educo-dashboard-dark) .weather-label,
+.educo-dashboard:not(.educo-dashboard-dark) .weather-section-title,
+.educo-dashboard:not(.educo-dashboard-dark) .weather-air-label,
+.educo-dashboard:not(.educo-dashboard-dark) .weather-hour-time,
+.educo-dashboard:not(.educo-dashboard-dark) .weather-week-meta,
+.admin-layout.admin-theme-light .weather-label,
+.admin-layout.admin-theme-light .weather-section-title,
+.admin-layout.admin-theme-light .weather-air-label,
+.admin-layout.admin-theme-light .weather-hour-time,
+.admin-layout.admin-theme-light .weather-week-meta {
+  color: rgba(233, 241, 255, 0.84);
+}
+
+.educo-dashboard:not(.educo-dashboard-dark) .weather-chip,
+.educo-dashboard:not(.educo-dashboard-dark) .weather-hour-item,
+.educo-dashboard:not(.educo-dashboard-dark) .weather-air-item,
+.admin-layout.admin-theme-light .weather-chip,
+.admin-layout.admin-theme-light .weather-hour-item,
+.admin-layout.admin-theme-light .weather-air-item {
+  border-color: rgba(205, 221, 248, 0.42);
+  background: linear-gradient(160deg, rgba(74, 102, 168, 0.46), rgba(57, 88, 153, 0.4));
+}
+
+.educo-dashboard:not(.educo-dashboard-dark) .weather-week-row,
+.admin-layout.admin-theme-light .weather-week-row {
+  border-bottom-color: rgba(204, 220, 246, 0.28);
+}
+
+.educo-dashboard:not(.educo-dashboard-dark) .weather-action-btn.ghost,
+.admin-layout.admin-theme-light .weather-action-btn.ghost {
+  background: rgba(241, 246, 255, 0.86);
+  border-color: rgba(193, 212, 243, 0.72);
+  color: #355a9a;
+}
+
+.educo-dashboard:not(.educo-dashboard-dark) .weather-hero-icon,
+.admin-layout.admin-theme-light .weather-hero-icon {
+  background: radial-gradient(circle at 40% 30%, rgba(251, 191, 36, 0.26), rgba(253, 224, 71, 0.08));
+}
+
+.educo-dashboard-dark .weather-sky-bg,
+.admin-layout.admin-theme-dark .weather-sky-bg {
+  opacity: 0.25;
+}
+
+@keyframes weather-cloud-drift {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(145vw);
+  }
+}
+
+@keyframes weather-sky-drift {
+  0% {
+    background-position: 0% 0%, 100% 0%, 40% 0%;
+  }
+  100% {
+    background-position: 18% 6%, 84% 8%, 62% 18%;
+  }
+}
+
+@media (max-width: 900px) {
+  .weather-sky-bg {
+    background:
+      radial-gradient(520px 200px at 10% -10%, rgba(255, 255, 255, 0.26), transparent 66%),
+      radial-gradient(560px 220px at 90% -15%, rgba(147, 197, 253, 0.2), transparent 68%),
+      linear-gradient(170deg, rgba(90, 128, 210, 0.55), rgba(77, 108, 182, 0.56));
+  }
+
+  .weather-cloud.cloud-1,
+  .weather-cloud.cloud-2,
+  .weather-cloud.cloud-3 {
+    transform: scale(0.85);
+  }
+
+  .educo-dashboard:not(.educo-dashboard-dark) .weather-temp,
+  .admin-layout.admin-theme-light .weather-temp {
+    font-size: clamp(2.5rem, 2.1rem + 1.2vw, 3rem);
+  }
+
+  .educo-dashboard:not(.educo-dashboard-dark) .weather-hour-icon,
+  .admin-layout.admin-theme-light .weather-hour-icon {
+    width: 40px;
+    height: 40px;
+  }
+}
+
+/* Interaction layer */
+:root {
+  --ui-ease: 220ms cubic-bezier(0.2, 0.7, 0.2, 1);
+  --ui-ease-fast: 140ms cubic-bezier(0.2, 0.7, 0.2, 1);
+}
+
+.button,
+.admin-btn,
+.admin-quick-btn,
+.admin-nav-item,
+.educo-sidebar-item,
+.educo-header-icon-btn,
+.educo-header-user-btn,
+.educo-header-search-item,
+.cardx,
+.admin-stat-card,
+.educo-summary-card,
+.admin-table tbody tr,
+.student-picker-option {
+  transition:
+    transform var(--ui-ease),
+    background-color var(--ui-ease),
+    border-color var(--ui-ease),
+    color var(--ui-ease),
+    box-shadow var(--ui-ease),
+    opacity var(--ui-ease-fast);
+}
+
+.button:hover,
+.admin-btn:hover,
+.admin-quick-btn:hover,
+.educo-header-icon-btn:hover,
+.educo-sidebar-item:hover,
+.admin-nav-item:hover {
+  transform: translateY(-1px);
+}
+
+.button:active,
+.admin-btn:active,
+.admin-quick-btn:active,
+.educo-header-icon-btn:active,
+.educo-sidebar-item:active,
+.admin-nav-item:active,
+.educo-header-search-item:active {
+  transform: translateY(0) scale(0.98);
+}
+
+.button:disabled,
+.admin-btn:disabled,
+.admin-quick-btn:disabled {
+  cursor: not-allowed;
+  opacity: 0.7;
+  transform: none;
+}
+
+.admin-nav-item,
+.educo-sidebar-item {
+  position: relative;
+  overflow: hidden;
+}
+
+.admin-nav-item::before,
+.educo-sidebar-item::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(90deg, rgba(255, 255, 255, 0.08), rgba(255, 255, 255, 0));
+  opacity: 0;
+  transition: opacity var(--ui-ease-fast);
+  pointer-events: none;
+}
+
+.admin-nav-item:hover::before,
+.educo-sidebar-item:hover::before {
+  opacity: 1;
+}
+
+.admin-nav-item.active::after,
+.educo-sidebar-item.active::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: -35%;
+  width: 40%;
+  background: linear-gradient(90deg, rgba(255, 255, 255, 0), rgba(255, 255, 255, 0.38), rgba(255, 255, 255, 0));
+  pointer-events: none;
+  animation: nav-ink-sweep 420ms cubic-bezier(0.2, 0.7, 0.2, 1);
+}
+
+.cardx:hover,
+.admin-stat-card:hover,
+.educo-summary-card:hover,
+.admin-table-wrap:hover {
+  box-shadow: 0 14px 30px rgba(15, 23, 42, 0.1);
+}
+
+.admin-table tbody tr:hover {
+  transform: translateX(1px);
+}
+
+.educo-header-badge,
+.educo-sidebar-badge {
+  animation: ui-badge-pulse 2.2s ease-in-out infinite;
+}
+
+@keyframes ui-badge-pulse {
+  0%,
+  100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.12);
+  }
+}
+
+@keyframes nav-ink-sweep {
+  from {
+    transform: translateX(0);
+    opacity: 0;
+  }
+  20% {
+    opacity: 1;
+  }
+  to {
+    transform: translateX(290%);
+    opacity: 0;
+  }
+}
+
+.educo-header-search:focus-visible,
+.admin-input:focus-visible,
+.input:focus-visible,
+.admin-btn:focus-visible,
+.button:focus-visible,
+.admin-nav-item:focus-visible,
+.educo-sidebar-item:focus-visible,
+.educo-header-icon-btn:focus-visible,
+.educo-header-user-btn:focus-visible,
+.educo-header-search-item:focus-visible {
+  outline: 2px solid rgba(91, 55, 255, 0.5);
+  outline-offset: 2px;
+}
+
+.educo-header-dropdown,
+.educo-header-messages-panel,
+.educo-header-search-panel {
+  animation: ui-pop-in var(--ui-ease) both;
+  transform-origin: top right;
+}
+
+.admin-modal-backdrop {
+  animation: ui-backdrop-in var(--ui-ease-fast) both;
+}
+
+.admin-modal {
+  animation: ui-modal-in var(--ui-ease) both;
+}
+
+@keyframes ui-pop-in {
+  from {
+    opacity: 0;
+    transform: translateY(8px) scale(0.98);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@keyframes ui-backdrop-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes ui-modal-in {
+  from {
+    opacity: 0;
+    transform: translateY(12px) scale(0.98);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .button,
+  .admin-btn,
+  .admin-quick-btn,
+  .admin-nav-item,
+  .educo-sidebar-item,
+  .educo-header-icon-btn,
+  .educo-header-user-btn,
+  .educo-header-search-item,
+  .cardx,
+  .admin-stat-card,
+  .educo-summary-card,
+  .admin-table tbody tr,
+  .student-picker-option,
+  .dashboard-reveal .reveal-card,
+  .admin-dashboard-home .reveal-block,
+  .admin-nav-item::before,
+  .educo-sidebar-item::before,
+  .admin-nav-item.active::after,
+  .educo-sidebar-item.active::after,
+  .route-transition,
+  .educo-header-dropdown,
+  .educo-header-messages-panel,
+  .educo-header-search-panel,
+  .admin-modal-backdrop,
+  .admin-modal,
+  .educo-header-badge,
+  .educo-sidebar-badge {
+    animation: none !important;
+    transition: none !important;
+    transform: none !important;
+  }
+}
+
+/* Dashboard staggered reveal */
+.dashboard-reveal .reveal-card {
+  opacity: 0;
+  transform: translateY(10px);
+  animation: dashboard-reveal-in 420ms cubic-bezier(0.2, 0.7, 0.2, 1) forwards;
+}
+
+.dashboard-reveal .reveal-card:nth-child(1) {
+  animation-delay: 40ms;
+}
+
+.dashboard-reveal .reveal-card:nth-child(2) {
+  animation-delay: 110ms;
+}
+
+.dashboard-reveal .reveal-card:nth-child(3) {
+  animation-delay: 180ms;
+}
+
+.dashboard-reveal .reveal-card:nth-child(4) {
+  animation-delay: 250ms;
+}
+
+.dashboard-reveal .reveal-card:nth-child(5) {
+  animation-delay: 320ms;
+}
+
+@keyframes dashboard-reveal-in {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Admin dashboard staggered reveal */
+.admin-dashboard-home .reveal-block {
+  opacity: 0;
+  transform: translateY(10px);
+  animation: dashboard-reveal-in 420ms cubic-bezier(0.2, 0.7, 0.2, 1) forwards;
+}
+
+.admin-dashboard-home .reveal-block:nth-child(2) {
+  animation-delay: 40ms;
+}
+
+.admin-dashboard-home .reveal-block:nth-child(3) {
+  animation-delay: 90ms;
+}
+
+.admin-dashboard-home .reveal-block:nth-child(4) {
+  animation-delay: 140ms;
+}
+
+.admin-dashboard-home .reveal-block:nth-child(5) {
+  animation-delay: 190ms;
+}
+
+.admin-dashboard-home .reveal-block:nth-child(6) {
+  animation-delay: 240ms;
+}
+
+/* Global alignment and spacing consistency */
+.admin-content,
+.educo-content {
+  display: grid;
+  align-content: start;
+  gap: 16px;
+}
+
+.admin-content > * {
+  margin: 0;
+}
+
+.educo-content > * {
+  margin: 0;
+}
+
+.admin-page-header,
+.educo-header,
+.cardx-header,
+.admin-toolbar {
+  align-items: center;
+}
+
+.admin-page-header {
+  margin-bottom: 0;
+}
+
+.admin-toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.admin-toolbar > * {
+  margin: 0;
+}
+
+.admin-quick-actions,
+.admin-recent-activity,
+.educo-settings-card,
+.cardx,
+.admin-table-wrap,
+.admin-settings-card {
+  margin: 0;
+}
+
+.cardx-header,
+.cardx-body,
+.admin-settings-card,
+.admin-modal,
+.admin-table th,
+.admin-table td,
+.educo-form-row,
+.admin-form-row {
+  box-sizing: border-box;
+}
+
+.educo-settings-form,
+.change-password-form,
+.admin-form-grid,
+.admin-form {
+  display: grid;
+  gap: 12px;
+}
+
+.educo-form-row,
+.admin-form-row {
+  margin: 0;
+}
+
+.educo-form-row .educo-input,
+.change-password-form .educo-input,
+.admin-form-row .admin-input,
+.admin-form-grid .admin-input {
+  width: 100%;
+}
+
+.admin-modal-actions,
+.admin-students-actions,
+.enrolled-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.admin-modal-actions {
+  margin-top: 12px;
+}
+
+.admin-table {
+  table-layout: auto;
+}
+
+.admin-table th,
+.admin-table td {
+  vertical-align: middle;
+}
+
+.admin-course-cell,
+.admin-students-actions,
+.enrolled-actions {
+  min-height: 34px;
+}
+
+.admin-btn,
+.button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+}
+
+@media (max-width: 900px) {
+  .admin-content,
+  .educo-content {
+    gap: 12px;
+  }
+
+  .admin-toolbar {
+    gap: 8px;
+  }
+
+  .admin-modal-actions {
+    gap: 8px;
+  }
+}
+
+/* Comfort spacing layer */
+:root {
+  --space-1: 8px;
+  --space-2: 12px;
+  --space-3: 16px;
+  --space-4: 20px;
+}
+
+.admin-content,
+.educo-content {
+  gap: var(--space-4);
+}
+
+.admin-toolbar,
+.filter-bar,
+.weather-search-bar,
+.admin-quick-actions-grid,
+.admin-dashboard-quick-grid {
+  gap: var(--space-2);
+}
+
+.educo-settings-form,
+.change-password-form,
+.admin-form-grid,
+.admin-form {
+  gap: var(--space-3);
+}
+
+.cardx-body,
+.admin-settings-card,
+.admin-modal {
+  padding: var(--space-3);
+}
+
+.admin-table th,
+.admin-table td {
+  padding: 12px 14px;
+}
+
+.admin-students-actions,
+.enrolled-actions,
+.admin-modal-actions {
+  gap: var(--space-2);
+}
+
+.admin-btn.icon {
+  min-width: 36px;
+  min-height: 36px;
+}
+
+.admin-btn.icon + .admin-btn.icon {
+  margin-left: 2px;
+}
+
+.checkbox-row {
+  margin: 6px 0 10px;
+}
+
+@media (max-width: 900px) {
+  .admin-content,
+  .educo-content {
+    gap: var(--space-3);
+  }
+
+  .admin-table th,
+  .admin-table td {
+    padding: 10px 12px;
+  }
+}
+
+@media (max-width: 640px) {
+  .admin-content,
+  .educo-content {
+    gap: var(--space-2);
+  }
+
+  .admin-toolbar,
+  .filter-bar,
+  .weather-search-bar,
+  .admin-modal-actions,
+  .admin-students-actions,
+  .enrolled-actions {
+    gap: var(--space-1);
+  }
+}
+
+/* Admin dashboard responsive polish */
+.admin-dashboard-home {
+  display: grid;
+  gap: 16px;
+}
+
+.admin-dashboard-home .admin-page-header {
+  margin-bottom: 0;
+}
+
+.admin-dashboard-home .admin-dashboard-stats {
+  margin-bottom: 0;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+}
+
+.admin-dashboard-home .admin-stat-card {
+  min-height: 96px;
+}
+
+.admin-dashboard-home .admin-dashboard-quick-actions,
+.admin-dashboard-home .admin-dashboard-activity {
+  margin-bottom: 0;
+}
+
+.admin-dashboard-home .admin-dashboard-quick-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 10px;
+}
+
+.admin-dashboard-home .admin-quick-btn {
+  width: 100%;
+  justify-content: center;
+  white-space: nowrap;
+}
+
+.admin-dashboard-home .admin-dashboard-activity {
+  border: 1px solid #dfe7f3;
+  border-radius: 14px;
+  background: #ffffff;
+  box-shadow: 0 10px 24px rgba(15, 23, 42, 0.06);
+  padding: 14px 16px;
+}
+
+.admin-dashboard-home .admin-dashboard-activity h2 {
+  margin-bottom: 10px;
+}
+
+.admin-dashboard-home .admin-activity-list {
+  margin: 0;
+  padding-left: 18px;
+  display: grid;
+  gap: 4px;
+}
+
+@media (max-width: 1200px) {
+  .admin-dashboard-home .admin-dashboard-stats {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .admin-dashboard-home .admin-dashboard-quick-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 900px) {
+  .admin-dashboard-home .admin-page-header {
+    align-items: stretch;
+  }
+
+  .admin-dashboard-home .admin-page-header .admin-btn.primary {
+    width: 100%;
+    justify-content: center;
+  }
+}
+
+@media (max-width: 640px) {
+  .admin-dashboard-home .admin-dashboard-stats {
+    grid-template-columns: 1fr;
+  }
+
+  .admin-dashboard-home .admin-dashboard-quick-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .admin-dashboard-home .admin-stat-card {
+    padding: 14px;
+    gap: 12px;
+  }
+
+  .admin-dashboard-home .admin-stat-value {
+    font-size: 1.3rem;
+  }
+
+  .admin-dashboard-home .admin-dashboard-activity {
+    padding: 12px;
+  }
+
+  .admin-dashboard-home .admin-activity-list li {
+    line-height: 1.35;
+  }
+}
+
+.admin-layout.admin-theme-dark .admin-dashboard-home .admin-dashboard-activity {
+  background: #0f172a;
+  border-color: rgba(148, 163, 184, 0.28);
+  box-shadow: 0 14px 28px rgba(2, 6, 23, 0.42);
+}
+
+/* Students action column: compact icon style */
+.admin-students-col-actions {
+  width: 112px;
+  white-space: nowrap;
+  text-align: right;
+  padding-right: 8px;
+}
+
+.admin-students-actions {
+  display: inline-flex;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 10px;
+  min-width: 86px;
+}
+
+.admin-students-actions .admin-btn.icon {
+  width: 34px;
+  height: 34px;
+  min-width: 34px;
+  min-height: 34px;
+  padding: 0;
+  border-radius: 10px;
+}
+
+.admin-students-actions .admin-btn.icon + .admin-btn.icon {
+  margin-left: 0;
+}
+
+.admin-layout.admin-theme-dark .admin-students-actions .admin-btn.icon {
+  background: rgba(18, 32, 56, 0.72);
+  border-color: rgba(148, 163, 184, 0.34);
+  color: #dbe8ff;
+}
+
+.admin-layout.admin-theme-dark .admin-students-actions .admin-btn.icon:hover {
+  background: rgba(30, 44, 72, 0.84);
+  border-color: rgba(165, 180, 252, 0.45);
+}
+
+.admin-layout.admin-theme-dark .admin-students-actions .admin-btn.icon.danger {
+  border-color: rgba(239, 68, 68, 0.66);
+  color: #fecaca;
+  background: rgba(127, 29, 29, 0.08);
+}
+
+.admin-layout.admin-theme-dark .admin-students-actions .admin-btn.icon.danger:hover {
+  background: rgba(153, 27, 27, 0.2);
+  border-color: rgba(248, 113, 113, 0.78);
+}
+
+@media (max-width: 900px) {
+  .admin-students-col-actions {
+    text-align: left;
+    width: auto;
+    padding-right: 12px;
+  }
+
+  .admin-students-actions {
+    justify-content: flex-start;
+  }
+}
+
+/* Shared admin table action column style */
+.admin-table-col-actions {
+  width: 112px;
+  white-space: nowrap;
+  text-align: right;
+  padding-right: 8px;
+}
+
+.admin-table-actions {
+  display: inline-flex;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 10px;
+  min-width: 86px;
+}
+
+.admin-table-actions .admin-btn.icon {
+  width: 34px;
+  height: 34px;
+  min-width: 34px;
+  min-height: 34px;
+  padding: 0;
+  border-radius: 10px;
+}
+
+.admin-table-actions .admin-btn.icon + .admin-btn.icon {
+  margin-left: 0;
+}
+
+.admin-layout.admin-theme-dark .admin-table-actions .admin-btn.icon {
+  background: rgba(18, 32, 56, 0.72);
+  border-color: rgba(148, 163, 184, 0.34);
+  color: #dbe8ff;
+}
+
+.admin-layout.admin-theme-dark .admin-table-actions .admin-btn.icon:hover {
+  background: rgba(30, 44, 72, 0.84);
+  border-color: rgba(165, 180, 252, 0.45);
+}
+
+.admin-layout.admin-theme-dark .admin-table-actions .admin-btn.icon.danger {
+  border-color: rgba(239, 68, 68, 0.66);
+  color: #fecaca;
+  background: rgba(127, 29, 29, 0.08);
+}
+
+.admin-layout.admin-theme-dark .admin-table-actions .admin-btn.icon.danger:hover {
+  background: rgba(153, 27, 27, 0.2);
+  border-color: rgba(248, 113, 113, 0.78);
+}
+
+@media (max-width: 900px) {
+  .admin-table-col-actions {
+    width: auto;
+    text-align: left;
+    padding-right: 12px;
+  }
+
+  .admin-table-actions {
+    justify-content: flex-start;
+  }
+}
+
+/* Theme text visibility guardrails */
+.admin-layout.admin-theme-light,
+.educo-dashboard:not(.educo-dashboard-dark) {
+  --theme-fg: #0f172a;
+  --theme-muted: #475569;
+}
+
+.admin-layout.admin-theme-dark,
+.educo-dashboard-dark {
+  --theme-fg: #e6eeff;
+  --theme-muted: #a7b6d1;
+}
+
+.admin-layout .admin-content :where(
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6,
+  p,
+  span,
+  strong,
+  small,
+  label,
+  li,
+  td,
+  th,
+  legend
+) {
+  color: var(--theme-fg);
+}
+
+.educo-dashboard .educo-content :where(
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6,
+  p,
+  span,
+  strong,
+  small,
+  label,
+  li,
+  td,
+  th,
+  legend
+) {
+  color: var(--theme-fg);
+}
+
+.admin-layout .admin-content :where(.admin-muted, .muted),
+.educo-dashboard .educo-content :where(.admin-muted, .muted),
+.admin-layout .admin-content :where(.admin-form-row label),
+.educo-dashboard .educo-content :where(.educo-form-label) {
+  color: var(--theme-muted);
+}
+
+.admin-layout.admin-theme-light .admin-input::placeholder,
+.educo-dashboard:not(.educo-dashboard-dark) .educo-input::placeholder {
+  color: #64748b;
+  opacity: 1;
+}
+
+.admin-layout.admin-theme-dark .admin-input::placeholder,
+.educo-dashboard-dark .educo-input::placeholder {
+  color: #93a3c1;
+  opacity: 1;
+}
+
+.admin-layout.admin-theme-light .admin-table th,
+.admin-layout.admin-theme-light .admin-table td,
+.educo-dashboard:not(.educo-dashboard-dark) .admin-table th,
+.educo-dashboard:not(.educo-dashboard-dark) .admin-table td {
+  color: #1e293b;
+}
+
+.admin-layout.admin-theme-dark .admin-table th,
+.admin-layout.admin-theme-dark .admin-table td,
+.educo-dashboard-dark .admin-table th,
+.educo-dashboard-dark .admin-table td {
+  color: #dbe6ff;
+}
+
+/* Final contrast layer for labels, icons, and badges */
+.admin-layout .admin-nav-item,
+.educo-dashboard .educo-sidebar-item,
+.educo-dashboard .educo-header-icon-btn,
+.admin-layout .admin-theme-switch {
+  color: var(--theme-muted);
+}
+
+.admin-layout .admin-nav-item.active,
+.educo-dashboard .educo-sidebar-item.active,
+.admin-layout .admin-nav-item:hover,
+.educo-dashboard .educo-sidebar-item:hover,
+.educo-dashboard .educo-header-icon-btn:hover {
+  color: var(--theme-fg);
+}
+
+.admin-layout .admin-btn,
+.educo-dashboard .button,
+.educo-dashboard .educo-header-user-btn,
+.educo-dashboard .educo-header-user {
+  color: var(--theme-fg);
+}
+
+.admin-layout .admin-btn.primary,
+.educo-dashboard .button.primary {
+  color: #ffffff;
+}
+
+.admin-layout .admin-btn.icon svg,
+.educo-dashboard .educo-header-icon-btn svg,
+.admin-layout .admin-nav-item svg,
+.educo-dashboard .educo-sidebar-item svg {
+  color: currentColor;
+  opacity: 1;
+}
+
+.admin-layout .admin-pill,
+.admin-layout .pill,
+.educo-dashboard .pill {
+  color: var(--theme-fg);
+}
+
+/* Absolute theme contrast lock (highest priority) */
+html[data-educo-theme="light"] .educo-dashboard,
+html[data-educo-theme="light"] .admin-layout {
+  color: #0f172a;
+}
+
+html[data-educo-theme="dark"] .educo-dashboard,
+html[data-educo-theme="dark"] .admin-layout {
+  color: #f8fafc;
+}
+
+html[data-educo-theme="light"] .educo-dashboard .educo-content :where(
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6,
+  p,
+  span,
+  strong,
+  small,
+  label,
+  td,
+  th,
+  li,
+  legend
+),
+html[data-educo-theme="light"] .admin-layout .admin-content :where(
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6,
+  p,
+  span,
+  strong,
+  small,
+  label,
+  td,
+  th,
+  li,
+  legend
+) {
+  color: #0f172a !important;
+}
+
+html[data-educo-theme="dark"] .educo-dashboard .educo-content :where(
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6,
+  p,
+  span,
+  strong,
+  small,
+  label,
+  td,
+  th,
+  li,
+  legend
+),
+html[data-educo-theme="dark"] .admin-layout .admin-content :where(
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6,
+  p,
+  span,
+  strong,
+  small,
+  label,
+  td,
+  th,
+  li,
+  legend
+) {
+  color: #f8fafc !important;
+}
+
+html[data-educo-theme="light"] :where(.muted, .admin-muted, .educo-form-label, .admin-form-row label) {
+  color: #475569 !important;
+}
+
+html[data-educo-theme="dark"] :where(.muted, .admin-muted, .educo-form-label, .admin-form-row label) {
+  color: #cbd5e1 !important;
+}
+
+html[data-educo-theme="dark"] :where(.cardx, .admin-stat-card, .admin-table-wrap, .admin-modal, .admin-settings-card) {
+  background: #0f172a;
+  border-color: rgba(148, 163, 184, 0.3);
+}
+
+html[data-educo-theme="dark"] :where(.educo-input, .input, .admin-input, textarea, select) {
+  background: #020617 !important;
+  color: #f8fafc !important;
+  border-color: rgba(148, 163, 184, 0.35) !important;
+}
+
+html[data-educo-theme="dark"] :where(.educo-input, .input, .admin-input, textarea, select)::placeholder {
+  color: #94a3b8 !important;
+}
+
+html[data-educo-theme="light"] :where(.educo-input, .input, .admin-input, textarea, select) {
+  background: #ffffff !important;
+  color: #0f172a !important;
+}
+
+html[data-educo-theme="light"] :where(.educo-input, .input, .admin-input, textarea, select)::placeholder {
+  color: #64748b !important;
+}
+
+html[data-educo-theme="dark"] .course-dist-donut-wrap {
+  background: radial-gradient(circle at 50% 38%, #0f172a 0%, #020617 62%);
+  border-color: rgba(148, 163, 184, 0.3);
+  box-shadow: inset 0 1px 0 rgba(148, 163, 184, 0.2), 0 8px 20px rgba(2, 6, 23, 0.5);
+}
+
+html[data-educo-theme="dark"] .course-dist-center-label,
+html[data-educo-theme="dark"] .course-dist-center-value,
+html[data-educo-theme="dark"] .course-dist-grid,
+html[data-educo-theme="dark"] .course-dist-name,
+html[data-educo-theme="dark"] .course-dist-count {
+  color: #e2e8f0 !important;
+}
+
+html[data-educo-theme="dark"] .course-dist-row {
+  background: #0b1327;
+  border-color: rgba(148, 163, 184, 0.3);
+}
+
+html[data-educo-theme="dark"] :where(.recharts-text, .recharts-label, .recharts-cartesian-axis-tick-value) {
+  fill: #dbeafe !important;
+}
+
+html[data-educo-theme="dark"] .recharts-default-tooltip,
+html[data-educo-theme="dark"] .recharts-tooltip-wrapper .recharts-default-tooltip {
+  background: #0f172a !important;
+  border: 1px solid rgba(148, 163, 184, 0.35) !important;
+  color: #f8fafc !important;
+}
+
+html[data-educo-theme="dark"] .recharts-tooltip-wrapper .recharts-tooltip-label,
+html[data-educo-theme="dark"] .recharts-tooltip-wrapper .recharts-tooltip-item {
+  color: #f8fafc !important;
+}
+
+.admin-layout .admin-pill.warn,
+.admin-layout .pill.warn,
+.educo-dashboard .pill.warn {
+  color: #92400e;
+}
+
+.admin-layout.admin-theme-dark .admin-pill.warn,
+.admin-layout.admin-theme-dark .pill.warn,
+.educo-dashboard-dark .pill.warn {
+  color: #fde68a;
+}
+
+.admin-layout .pill.success,
+.educo-dashboard .pill.success {
+  color: #166534;
+}
+
+.admin-layout.admin-theme-dark .pill.success,
+.educo-dashboard-dark .pill.success {
+  color: #bbf7d0;
+}
+
+/* Admin theme geometry lock: keep dark/light same size and spacing */
+.admin-layout .admin-sidebar,
+.admin-layout .admin-sidebar-nav,
+.admin-layout .admin-sidebar-bottom {
+  overflow-x: hidden;
+}
+
+.admin-layout .admin-content {
+  padding: 22px;
+}
+
+.admin-layout .admin-sidebar-brand {
+  font-size: 1.24rem;
+  font-weight: 800;
+}
+
+.admin-layout .admin-nav-item {
+  margin: 0;
+  border-radius: 11px;
+  min-width: 0;
+  width: 100%;
+  white-space: normal;
+  word-break: break-word;
+}
+
+.admin-layout .admin-sidebar-nav,
+.admin-layout .admin-sidebar-bottom {
+  padding-left: 10px;
+  padding-right: 10px;
+}
+
+.admin-layout .admin-stat-card,
+.admin-layout .admin-table-wrap,
+.admin-layout .cardx,
+.admin-layout .admin-modal,
+.admin-layout .admin-search-wrap,
+.admin-layout .admin-settings-card {
+  border-width: 1px;
+  border-style: solid;
+  border-radius: 14px;
+}
+
+.admin-layout .admin-input {
+  min-height: 40px;
+  border-radius: 10px;
+}
+
+/* Final hard lock: never show horizontal scrollbar in admin sidebar (light mode) */
+.admin-layout.admin-theme-light .admin-sidebar,
+.admin-layout.admin-theme-light .admin-sidebar-nav,
+.admin-layout.admin-theme-light .admin-sidebar-bottom {
+  overflow-x: hidden !important;
+}
+
+.admin-layout.admin-theme-light .admin-sidebar {
+  overflow: hidden !important;
+  max-width: 100%;
+  contain: inline-size;
+}
+
+.admin-layout.admin-theme-light .admin-sidebar-nav {
+  overflow-y: auto !important;
+  overflow-x: hidden !important;
+  max-width: 100%;
+}
+
+.admin-layout.admin-theme-light .admin-sidebar-bottom {
+  overflow: hidden !important;
+  max-width: 100%;
+}
+
+.admin-layout.admin-theme-light .admin-sidebar::-webkit-scrollbar:horizontal,
+.admin-layout.admin-theme-light .admin-sidebar-nav::-webkit-scrollbar:horizontal,
+.admin-layout.admin-theme-light .admin-sidebar-bottom::-webkit-scrollbar:horizontal {
+  height: 0 !important;
+  display: none;
+}
+
+.admin-layout.admin-theme-light .admin-sidebar *::-webkit-scrollbar:horizontal {
+  height: 0 !important;
+  display: none;
+}
+
+/* Final light-mode admin size parity with dark mode */
+.admin-layout.admin-theme-light .admin-sidebar {
+  width: 220px !important;
+  min-width: 220px !important;
+  padding: 16px 0 !important;
+}
+
+.admin-layout.admin-theme-light .admin-sidebar-brand {
+  padding: 0 16px 16px !important;
+  font-size: 1.2rem !important;
+  font-weight: 700 !important;
+}
+
+.admin-layout.admin-theme-light .admin-theme-switch {
+  margin: 0 12px 12px !important;
+  padding: 10px !important;
+  border-radius: 10px !important;
+}
+
+.admin-layout.admin-theme-light .admin-theme-switch .admin-btn {
+  padding: 6px 10px !important;
+}
+
+.admin-layout.admin-theme-light .admin-sidebar-nav,
+.admin-layout.admin-theme-light .admin-sidebar-bottom {
+  gap: 4px !important;
+  padding-left: 10px !important;
+  padding-right: 10px !important;
+}
+
+.admin-layout.admin-theme-light .admin-nav-item {
+  width: 100% !important;
+  margin: 0 !important;
+  padding: 10px 16px !important;
+  font-size: 0.95rem !important;
+  line-height: 1.35;
+  border-radius: 11px !important;
+}
+
+/* Final system-wide light theme (soft neumorphic) */
+:root {
+  --neo-bg: #eaf0f8;
+  --neo-surface: #edf2f9;
+  --neo-text: #335ea8;
+  --neo-muted: #6f84b6;
+  --neo-title-size: clamp(1.24rem, 1.1rem + 0.35vw, 1.52rem);
+  --neo-body-size: 0.96rem;
+  --neo-caption-size: 0.85rem;
+  --neo-tight-lh: 1.24;
+  --neo-body-lh: 1.45;
+  --neo-accent: #61c5ec;
+  --neo-accent-2: #46afe3;
+  --neo-border: rgba(132, 156, 198, 0.15);
+  --neo-shadow-out: 7px 7px 15px #d4dcea, -7px -7px 15px #f9fcff;
+  --neo-shadow-in: inset 6px 6px 12px #d4dcea, inset -6px -6px 12px #f9fcff;
+  --neo-radius-sm: 12px;
+  --neo-radius-md: 16px;
+  --neo-radius-lg: 22px;
+}
+
+.admin-layout.admin-theme-light,
+.educo-dashboard:not(.educo-dashboard-dark) {
+  background:
+    radial-gradient(1200px 520px at -10% -20%, rgba(97, 197, 236, 0.12), transparent 60%),
+    radial-gradient(820px 420px at 110% 120%, rgba(70, 175, 227, 0.08), transparent 62%),
+    var(--neo-bg) !important;
+  color: var(--neo-text) !important;
+}
+
+.admin-layout.admin-theme-light .admin-main,
+.educo-dashboard:not(.educo-dashboard-dark) .educo-main,
+.educo-dashboard:not(.educo-dashboard-dark) .educo-content,
+.admin-layout.admin-theme-light .admin-content {
+  background: var(--neo-bg) !important;
+}
+
+.admin-layout.admin-theme-light .admin-sidebar,
+.educo-dashboard:not(.educo-dashboard-dark) .educo-sidebar {
+  background: var(--neo-surface) !important;
+  border-right: 0 !important;
+  box-shadow: var(--neo-shadow-out);
+  border-radius: 0 var(--neo-radius-lg) var(--neo-radius-lg) 0;
+}
+
+.admin-layout.admin-theme-light .admin-sidebar-brand,
+.educo-dashboard:not(.educo-dashboard-dark) .educo-sidebar-title {
+  font-weight: 800;
+  letter-spacing: -0.01em;
+}
+
+.admin-layout.admin-theme-light .admin-sidebar-nav,
+.educo-dashboard:not(.educo-dashboard-dark) .educo-sidebar-nav,
+.admin-layout.admin-theme-light .admin-sidebar-bottom,
+.educo-dashboard:not(.educo-dashboard-dark) .educo-sidebar-bottom {
+  gap: 8px;
+}
+
+.admin-layout.admin-theme-light .admin-nav-item,
+.educo-dashboard:not(.educo-dashboard-dark) .educo-sidebar-item {
+  min-height: 46px;
+  padding: 11px 14px !important;
+  font-size: 0.96rem;
+  font-weight: 600;
+  letter-spacing: 0.01em;
+  border-radius: var(--neo-radius-md) !important;
+}
+
+.admin-layout.admin-theme-light .admin-nav-item svg,
+.educo-dashboard:not(.educo-dashboard-dark) .educo-sidebar-item svg {
+  width: 19px;
+  height: 19px;
+  color: currentColor;
+  opacity: 0.95;
+}
+
+.admin-layout.admin-theme-light .admin-sidebar-brand,
+.educo-dashboard:not(.educo-dashboard-dark) .educo-sidebar-title,
+.admin-layout.admin-theme-light .admin-page-title,
+.educo-dashboard:not(.educo-dashboard-dark) .educo-header-welcome,
+.admin-layout.admin-theme-light .admin-settings-title,
+.educo-dashboard:not(.educo-dashboard-dark) .cardx-title,
+.admin-layout.admin-theme-light .cardx-title,
+.admin-layout.admin-theme-light .admin-stat-value,
+.educo-dashboard:not(.educo-dashboard-dark) .educo-summary-value {
+  color: var(--neo-text) !important;
+  line-height: var(--neo-tight-lh);
+}
+
+.admin-layout.admin-theme-light .admin-page-title,
+.educo-dashboard:not(.educo-dashboard-dark) .educo-header-welcome {
+  font-size: var(--neo-title-size);
+  font-weight: 800;
+  letter-spacing: -0.015em;
+}
+
+.admin-layout.admin-theme-light .cardx-title,
+.educo-dashboard:not(.educo-dashboard-dark) .cardx-title {
+  font-size: 1.02rem;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+}
+
+.admin-layout.admin-theme-light .admin-stat-value,
+.educo-dashboard:not(.educo-dashboard-dark) .educo-summary-value {
+  font-size: clamp(1.45rem, 1.32rem + 0.42vw, 1.84rem);
+  font-weight: 800;
+}
+
+.admin-layout.admin-theme-light .admin-muted,
+.admin-layout.admin-theme-light .admin-stat-label,
+.admin-layout.admin-theme-light .admin-table th,
+.admin-layout.admin-theme-light .admin-form-row label,
+.educo-dashboard:not(.educo-dashboard-dark) .muted,
+.educo-dashboard:not(.educo-dashboard-dark) .cardx-description,
+.educo-dashboard:not(.educo-dashboard-dark) .educo-header-user-role,
+.educo-dashboard:not(.educo-dashboard-dark) .educo-form-label {
+  color: var(--neo-muted) !important;
+  font-size: var(--neo-body-size);
+  line-height: var(--neo-body-lh);
+}
+
+.admin-layout.admin-theme-light .admin-table th,
+.educo-dashboard:not(.educo-dashboard-dark) .admin-table th {
+  font-size: var(--neo-caption-size);
+  font-weight: 700;
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+}
+
+.admin-layout.admin-theme-light .admin-table td,
+.educo-dashboard:not(.educo-dashboard-dark) .admin-table td {
+  font-size: 0.93rem;
+  line-height: 1.4;
+}
+
+.admin-layout.admin-theme-light .admin-theme-switch,
+.admin-layout.admin-theme-light .admin-stat-card,
+.admin-layout.admin-theme-light .admin-table-wrap,
+.admin-layout.admin-theme-light .cardx,
+.admin-layout.admin-theme-light .admin-modal,
+.admin-layout.admin-theme-light .admin-search-wrap,
+.admin-layout.admin-theme-light .admin-settings-card,
+.educo-dashboard:not(.educo-dashboard-dark) .cardx,
+.educo-dashboard:not(.educo-dashboard-dark) .educo-summary-card,
+.educo-dashboard:not(.educo-dashboard-dark) .educo-header,
+.educo-dashboard:not(.educo-dashboard-dark) .educo-header-dropdown,
+.educo-dashboard:not(.educo-dashboard-dark) .educo-header-messages-panel,
+.educo-dashboard:not(.educo-dashboard-dark) .educo-header-search-panel,
+.admin-confirm-modal {
+  background: var(--neo-surface) !important;
+  border: 1px solid var(--neo-border) !important;
+  box-shadow: var(--neo-shadow-out) !important;
+  border-radius: var(--neo-radius-lg) !important;
+}
+
+.admin-layout.admin-theme-light .admin-input,
+.admin-layout.admin-theme-light .admin-search-wrap,
+.admin-layout.admin-theme-light .admin-btn,
+.educo-dashboard:not(.educo-dashboard-dark) .educo-header-search,
+.educo-dashboard:not(.educo-dashboard-dark) .educo-header-icon-btn,
+.educo-dashboard:not(.educo-dashboard-dark) .educo-header-user,
+.educo-dashboard:not(.educo-dashboard-dark) .educo-header-user-btn,
+.educo-dashboard:not(.educo-dashboard-dark) .button,
+.educo-dashboard:not(.educo-dashboard-dark) .input,
+.admin-layout.admin-theme-light .student-picker-option {
+  background: var(--neo-surface) !important;
+  border: 1px solid var(--neo-border) !important;
+  box-shadow: var(--neo-shadow-out);
+  color: var(--neo-text) !important;
+  border-radius: var(--neo-radius-md) !important;
+}
+
+.admin-layout.admin-theme-light .admin-input,
+.educo-dashboard:not(.educo-dashboard-dark) .educo-header-search,
+.educo-dashboard:not(.educo-dashboard-dark) .input {
+  box-shadow: var(--neo-shadow-in);
+}
+
+.admin-layout.admin-theme-light .admin-input:focus,
+.educo-dashboard:not(.educo-dashboard-dark) .educo-header-search:focus,
+.educo-dashboard:not(.educo-dashboard-dark) .input:focus {
+  border-color: rgba(73, 183, 231, 0.45) !important;
+  box-shadow: inset 5px 5px 10px #d4dcea, inset -5px -5px 10px #f9fcff, 0 0 0 3px rgba(73, 183, 231, 0.11) !important;
+}
+
+.admin-layout.admin-theme-light .admin-btn.primary,
+.educo-dashboard:not(.educo-dashboard-dark) .button.primary,
+.educo-dashboard:not(.educo-dashboard-dark) .admin-btn.primary,
+.admin-layout.admin-theme-light .admin-nav-item.active,
+.educo-dashboard:not(.educo-dashboard-dark) .educo-sidebar-item.active,
+.educo-dashboard:not(.educo-dashboard-dark) .educo-toggle.on,
+.admin-layout.admin-theme-light .educo-toggle.on {
+  background: linear-gradient(135deg, var(--neo-accent), var(--neo-accent-2)) !important;
+  border-color: transparent !important;
+  color: #f7fbff !important;
+  box-shadow: 0 7px 16px rgba(58, 160, 220, 0.22) !important;
+  font-weight: 700;
+}
+
+.admin-layout.admin-theme-light .admin-btn:hover,
+.educo-dashboard:not(.educo-dashboard-dark) .button:hover,
+.educo-dashboard:not(.educo-dashboard-dark) .educo-header-icon-btn:hover,
+.admin-layout.admin-theme-light .admin-nav-item:hover,
+.educo-dashboard:not(.educo-dashboard-dark) .educo-sidebar-item:hover {
+  border-color: rgba(73, 183, 231, 0.26) !important;
+  transform: translateY(-0.5px);
+}
+
+.admin-layout.admin-theme-light .admin-nav-item.active,
+.educo-dashboard:not(.educo-dashboard-dark) .educo-sidebar-item.active {
+  padding-left: 16px !important;
+}
+
+.admin-layout.admin-theme-light .admin-table,
+.admin-layout.admin-theme-light .admin-table th,
+.admin-layout.admin-theme-light .admin-table td {
+  background: transparent;
+}
+
+.admin-layout.admin-theme-light .admin-table th {
+  color: var(--neo-muted) !important;
+  border-bottom-color: rgba(120, 145, 190, 0.18) !important;
+}
+
+.admin-layout.admin-theme-light .admin-table td {
+  color: var(--neo-text) !important;
+  border-bottom-color: rgba(120, 145, 190, 0.14) !important;
+}
+
+.admin-layout.admin-theme-light .admin-table tbody tr:hover {
+  background: rgba(73, 183, 231, 0.06) !important;
+}
+
+.admin-layout.admin-theme-light .admin-pill.warn,
+.admin-layout.admin-theme-light .pill.warn,
+.educo-dashboard:not(.educo-dashboard-dark) .pill.warn {
+  background: #f8d7cf !important;
+  border-color: #efb0a3 !important;
+  color: #8a3d30 !important;
+  box-shadow: var(--neo-shadow-out);
+}
+
+.admin-layout.admin-theme-light .pill.success,
+.educo-dashboard:not(.educo-dashboard-dark) .pill.success {
+  background: #d6f3e7 !important;
+  border-color: #9edec5 !important;
+  color: #16614a !important;
+  box-shadow: var(--neo-shadow-out);
+}
+
+.admin-layout.admin-theme-light .admin-confirm-card,
+.admin-layout.admin-theme-light .enrolled-delete-card,
+.educo-dashboard:not(.educo-dashboard-dark) .admin-confirm-card,
+.educo-dashboard:not(.educo-dashboard-dark) .enrolled-delete-card {
+  background: var(--neo-surface) !important;
+  border: 1px solid var(--neo-border) !important;
+  box-shadow: var(--neo-shadow-in);
+  border-radius: var(--neo-radius-md);
+}
+
+.admin-layout.admin-theme-light .admin-confirm-sub,
+.admin-layout.admin-theme-light .admin-confirm-meta,
+.admin-layout.admin-theme-light .enrolled-delete-sub,
+.admin-layout.admin-theme-light .enrolled-delete-meta {
+  color: var(--neo-muted) !important;
+}
+
+/* Admin custom confirm modal */
+.admin-confirm-modal {
+  max-width: 520px !important;
+  border-radius: var(--neo-radius-lg);
+  border: 1px solid var(--neo-border);
+  box-shadow: var(--neo-shadow-out);
+}
+
+.admin-confirm-title {
+  margin: 0;
+  font-size: 2rem;
+  letter-spacing: -0.02em;
+}
+
+.admin-confirm-sub {
+  margin: 10px 0 14px;
+  color: #60728f;
+  font-size: 1.05rem;
+}
+
+.admin-confirm-card {
+  border: 1px solid var(--neo-border);
+  border-radius: var(--neo-radius-md);
+  background: var(--neo-surface);
+  box-shadow: var(--neo-shadow-in);
+  padding: 12px 14px;
+  display: grid;
+  gap: 4px;
+  margin-bottom: 16px;
+}
+
+.admin-confirm-meta {
+  color: #5b6e8c;
+  font-size: 0.95rem;
+}
+
+.admin-layout.admin-theme-dark .admin-confirm-modal {
+  background: #0f172a;
+  border-color: rgba(148, 163, 184, 0.28);
+  box-shadow: 0 20px 48px rgba(2, 6, 23, 0.48);
+}
+
+.admin-layout.admin-theme-dark .admin-confirm-title {
+  color: #e6eeff;
+}
+
+.admin-layout.admin-theme-dark .admin-confirm-sub,
+.admin-layout.admin-theme-dark .admin-confirm-meta {
+  color: #a9b9d6;
+}
+
+.admin-layout.admin-theme-dark .admin-confirm-card {
+  border-color: rgba(148, 163, 184, 0.34);
+  background: linear-gradient(180deg, rgba(30, 41, 59, 0.76) 0%, rgba(15, 23, 42, 0.84) 100%);
+}
+
+@media (max-width: 900px) {
+  .admin-layout.admin-theme-light .admin-content,
+  .educo-dashboard:not(.educo-dashboard-dark) .educo-content {
+    padding: 14px;
+  }
+
+  .admin-layout.admin-theme-light .admin-mobile-topbar {
+    padding: 10px 14px 0;
+  }
+
+  .admin-layout.admin-theme-light .admin-page-title,
+  .educo-dashboard:not(.educo-dashboard-dark) .educo-header-welcome {
+    font-size: clamp(1.12rem, 1rem + 0.6vw, 1.3rem);
+  }
+
+  .admin-layout.admin-theme-light .admin-stat-card,
+  .educo-dashboard:not(.educo-dashboard-dark) .educo-summary-card,
+  .admin-layout.admin-theme-light .cardx,
+  .educo-dashboard:not(.educo-dashboard-dark) .cardx {
+    padding: 12px;
+    border-radius: 14px !important;
+  }
+
+  .admin-layout.admin-theme-light .admin-btn,
+  .educo-dashboard:not(.educo-dashboard-dark) .button,
+  .admin-layout.admin-theme-light .admin-input,
+  .educo-dashboard:not(.educo-dashboard-dark) .input,
+  .educo-dashboard:not(.educo-dashboard-dark) .educo-header-search {
+    min-height: 40px;
+    font-size: 0.92rem;
+  }
+}
+
+@media (max-width: 640px) {
+  .admin-layout.admin-theme-light .admin-sidebar,
+  .educo-dashboard:not(.educo-dashboard-dark) .educo-sidebar {
+    border-radius: 0 18px 18px 0;
+  }
+
+  .admin-layout.admin-theme-light .admin-nav-item,
+  .educo-dashboard:not(.educo-dashboard-dark) .educo-sidebar-item {
+    min-height: 42px;
+    padding: 10px 12px !important;
+    font-size: 0.91rem;
+    border-radius: 13px !important;
+  }
+
+  .admin-layout.admin-theme-light .admin-nav-item svg,
+  .educo-dashboard:not(.educo-dashboard-dark) .educo-sidebar-item svg {
+    width: 18px;
+    height: 18px;
+  }
+
+  .admin-layout.admin-theme-light .admin-header,
+  .educo-dashboard:not(.educo-dashboard-dark) .educo-header {
+    padding: 12px 14px;
+  }
+
+  .admin-layout.admin-theme-light .admin-table th,
+  .admin-layout.admin-theme-light .admin-table td,
+  .educo-dashboard:not(.educo-dashboard-dark) .admin-table th,
+  .educo-dashboard:not(.educo-dashboard-dark) .admin-table td {
+    padding: 9px;
+  }
+
+  .admin-layout.admin-theme-light .admin-modal,
+  .educo-dashboard:not(.educo-dashboard-dark) .admin-modal,
+  .admin-layout.admin-theme-light .admin-confirm-modal,
+  .educo-dashboard:not(.educo-dashboard-dark) .admin-confirm-modal {
+    border-radius: 16px !important;
+    padding: 14px;
+  }
+}
+
+@media (max-width: 480px) {
+  .admin-layout.admin-theme-light .admin-content,
+  .educo-dashboard:not(.educo-dashboard-dark) .educo-content {
+    padding: 10px;
+  }
+
+  .admin-layout.admin-theme-light .admin-mobile-topbar {
+    padding: 8px 10px 0;
+  }
+
+  .admin-layout.admin-theme-light .admin-page-title,
+  .educo-dashboard:not(.educo-dashboard-dark) .educo-header-welcome {
+    font-size: 1.04rem;
+  }
+
+  .admin-layout.admin-theme-light .admin-stat-card,
+  .educo-dashboard:not(.educo-dashboard-dark) .educo-summary-card,
+  .admin-layout.admin-theme-light .cardx,
+  .educo-dashboard:not(.educo-dashboard-dark) .cardx {
+    padding: 10px;
+    border-radius: 12px !important;
+  }
+
+  .admin-layout.admin-theme-light .admin-btn,
+  .educo-dashboard:not(.educo-dashboard-dark) .button,
+  .admin-layout.admin-theme-light .admin-input,
+  .educo-dashboard:not(.educo-dashboard-dark) .input,
+  .educo-dashboard:not(.educo-dashboard-dark) .educo-header-search {
+    min-height: 38px;
+    font-size: 0.88rem;
+  }
+}
+
+/* Final parity lock: same design language in light and dark + guaranteed readability */
+:root {
+  --parity-radius-card: 16px;
+  --parity-radius-control: 12px;
+}
+
+.admin-layout.admin-theme-dark,
+.educo-dashboard-dark {
+  background: #0b1427 !important;
+  color: #dbe7ff !important;
+}
+
+.admin-layout.admin-theme-dark .admin-main,
+.admin-layout.admin-theme-dark .admin-content,
+.educo-dashboard-dark .educo-main,
+.educo-dashboard-dark .educo-content {
+  background: #0b1427 !important;
+}
+
+.admin-layout.admin-theme-dark .admin-sidebar,
+.educo-dashboard-dark .educo-sidebar,
+.admin-layout.admin-theme-dark .admin-theme-switch,
+.admin-layout.admin-theme-dark .admin-stat-card,
+.admin-layout.admin-theme-dark .admin-table-wrap,
+.admin-layout.admin-theme-dark .cardx,
+.admin-layout.admin-theme-dark .admin-modal,
+.admin-layout.admin-theme-dark .admin-search-wrap,
+.admin-layout.admin-theme-dark .admin-settings-card,
+.educo-dashboard-dark .cardx,
+.educo-dashboard-dark .educo-summary-card,
+.educo-dashboard-dark .educo-header,
+.educo-dashboard-dark .educo-header-dropdown,
+.educo-dashboard-dark .educo-header-messages-panel,
+.educo-dashboard-dark .educo-header-search-panel {
+  border-radius: var(--parity-radius-card) !important;
+  border: 1px solid rgba(93, 121, 177, 0.35) !important;
+  background: linear-gradient(165deg, rgba(20, 33, 62, 0.92), rgba(14, 24, 46, 0.95)) !important;
+  box-shadow: 0 14px 28px rgba(2, 6, 23, 0.42), inset 0 1px 0 rgba(180, 200, 236, 0.08) !important;
+}
+
+.admin-layout.admin-theme-dark .admin-input,
+.admin-layout.admin-theme-dark .admin-btn,
+.educo-dashboard-dark .button,
+.educo-dashboard-dark .input,
+.educo-dashboard-dark .educo-header-search,
+.educo-dashboard-dark .educo-header-icon-btn,
+.educo-dashboard-dark .educo-header-user,
+.educo-dashboard-dark .educo-header-user-btn,
+.admin-layout.admin-theme-dark .student-picker-option {
+  border-radius: var(--parity-radius-control) !important;
+  border: 1px solid rgba(106, 137, 198, 0.36) !important;
+  background: linear-gradient(160deg, rgba(22, 37, 68, 0.95), rgba(15, 28, 52, 0.96)) !important;
+  color: #deebff !important;
+}
+
+.admin-layout.admin-theme-dark .admin-input::placeholder,
+.educo-dashboard-dark .input::placeholder,
+.educo-dashboard-dark .educo-header-search::placeholder {
+  color: #96add6 !important;
+}
+
+.admin-layout.admin-theme-dark .admin-btn.primary,
+.educo-dashboard-dark .button.primary,
+.educo-dashboard-dark .admin-btn.primary,
+.admin-layout.admin-theme-dark .admin-nav-item.active,
+.educo-dashboard-dark .educo-sidebar-item.active {
+  background: linear-gradient(135deg, #61c5ec, #46afe3) !important;
+  color: #f5fbff !important;
+  border-color: transparent !important;
+  box-shadow: 0 10px 22px rgba(44, 143, 205, 0.3) !important;
+}
+
+.admin-layout.admin-theme-dark .admin-page-title,
+.admin-layout.admin-theme-dark .cardx-title,
+.admin-layout.admin-theme-dark .admin-stat-value,
+.educo-dashboard-dark .educo-header-welcome,
+.educo-dashboard-dark .cardx-title,
+.educo-dashboard-dark .educo-summary-value,
+.admin-layout.admin-theme-light .admin-page-title,
+.admin-layout.admin-theme-light .cardx-title,
+.admin-layout.admin-theme-light .admin-stat-value,
+.educo-dashboard:not(.educo-dashboard-dark) .educo-header-welcome,
+.educo-dashboard:not(.educo-dashboard-dark) .cardx-title,
+.educo-dashboard:not(.educo-dashboard-dark) .educo-summary-value {
+  color: inherit !important;
+}
+
+.admin-layout.admin-theme-dark .admin-muted,
+.admin-layout.admin-theme-dark .admin-stat-label,
+.admin-layout.admin-theme-dark .admin-table th,
+.admin-layout.admin-theme-dark .admin-form-row label,
+.educo-dashboard-dark .muted,
+.educo-dashboard-dark .cardx-description,
+.educo-dashboard-dark .educo-header-user-role,
+.educo-dashboard-dark .educo-form-label {
+  color: #9eb2d8 !important;
+}
+
+.admin-layout.admin-theme-dark .admin-table td,
+.educo-dashboard-dark .admin-table td,
+.admin-layout.admin-theme-light .admin-table td,
+.educo-dashboard:not(.educo-dashboard-dark) .admin-table td {
+  color: inherit !important;
+}
+
+.admin-layout.admin-theme-dark .admin-table th,
+.educo-dashboard-dark .admin-table th {
+  border-bottom-color: rgba(103, 131, 187, 0.34) !important;
+}
+
+.admin-layout.admin-theme-dark .admin-table td,
+.educo-dashboard-dark .admin-table td {
+  border-bottom-color: rgba(103, 131, 187, 0.24) !important;
+}
+
+.admin-layout.admin-theme-dark .admin-confirm-title,
+.educo-dashboard-dark .admin-confirm-title,
+.admin-layout.admin-theme-light .admin-confirm-title,
+.educo-dashboard:not(.educo-dashboard-dark) .admin-confirm-title {
+  color: inherit !important;
+}
+
+.admin-layout.admin-theme-dark .admin-confirm-sub,
+.admin-layout.admin-theme-dark .admin-confirm-meta,
+.educo-dashboard-dark .admin-confirm-sub,
+.educo-dashboard-dark .admin-confirm-meta,
+.admin-layout.admin-theme-light .admin-confirm-sub,
+.admin-layout.admin-theme-light .admin-confirm-meta,
+.educo-dashboard:not(.educo-dashboard-dark) .admin-confirm-sub,
+.educo-dashboard:not(.educo-dashboard-dark) .admin-confirm-meta {
+  opacity: 0.92;
+}
+
+/* Final contrast polish */
+.admin-layout.admin-theme-light .muted,
+.educo-dashboard:not(.educo-dashboard-dark) .muted {
+  color: #5d739f !important;
+}
+
+.admin-layout.admin-theme-dark .muted,
+.educo-dashboard-dark .muted {
+  color: #9eb2d8 !important;
+}
+
+.admin-layout.admin-theme-light .pill,
+.educo-dashboard:not(.educo-dashboard-dark) .pill,
+.admin-layout.admin-theme-light .admin-pill,
+.educo-dashboard:not(.educo-dashboard-dark) .admin-pill {
+  color: #355177 !important;
+}
+
+.admin-layout.admin-theme-dark .pill,
+.educo-dashboard-dark .pill,
+.admin-layout.admin-theme-dark .admin-pill,
+.educo-dashboard-dark .admin-pill {
+  color: #dbe8ff !important;
+}
+
+.admin-layout.admin-theme-light .educo-sidebar-badge,
+.educo-dashboard:not(.educo-dashboard-dark) .educo-sidebar-badge,
+.admin-layout.admin-theme-light .educo-header-badge,
+.educo-dashboard:not(.educo-dashboard-dark) .educo-header-badge {
+  color: #f8fbff !important;
+}
+
+.admin-layout.admin-theme-dark .educo-sidebar-badge,
+.educo-dashboard-dark .educo-sidebar-badge,
+.admin-layout.admin-theme-dark .educo-header-badge,
+.educo-dashboard-dark .educo-header-badge {
+  color: #f8fbff !important;
+}
+
+.admin-layout.admin-theme-light a,
+.educo-dashboard:not(.educo-dashboard-dark) a {
+  color: #3e66aa;
+}
+
+.admin-layout.admin-theme-dark a,
+.educo-dashboard-dark a {
+  color: #98c5ff;
+}
+
+.admin-layout.admin-theme-light .admin-table tbody tr:hover td,
+.educo-dashboard:not(.educo-dashboard-dark) .admin-table tbody tr:hover td {
+  color: #2f4f84 !important;
+}
+
+.admin-layout.admin-theme-dark .admin-table tbody tr:hover td,
+.educo-dashboard-dark .admin-table tbody tr:hover td {
+  color: #e5efff !important;
+}
+
+/* Final dark-mode text visibility lock */
+.admin-layout.admin-theme-dark,
+.educo-dashboard-dark,
+html[data-educo-theme="dark"] .login-page,
+html[data-educo-theme="dark"] .login-card {
+  color: #dce8ff !important;
+}
+
+.admin-layout.admin-theme-dark h1,
+.admin-layout.admin-theme-dark h2,
+.admin-layout.admin-theme-dark h3,
+.admin-layout.admin-theme-dark h4,
+.admin-layout.admin-theme-dark h5,
+.admin-layout.admin-theme-dark h6,
+.admin-layout.admin-theme-dark p,
+.admin-layout.admin-theme-dark span,
+.admin-layout.admin-theme-dark strong,
+.admin-layout.admin-theme-dark em,
+.admin-layout.admin-theme-dark small,
+.admin-layout.admin-theme-dark li,
+.admin-layout.admin-theme-dark label,
+.admin-layout.admin-theme-dark th,
+.admin-layout.admin-theme-dark td,
+.admin-layout.admin-theme-dark a,
+.educo-dashboard-dark h1,
+.educo-dashboard-dark h2,
+.educo-dashboard-dark h3,
+.educo-dashboard-dark h4,
+.educo-dashboard-dark h5,
+.educo-dashboard-dark h6,
+.educo-dashboard-dark p,
+.educo-dashboard-dark span,
+.educo-dashboard-dark strong,
+.educo-dashboard-dark em,
+.educo-dashboard-dark small,
+.educo-dashboard-dark li,
+.educo-dashboard-dark label,
+.educo-dashboard-dark th,
+.educo-dashboard-dark td,
+.educo-dashboard-dark a {
+  color: #dce8ff !important;
+}
+
+.admin-layout.admin-theme-dark .muted,
+.admin-layout.admin-theme-dark .admin-muted,
+.admin-layout.admin-theme-dark .admin-stat-label,
+.admin-layout.admin-theme-dark .admin-form-row label,
+.admin-layout.admin-theme-dark .admin-table th,
+.educo-dashboard-dark .muted,
+.educo-dashboard-dark .cardx-description,
+.educo-dashboard-dark .educo-header-user-role,
+.educo-dashboard-dark .educo-form-label,
+.educo-dashboard-dark .admin-table th {
+  color: #abc0e7 !important;
+}
+
+.admin-layout.admin-theme-dark input,
+.admin-layout.admin-theme-dark textarea,
+.admin-layout.admin-theme-dark select,
+.educo-dashboard-dark input,
+.educo-dashboard-dark textarea,
+.educo-dashboard-dark select,
+html[data-educo-theme="dark"] .login-input {
+  color: #e6f0ff !important;
+}
+
+.admin-layout.admin-theme-dark input::placeholder,
+.admin-layout.admin-theme-dark textarea::placeholder,
+.educo-dashboard-dark input::placeholder,
+.educo-dashboard-dark textarea::placeholder,
+html[data-educo-theme="dark"] .login-input::placeholder {
+  color: #9eb6de !important;
+}
+
+.admin-layout.admin-theme-dark .pill,
+.admin-layout.admin-theme-dark .admin-pill,
+.educo-dashboard-dark .pill,
+.educo-dashboard-dark .admin-pill {
+  color: #eaf2ff !important;
+}
+
+/* Preserve course distribution center styling over global text locks */
+.course-dist-center-core {
+  background: radial-gradient(circle at 35% 30%, #0f1d3f 0%, #060f27 78%) !important;
+  border-color: rgba(120, 148, 205, 0.34) !important;
+}
+
+.course-dist-center-label {
+  color: #a9c2ef !important;
+}
+
+.course-dist-center-value {
+  color: #f8fbff !important;
+}
+
+.course-dist-center-sub {
+  color: #bcd3f6 !important;
+}
+
+.course-dist-center-meta {
+  color: #8db4f4 !important;
+}
+
+/* Last-mile dark readability lock (charts + weather) */
+html[data-educo-theme="dark"] .recharts-legend-item-text,
+html[data-educo-theme="dark"] .recharts-cartesian-axis-tick-value,
+html[data-educo-theme="dark"] .recharts-label,
+html[data-educo-theme="dark"] .recharts-text {
+  fill: #e6f0ff !important;
+  color: #e6f0ff !important;
+}
+
+html[data-educo-theme="dark"] .weather.weather-shell :where(
+  .weather-city,
+  .weather-temp,
+  .weather-hour-temp,
+  .weather-air-value,
+  .weather-week-day,
+  .weather-week-temp,
+  .weather-rail-item,
+  .weather-rail-item.active,
+  .weather-chip .muted,
+  .weather-chip .mono
+) {
+  color: #f8fafc !important;
+}
+
+html[data-educo-theme="dark"] .weather.weather-shell :where(
+  .weather-label,
+  .weather-section-title,
+  .weather-air-label,
+  .weather-hour-time,
+  .weather-week-meta
+) {
+  color: #cbd5e1 !important;
+}
+
+/* Final compact weather sizing */
+@media (min-width: 901px) {
+  .educo-content .weather.weather-shell,
+  .admin-content .weather.weather-shell {
+    padding: 10px !important;
+    border-radius: 16px !important;
+    gap: 10px !important;
+  }
+
+  .educo-content .weather-search-bar,
+  .admin-content .weather-search-bar {
+    gap: 8px !important;
+  }
+
+  .educo-content .weather-search-input,
+  .admin-content .weather-search-input {
+    min-height: 36px;
+    padding: 8px 10px !important;
+    font-size: 0.9rem !important;
+  }
+
+  .educo-content .weather-action-btn,
+  .admin-content .weather-action-btn {
+    min-height: 36px;
+    padding: 7px 10px !important;
+    font-size: 0.88rem !important;
+  }
+
+  .educo-content .weather-hero-panel,
+  .educo-content .weather-card,
+  .admin-content .weather-hero-panel,
+  .admin-content .weather-card {
+    padding: 10px !important;
+    border-radius: 12px !important;
+  }
+
+  .educo-content .weather-main,
+  .admin-content .weather-main {
+    gap: 10px !important;
+  }
+
+  .educo-content .weather-city,
+  .admin-content .weather-city {
+    font-size: 1.55rem !important;
+  }
+
+  .educo-content .weather-temp,
+  .admin-content .weather-temp {
+    font-size: 2.3rem !important;
+  }
+
+  .educo-content .weather-label,
+  .admin-content .weather-label {
+    font-size: 0.84rem !important;
+  }
+
+  .educo-content .weather-hero-icon,
+  .admin-content .weather-hero-icon {
+    width: 98px !important;
+    height: 98px !important;
+  }
+
+  .educo-content .weather-hero-weather-image,
+  .admin-content .weather-hero-weather-image {
+    width: 84px !important;
+    height: 84px !important;
+  }
+
+  .educo-content .weather-hero-meta,
+  .educo-content .weather-grid,
+  .admin-content .weather-hero-meta,
+  .admin-content .weather-grid {
+    gap: 8px !important;
+    margin-top: 8px !important;
+  }
+
+  .educo-content .weather-chip,
+  .admin-content .weather-chip {
+    padding: 7px 9px !important;
+    font-size: 0.84rem !important;
+  }
+
+  .educo-content .weather-section-title,
+  .admin-content .weather-section-title {
+    font-size: 0.72rem !important;
+    margin-bottom: 8px !important;
+  }
+
+  .educo-content .weather-hour-item,
+  .admin-content .weather-hour-item {
+    min-width: 66px;
+    padding: 7px 5px !important;
+  }
+
+  .educo-content .weather-hour-icon,
+  .admin-content .weather-hour-icon {
+    width: 34px !important;
+    height: 34px !important;
+  }
+
+  .educo-content .weather-air-item,
+  .admin-content .weather-air-item {
+    padding: 8px !important;
+  }
+
+  .educo-content .weather-air-value,
+  .admin-content .weather-air-value {
+    font-size: 1.15rem !important;
+  }
+
+  .educo-content .weather-week-row,
+  .admin-content .weather-week-row {
+    grid-template-columns: 52px minmax(0, 1fr) auto !important;
+    padding: 7px 0 !important;
+  }
+
+  .educo-content .weather-week-icon,
+  .admin-content .weather-week-icon {
+    width: 24px !important;
+    height: 24px !important;
+  }
+}
+
+/* Ultra-compact desktop weather pass */
+@media (min-width: 901px) {
+  .educo-content .weather.weather-shell,
+  .admin-content .weather.weather-shell {
+    transform: none !important;
+    margin-bottom: 0 !important;
+    padding: 8px !important;
+    border-radius: 14px !important;
+    gap: 8px !important;
+  }
+
+  .educo-content .weather-search-input,
+  .admin-content .weather-search-input {
+    min-height: 34px;
+    padding: 7px 9px !important;
+    font-size: 0.86rem !important;
+  }
+
+  .educo-content .weather-action-btn,
+  .admin-content .weather-action-btn {
+    min-height: 34px;
+    padding: 6px 9px !important;
+    font-size: 0.84rem !important;
+  }
+
+  .educo-content .weather-hero-panel,
+  .educo-content .weather-card,
+  .admin-content .weather-hero-panel,
+  .admin-content .weather-card {
+    padding: 8px !important;
+    border-radius: 10px !important;
+  }
+
+  .educo-content .weather-main,
+  .admin-content .weather-main {
+    gap: 8px !important;
+  }
+
+  .educo-content .weather-city,
+  .admin-content .weather-city {
+    font-size: 1.2rem !important;
+  }
+
+  .educo-content .weather-temp,
+  .admin-content .weather-temp {
+    font-size: 1.75rem !important;
+  }
+
+  .educo-content .weather-label,
+  .admin-content .weather-label {
+    font-size: 0.8rem !important;
+  }
+
+  .educo-content .weather-hero-icon,
+  .admin-content .weather-hero-icon {
+    width: 76px !important;
+    height: 76px !important;
+  }
+
+  .educo-content .weather-hero-weather-image,
+  .admin-content .weather-hero-weather-image {
+    width: 62px !important;
+    height: 62px !important;
+  }
+
+  .educo-content .weather-chip,
+  .admin-content .weather-chip {
+    padding: 6px 8px !important;
+    font-size: 0.8rem !important;
+  }
+
+  .educo-content .weather-section-title,
+  .admin-content .weather-section-title {
+    font-size: 0.68rem !important;
+    margin-bottom: 6px !important;
+  }
+
+  .educo-content .weather-hour-item,
+  .admin-content .weather-hour-item {
+    min-width: 58px;
+    padding: 6px 4px !important;
+  }
+
+  .educo-content .weather-hour-icon,
+  .admin-content .weather-hour-icon {
+    width: 28px !important;
+    height: 28px !important;
+  }
+
+  .educo-content .weather-air-item,
+  .admin-content .weather-air-item {
+    padding: 7px !important;
+  }
+
+  .educo-content .weather-air-value,
+  .admin-content .weather-air-value {
+    font-size: 1rem !important;
+  }
+
+  .educo-content .weather-week-row,
+  .admin-content .weather-week-row {
+    grid-template-columns: 46px minmax(0, 1fr) auto !important;
+    padding: 6px 0 !important;
+  }
+
+  .educo-content .weather-week-icon,
+  .admin-content .weather-week-icon {
+    width: 20px !important;
+    height: 20px !important;
+  }
+}
+
+/* Attendance + school calendar stack */
+.attendance-stack {
+  display: grid;
+  align-content: start;
+  gap: 10px;
+}
+
+.attendance-stack .chart {
+  min-height: 228px;
+}
+
+.attendance-bottom-row {
+  display: grid;
+  grid-template-columns: minmax(280px, 320px) minmax(0, 1fr);
+  gap: 10px;
+  align-items: stretch;
+}
+
+@media (min-width: 901px) {
+  .attendance-bottom-row {
+    --attendance-side-height: 320px;
+    min-height: var(--attendance-side-height);
+  }
+
+  .attendance-bottom-row > .school-calendar,
+  .attendance-bottom-row > .attendance-announcements {
+    height: var(--attendance-side-height);
+    max-height: var(--attendance-side-height);
+  }
+}
+
+.attendance-announcements {
+  min-height: 100%;
+  border: 1px solid #d8e1ef;
+  border-radius: 14px;
+  background: #edf3fb;
+  padding: 8px;
+  display: grid;
+  grid-template-rows: auto 1fr;
+  gap: 6px;
+}
+
+.attendance-announcements-head {
+  margin-bottom: 0;
+}
+
+.attendance-announcements-head .cardx-title {
+  font-size: 0.95rem;
+}
+
+.attendance-announcements-head .cardx-description {
+  font-size: 0.82rem;
+}
+
+.attendance-announcements .cardx {
+  border-color: #d8e1ef;
+  background: #f5f8fd;
+}
+
+.attendance-announcements .student-announcements-stack {
+  min-height: 0;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.attendance-announcements .student-announcements-actions {
+  padding-bottom: 2px;
+}
+
+.attendance-announcements .student-announcements-stack .student-announcement-item {
+  max-height: 100%;
+}
+
+.attendance-announcements .student-announcements-stack {
+  overflow: auto;
+  padding-right: 2px;
+}
+
+.attendance-announcements .student-announcements-stack::-webkit-scrollbar {
+  width: 6px;
+}
+
+.attendance-announcements .student-announcements-stack::-webkit-scrollbar-thumb {
+  background: rgba(148, 163, 184, 0.45);
+  border-radius: 999px;
+}
+
+.school-calendar {
+  width: min(320px, 100%);
+  min-height: 100%;
+  background: #eaf0f8;
+  border: 1px solid #d8e1ef;
+  border-radius: 16px;
+  padding: 10px;
+  box-shadow: 8px 8px 18px rgba(148, 163, 184, 0.32), -8px -8px 18px rgba(255, 255, 255, 0.78);
+  color: #0f172a !important;
+}
+
+.school-calendar * {
+  color: #0f172a !important;
+}
+
+.school-calendar-header {
+  display: grid;
+  grid-template-columns: 30px 1fr 30px;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 8px;
+}
+
+.school-calendar-title {
+  text-align: center;
+  font-weight: 700;
+  letter-spacing: 0.01em;
+}
+
+.school-calendar-nav {
+  border: 1px solid #d8e1ef;
+  background: #eef3fa;
+  border-radius: 999px;
+  width: 30px;
+  height: 30px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  box-shadow: 3px 3px 8px rgba(148, 163, 184, 0.3), -3px -3px 8px rgba(255, 255, 255, 0.7);
+}
+
+.school-calendar-weekdays,
+.school-calendar-grid {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+}
+
+.school-calendar-weekdays {
+  margin-bottom: 4px;
+}
+
+.school-calendar-weekdays span {
+  text-align: center;
+  font-size: 0.73rem;
+  font-weight: 700;
+  text-transform: lowercase;
+}
+
+.school-calendar-day {
+  border: none;
+  background: transparent;
+  min-height: 26px;
+  border-radius: 8px;
+  display: grid;
+  place-items: center;
+  cursor: default;
+  font-size: 0.9rem;
+  position: relative;
+}
+
+.school-calendar-day.is-outside {
+  opacity: 0.34;
+}
+
+.school-calendar-day.is-today {
+  background: #dbeafe;
+  box-shadow: inset 0 0 0 1px #93c5fd;
+}
+
+.school-calendar-day.is-selected {
+  background: #dbeafe;
+  box-shadow: inset 0 0 0 1px #60a5fa;
+  font-weight: 700;
+}
+
+.school-calendar-day.is-schoolday::after,
+.school-calendar-day.is-holiday::after {
+  content: "";
+  width: 5px;
+  height: 5px;
+  border-radius: 999px;
+  position: absolute;
+  bottom: 4px;
+}
+
+.school-calendar-day.is-schoolday::after {
+  background: #22c55e;
+}
+
+.school-calendar-day.is-holiday::after {
+  background: #ef4444;
+}
+
+.school-calendar-footer {
+  margin-top: 6px;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.73rem;
+  font-weight: 600;
+}
+
+.school-calendar-detail {
+  margin-top: 8px;
+  border: 1px solid #d8e1ef;
+  border-radius: 12px;
+  background: #edf3fb;
+  padding: 7px 9px;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.78);
+}
+
+.school-calendar-detail-date {
+  font-size: 0.82rem;
+  font-weight: 700;
+  color: #111827 !important;
+}
+
+.school-calendar-detail-row {
+  margin-top: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  font-size: 0.76rem;
+  font-weight: 600;
+  color: #1f2937 !important;
+}
+
+.school-calendar-detail-row .schoolday {
+  color: #166534 !important;
+}
+
+.school-calendar-detail-row .holiday {
+  color: #b91c1c !important;
+}
+
+.school-calendar-detail-note {
+  margin-top: 3px;
+  font-size: 0.74rem;
+  color: #374151 !important;
+  line-height: 1.35;
+}
+
+.school-calendar-legend {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.school-calendar-legend::before {
+  content: "";
+  width: 6px;
+  height: 6px;
+  border-radius: 999px;
+}
+
+.school-calendar-legend.schoolday::before {
+  background: #22c55e;
+}
+
+.school-calendar-legend.holiday::before {
+  background: #ef4444;
+}
+
+.school-calendar-status {
+  margin-left: auto;
+  opacity: 0.85;
+}
+
+@media (max-width: 900px) {
+  .attendance-bottom-row {
+    grid-template-columns: 1fr;
+    min-height: 0;
+  }
+
+  .school-calendar {
+    width: 100%;
+    height: auto;
+    max-height: none;
+  }
+
+  .attendance-announcements {
+    height: auto;
+    max-height: none;
+  }
+
+  .attendance-stack .chart {
+    min-height: 220px;
+  }
+}
+
+/* Final dark-mode visibility safeguard (system-wide) */
+html[data-educo-theme="dark"] :where(.educo-dashboard, .admin-layout, .login-page) {
+  color: #eaf2ff !important;
+}
+
+html[data-educo-theme="dark"] :where(.educo-dashboard, .admin-layout, .login-page) :where(
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6,
+  p,
+  span,
+  strong,
+  small,
+  label,
+  li,
+  td,
+  th,
+  a,
+  button
+) {
+  color: #eaf2ff !important;
+}
+
+html[data-educo-theme="dark"] :where(.educo-dashboard, .admin-layout, .login-page) :where(.muted, .admin-muted) {
+  color: #b8c7e3 !important;
+}
+
+html[data-educo-theme="dark"] :where(.educo-dashboard, .admin-layout, .login-page) :where(input, textarea, select) {
+  color: #f8fbff !important;
+}
+
+html[data-educo-theme="dark"] :where(.educo-dashboard, .admin-layout, .login-page) :where(input, textarea, select)::placeholder {
+  color: #9fb2d4 !important;
+}
+
+/* Dark-mode lock for attendance bottom widgets */
+html[data-educo-theme="dark"] .attendance-announcements {
+  background: #0f1b36 !important;
+  border-color: rgba(120, 145, 196, 0.42) !important;
+}
+
+html[data-educo-theme="dark"] .attendance-announcements .cardx {
+  background: #162645 !important;
+  border-color: rgba(120, 145, 196, 0.42) !important;
+}
+
+html[data-educo-theme="dark"] .attendance-announcements .button {
+  background: #1c2f54 !important;
+  border-color: rgba(120, 145, 196, 0.42) !important;
+  color: #eff6ff !important;
+}
+
+html[data-educo-theme="dark"] .school-calendar {
+  background: #0f1b36 !important;
+  border-color: rgba(120, 145, 196, 0.42) !important;
+  box-shadow: 8px 8px 18px rgba(2, 6, 23, 0.46), -8px -8px 18px rgba(43, 61, 102, 0.32) !important;
+}
+
+html[data-educo-theme="dark"] .school-calendar * {
+  color: #eff6ff !important;
+}
+
+html[data-educo-theme="dark"] .school-calendar-nav,
+html[data-educo-theme="dark"] .school-calendar-detail {
+  background: #162645 !important;
+  border-color: rgba(120, 145, 196, 0.42) !important;
+}
+
+html[data-educo-theme="dark"] .school-calendar-day.is-today,
+html[data-educo-theme="dark"] .school-calendar-day.is-selected {
+  background: #1f3a66 !important;
+  box-shadow: inset 0 0 0 1px #60a5fa !important;
+}
+
+html[data-educo-theme="dark"] .school-calendar-detail-row .schoolday {
+  color: #86efac !important;
+}
+
+html[data-educo-theme="dark"] .school-calendar-detail-row .holiday {
+  color: #fca5a5 !important;
+}
+
