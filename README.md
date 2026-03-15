@@ -2,12 +2,21 @@
 
 React frontend for student/admin dashboards, charts, and weather integration.
 
+
 ## Tech Stack
 
-- React + Vite
-- React Router
-- Axios
-- Recharts
+- React ^19.2.0
+- Vite ^7.3.1
+- React Router DOM ^7.13.0
+- Axios ^1.7.9
+- Recharts ^3.7.0
+- lucide-react ^0.574.0
+
+### Dev Dependencies
+- @vitejs/plugin-react ^5.2.0
+- eslint ^9.39.1
+- @types/react ^19.2.7
+- @types/react-dom ^19.2.3
 
 ## Requirements
 
