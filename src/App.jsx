@@ -16,6 +16,7 @@ const MyCoursesPage = lazy(() => import("./components/dashboard/MyCoursesPage"))
 const GradesPage = lazy(() => import("./components/dashboard/GradesPage"));
 const SchedulePage = lazy(() => import("./components/dashboard/SchedulePage"));
 const EventsPage = lazy(() => import("./components/dashboard/EventsPage"));
+const StudentMessagesPage = lazy(() => import("./components/dashboard/StudentMessagesPage"));
 const AdminLayout = lazy(() => import("./components/admin/AdminLayout"));
 const AdminDashboardHome = lazy(() => import("./components/admin/AdminDashboardHome"));
 const AdminStudents = lazy(() => import("./components/admin/AdminStudents"));
@@ -100,6 +101,7 @@ function App() {
               <Route path="grades" element={<GradesPage />} />
               <Route path="schedule" element={<SchedulePage />} />
               <Route path="events" element={<EventsPage />} />
+              <Route path="messages" element={<StudentMessagesPage />} />
               <Route path="announcements" element={<AnnouncementsPage />} />
               <Route path="settings" element={<Settings />} />
             </Route>

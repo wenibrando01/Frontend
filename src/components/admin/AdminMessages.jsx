@@ -13,20 +13,36 @@ const AdminMessages = () => {
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
 
-  const loadStudents = async () => {
-    const res = await api.get("/admin/students", { params: { per_page: 200 } });
+  const studentLabel = (s) => {
+    const base = `${s.first_name || ""} ${s.last_name || ""}`.trim() || s.name || `Student #${s.id}`;
+    return s.email ? `${base} (${s.email})` : base;
+  };
+
+  const loadStudents = async (search = "", autoSelectFirst = false) => {
+    const params = { per_page: 100 };
+    if (search.trim()) params.search = search.trim();
+
+    const res = await api.get("/admin/students", { params });
     const raw = res.data;
     const rows = Array.isArray(raw?.data) ? raw.data : Array.isArray(raw) ? raw : [];
     setStudents(rows);
-    if (!selectedStudentId && rows[0]?.id) {
+
+    if (autoSelectFirst && !selectedStudentId && rows[0]?.id) {
       setSelectedStudentId(String(rows[0].id));
+      setStudentSearch(studentLabel(rows[0]));
     }
+
     return rows;
   };
 
   const loadMessages = async (studentId) => {
+    if (!studentId) {
+      setMessages([]);
+      return;
+    }
+
     const params = { per_page: 100 };
-    if (studentId) params.student_id = Number(studentId);
+    params.student_id = Number(studentId);
 
     const res = await api.get("/admin/private-messages", { params });
     const raw = res.data;
@@ -38,7 +54,7 @@ const AdminMessages = () => {
     setLoading(true);
     setError("");
     try {
-      const rows = await loadStudents();
+      const rows = await loadStudents("", true);
       const targetId = studentId || selectedStudentId || String(rows[0]?.id || "");
       await loadMessages(targetId);
     } catch (err) {
@@ -54,22 +70,44 @@ const AdminMessages = () => {
     loadAll();
   }, []);
 
-  const filteredStudents = students.filter((s) => {
-    const q = studentSearch.trim().toLowerCase();
-    if (!q) return true;
-    const fullName = `${s.first_name || ""} ${s.last_name || ""}`.trim();
-    return (
-      fullName.toLowerCase().includes(q) ||
-      String(s.name || "").toLowerCase().includes(q) ||
-      String(s.email || "").toLowerCase().includes(q)
-    );
-  });
+  useEffect(() => {
+    const handle = setTimeout(async () => {
+      try {
+        const rows = await loadStudents(studentSearch, false);
 
-  const onStudentChange = async (value) => {
-    setSelectedStudentId(value);
+        if (
+          selectedStudentId &&
+          !rows.some((s) => String(s.id) === String(selectedStudentId))
+        ) {
+          setSelectedStudentId("");
+          setMessages([]);
+        }
+      } catch {
+        // Keep existing list and error state from other flows.
+      }
+    }, 250);
+
+    return () => clearTimeout(handle);
+  }, [studentSearch]);
+
+  const onStudentInputChange = async (value) => {
+    setStudentSearch(value);
     setError("");
     setSuccess("");
-    await loadMessages(value);
+
+    const match = students.find(
+      (s) => studentLabel(s).toLowerCase() === value.trim().toLowerCase()
+    );
+
+    if (!match) {
+      setSelectedStudentId("");
+      setMessages([]);
+      return;
+    }
+
+    const nextId = String(match.id);
+    setSelectedStudentId(nextId);
+    await loadMessages(nextId);
   };
 
   const onSubmit = async (e) => {
@@ -115,23 +153,18 @@ const AdminMessages = () => {
             <input
               className="admin-input"
               value={studentSearch}
-              onChange={(e) => setStudentSearch(e.target.value)}
-              placeholder="Type student name to filter..."
+              onChange={(e) => onStudentInputChange(e.target.value)}
+              placeholder="Type student name to search and select..."
+              list="admin-student-options"
             />
-
-            <select
-              className="admin-input"
-              value={selectedStudentId}
-              onChange={(e) => onStudentChange(e.target.value)}
-              required
-            >
-              <option value="">Select student</option>
-              {filteredStudents.map((s) => (
-                <option key={s.id} value={s.id}>
-                  {`${s.first_name || ""} ${s.last_name || ""}`.trim() || s.name || `Student #${s.id}`}
-                </option>
+            <datalist id="admin-student-options">
+              {students.map((s) => (
+                <option key={s.id} value={studentLabel(s)} />
               ))}
-            </select>
+            </datalist>
+            {!selectedStudentId && studentSearch.trim() && (
+              <div className="admin-muted">Choose a student from the suggestions to continue.</div>
+            )}
 
             <input
               className="admin-input"

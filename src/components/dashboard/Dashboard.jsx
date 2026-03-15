@@ -71,7 +71,7 @@ const Dashboard = () => {
                   <div className="cardx-title">Announcements</div>
                   <div className="cardx-description muted">Latest announcements from admin</div>
                 </div>
-                <StudentAnnouncements limit={3} />
+                <StudentAnnouncements limit={0} itemClickMode="navigate" />
               </div>
             </div>
           </div>

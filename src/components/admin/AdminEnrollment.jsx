@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Search } from "lucide-react";
 import api from "../../services/api";
 
@@ -9,25 +9,44 @@ const AdminEnrollment = () => {
   const [courseFilter, setCourseFilter] = useState("");
   const [yearFilter, setYearFilter] = useState("");
   const [loading, setLoading] = useState(true);
+  const [loadingCourses, setLoadingCourses] = useState(true);
   const [error, setError] = useState("");
 
   useEffect(() => {
-    const load = async () => {
+    const loadCourses = async () => {
+      setLoadingCourses(true);
+      setError("");
+      try {
+        const cRes = await api.get("/admin/courses", { params: { per_page: 100 } });
+        const cRaw = cRes.data;
+        const cRows = Array.isArray(cRaw?.data) ? cRaw.data : Array.isArray(cRaw) ? cRaw : [];
+        setCourses(cRows);
+      } catch (err) {
+        if (err.response?.status === 401) setError("Session expired. Please log in again.");
+        else if (err.response?.status === 403) setError("Access denied.");
+        else setError("Failed to load enrollment records.");
+      } finally {
+        setLoadingCourses(false);
+      }
+    };
+
+    loadCourses();
+  }, []);
+
+  useEffect(() => {
+    const timer = setTimeout(async () => {
       setLoading(true);
       setError("");
       try {
-        const [sRes, cRes] = await Promise.all([
-          api.get("/admin/students", { params: { per_page: 200 } }),
-          api.get("/admin/courses", { params: { per_page: 200 } }),
-        ]);
+        const params = { per_page: 100 };
+        if (search.trim()) params.search = search.trim();
+        if (courseFilter) params.course_id = Number(courseFilter);
+        if (yearFilter) params.year_level = Number(yearFilter);
 
+        const sRes = await api.get("/admin/students", { params });
         const sRaw = sRes.data;
-        const cRaw = cRes.data;
         const sRows = Array.isArray(sRaw?.data) ? sRaw.data : Array.isArray(sRaw) ? sRaw : [];
-        const cRows = Array.isArray(cRaw?.data) ? cRaw.data : Array.isArray(cRaw) ? cRaw : [];
-
         setStudents(sRows);
-        setCourses(cRows);
       } catch (err) {
         if (err.response?.status === 401) setError("Session expired. Please log in again.");
         else if (err.response?.status === 403) setError("Access denied.");
@@ -35,23 +54,10 @@ const AdminEnrollment = () => {
       } finally {
         setLoading(false);
       }
-    };
+    }, 250);
 
-    load();
-  }, []);
-
-  const rows = useMemo(() => {
-    return students.filter((s) => {
-      const name = `${s.first_name || ""} ${s.last_name || ""}`.trim() || s.name || "";
-      const bySearch =
-        !search ||
-        name.toLowerCase().includes(search.toLowerCase()) ||
-        String(s.email || "").toLowerCase().includes(search.toLowerCase());
-      const byCourse = !courseFilter || String(s.course_id || s.course?.id || "") === courseFilter;
-      const byYear = !yearFilter || String(s.year_level || "") === yearFilter;
-      return bySearch && byCourse && byYear;
-    });
-  }, [students, search, courseFilter, yearFilter]);
+    return () => clearTimeout(timer);
+  }, [search, courseFilter, yearFilter]);
 
   return (
     <div className="admin-content">
@@ -93,7 +99,7 @@ const AdminEnrollment = () => {
       {error && <div className="admin-pill warn">{error}</div>}
 
       <div className="admin-table-wrap">
-        {loading ? (
+        {loading || loadingCourses ? (
           <div className="skeleton skeleton-block" style={{ height: 260 }} />
         ) : (
           <table className="admin-table">
@@ -107,12 +113,12 @@ const AdminEnrollment = () => {
               </tr>
             </thead>
             <tbody>
-              {rows.length === 0 ? (
+              {students.length === 0 ? (
                 <tr>
                   <td colSpan={5}>No enrollment records found.</td>
                 </tr>
               ) : (
-                rows.map((s) => (
+                students.map((s) => (
                   <tr key={s.id}>
                     <td>{`${s.first_name || ""} ${s.last_name || ""}`.trim() || s.name || "-"}</td>
                     <td>{s.email || "-"}</td>

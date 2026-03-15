@@ -15,7 +15,7 @@
     radial-gradient(700px 360px at 100% 100%, rgba(139, 92, 246, 0.08), transparent 62%),
     linear-gradient(180deg, #f8faff 0%, #f1f4fb 100%);
   padding: 1.5rem;
-  font-family: "Poppins", "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+  font-family: inherit;
 }
 
 .login-page.auth-phase-morning {

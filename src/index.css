@@ -1,3 +1,5 @@
+@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap");
+
 *,
 *::before,
 *::after {
@@ -8,21 +10,8 @@ html {
   height: 100%;
 }
 
-body {
-  margin: 0;
-  min-height: 100%;
-  font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji",
-    "Segoe UI Emoji";
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-}
-
-#root {
-  min-height: 100vh;
-  width: 100%;
-}
-
 :root {
+  --font-sans: "Poppins", "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
   --bg: #070a12;
   --panel: rgba(255, 255, 255, 0.06);
   --panel-2: rgba(255, 255, 255, 0.08);
@@ -38,12 +27,29 @@ body {
 }
 
 body {
+  margin: 0;
+  min-height: 100%;
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
   color: var(--text);
   background:
     radial-gradient(1000px 500px at 20% -10%, rgba(99, 102, 241, 0.28), transparent 55%),
     radial-gradient(900px 450px at 110% 25%, rgba(6, 182, 212, 0.14), transparent 50%),
     radial-gradient(900px 450px at 20% 110%, rgba(34, 197, 94, 0.09), transparent 55%),
     var(--bg);
+}
+
+input,
+button,
+select,
+textarea {
+  font-family: inherit;
+}
+
+#root {
+  min-height: 100vh;
+  width: 100%;
 }
 
 a {
@@ -539,19 +545,58 @@ a {
   min-height: 0;
   align-items: stretch;
 }
+.course-dist-wrap-creative {
+  grid-template-columns: minmax(130px, 0.85fr) minmax(0, 1.1fr) minmax(130px, 0.85fr);
+  gap: 10px;
+  align-items: center;
+}
+.course-dist-side {
+  min-height: 0;
+  display: grid;
+  gap: 8px;
+}
+.course-dist-callout {
+  border: 1px solid rgba(148, 163, 184, 0.24);
+  background: #f7faff;
+  border-radius: 10px;
+  padding: 8px;
+}
+.course-dist-callout-name {
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: #334155;
+  line-height: 1.25;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.course-dist-callout-percent {
+  font-size: 1.75rem;
+  font-weight: 800;
+  line-height: 1;
+  margin-top: 3px;
+}
+.course-dist-callout-sub {
+  margin-top: 4px;
+  font-size: 0.74rem;
+  color: #64748b;
+}
 .course-dist-donut-wrap {
   display: grid;
   place-items: center;
+  justify-self: center;
   position: relative;
   --course-center-ring-a: rgba(56, 189, 248, 0.34);
   --course-center-ring-b: rgba(59, 130, 246, 0.08);
   --course-center-dot: #67e8f9;
   --course-center-orbit-duration: 7s;
-  border: 1px solid rgba(99, 123, 255, 0.35);
+  border: none;
   border-radius: 10px;
-  background: radial-gradient(circle at 50% 38%, #f1f5ff 0%, #f8fbff 62%);
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.8), 0 8px 20px rgba(92, 116, 230, 0.16);
-  min-height: 236px;
+  background: transparent;
+  box-shadow: none;
+  width: min(100%, 360px);
+  margin-inline: auto;
+  min-height: 304px;
 }
 .course-dist-center-text {
   position: absolute;
@@ -561,10 +606,11 @@ a {
   justify-content: center;
   pointer-events: none;
   text-align: center;
+  z-index: 2;
 }
 .course-dist-center-core {
-  width: 88px;
-  height: 88px;
+  width: 126px;
+  height: 126px;
   border-radius: 999px;
   position: relative;
   display: flex;
@@ -610,7 +656,7 @@ a {
 }
 .course-dist-center-value {
   color: #f8fbff;
-  font-size: 27px;
+  font-size: 38px;
   font-weight: 800;
   line-height: 1;
   text-shadow: 0 1px 8px rgba(59, 130, 246, 0.2);
@@ -685,6 +731,15 @@ a {
   border-radius: 8px;
   border: 1px solid rgba(148, 163, 184, 0.26);
   background: #f5f8fd;
+  transition: border-color 220ms ease, box-shadow 220ms ease, transform 220ms ease;
+}
+.course-dist-row.is-active {
+  border-color: rgba(95, 110, 232, 0.52);
+  box-shadow: 0 6px 16px rgba(95, 110, 232, 0.18);
+  transform: translateY(-1px);
+}
+.course-dist-row.is-dim {
+  opacity: 0.56;
 }
 .course-dist-left {
   display: inline-flex;
@@ -728,6 +783,76 @@ a {
   opacity: 0.95;
 }
 
+.course-dist-active-slice {
+  filter: drop-shadow(0 8px 14px rgba(59, 130, 246, 0.28));
+}
+
+.course-dist-active-percent {
+  fill: #ffffff;
+  font-size: 12px;
+  font-weight: 800;
+  letter-spacing: 0.01em;
+  text-shadow: 0 1px 5px rgba(15, 23, 42, 0.28);
+}
+
+.course-dist-live-pie {
+  transform-origin: center center;
+  animation: course-pie-spin 18s linear infinite;
+  will-change: transform;
+}
+
+.course-dist-live-pie.is-paused {
+  animation-play-state: paused;
+}
+
+@keyframes course-pie-spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.course-dist-active-glow {
+  filter: blur(0.2px);
+}
+
+.course-dist-tooltip {
+  border-radius: 10px;
+  border: 1px solid rgba(148, 163, 184, 0.35);
+  background: #ffffff;
+  box-shadow: 0 12px 24px rgba(15, 23, 42, 0.12);
+  min-width: 188px;
+  padding: 8px 10px;
+}
+
+.course-dist-tooltip-title {
+  color: #1e293b;
+  font-size: 0.82rem;
+  font-weight: 700;
+  line-height: 1.2;
+  margin-bottom: 6px;
+}
+
+.course-dist-tooltip-line {
+  color: #475569;
+  font-size: 0.76rem;
+  line-height: 1.25;
+  margin-top: 2px;
+}
+
+.course-dist-tooltip-hint {
+  color: #5f6ee8;
+  font-size: 0.73rem;
+  font-weight: 600;
+  margin-top: 6px;
+}
+
+.course-dist-donut-wrap .recharts-tooltip-wrapper {
+  z-index: 8 !important;
+}
+
 html[data-educo-theme="light"] .course-dist-donut-wrap {
   --course-center-ring-a: rgba(56, 189, 248, 0.3);
   --course-center-ring-b: rgba(59, 130, 246, 0.06);
@@ -742,9 +867,41 @@ html[data-educo-theme="dark"] .course-dist-donut-wrap {
   --course-center-orbit-duration: 8.4s;
 }
 
+html[data-educo-theme="dark"] .course-dist-tooltip {
+  border-color: rgba(126, 156, 204, 0.34);
+  background: #0f1b34;
+  box-shadow: 0 12px 24px rgba(2, 8, 23, 0.35);
+}
+
+html[data-educo-theme="dark"] .course-dist-tooltip-title {
+  color: #dbeafe;
+}
+
+html[data-educo-theme="dark"] .course-dist-tooltip-line {
+  color: #bcd3f6;
+}
+
+html[data-educo-theme="dark"] .course-dist-tooltip-hint {
+  color: #93c5fd;
+}
+
 @media (max-width: 760px) {
   .course-dist-wrap {
     grid-template-columns: 1fr;
+  }
+  .course-dist-wrap-creative {
+    grid-template-columns: 1fr;
+    gap: 10px;
+  }
+  .course-dist-side {
+    grid-template-columns: 1fr;
+  }
+  .course-dist-side-left,
+  .course-dist-side-right {
+    order: 2;
+  }
+  .course-dist-donut-wrap {
+    order: 1;
   }
   .course-dist-grid {
     grid-template-columns: 1fr;
@@ -754,6 +911,12 @@ html[data-educo-theme="dark"] .course-dist-donut-wrap {
   }
   .course-dist-row {
     min-height: 32px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .course-dist-live-pie {
+    animation: none !important;
   }
 }
 
@@ -1400,6 +1563,21 @@ html[data-educo-theme="dark"] .course-dist-donut-wrap {
   background: #f8fafc;
 }
 
+.educo-notification-delete {
+  border: 1px solid #fecaca;
+  background: #fff1f2;
+  color: #b91c1c;
+  border-radius: 8px;
+  font-size: 0.74rem;
+  font-weight: 600;
+  padding: 3px 8px;
+  cursor: pointer;
+}
+
+.educo-notification-delete:hover {
+  background: #ffe4e6;
+}
+
 .educo-header-message-top {
   display: flex;
   align-items: center;
@@ -1915,6 +2093,12 @@ html[data-educo-theme="dark"] .course-dist-donut-wrap {
 .educo-dashboard-dark .educo-header-message-item {
   background: #0f172a;
   border-color: #334155;
+}
+
+.educo-dashboard-dark .educo-notification-delete {
+  background: rgba(127, 29, 29, 0.24);
+  border-color: rgba(248, 113, 113, 0.45);
+  color: #fecaca;
 }
 
 .educo-dashboard-dark .educo-header-dropdown-label {
@@ -6431,7 +6615,7 @@ html[data-educo-theme="dark"] .weather.weather-shell :where(
   background: #edf3fb;
   padding: 8px;
   display: grid;
-  grid-template-rows: auto 1fr;
+  grid-template-rows: auto minmax(0, 1fr);
   gap: 6px;
 }
 
@@ -6458,28 +6642,55 @@ html[data-educo-theme="dark"] .weather.weather-shell :where(
   display: flex;
   flex-direction: column;
   gap: 6px;
+  overflow: hidden;
 }
 
 .attendance-announcements .student-announcements-actions {
+  display: flex;
+  justify-content: flex-end;
   padding-bottom: 2px;
+  flex: 0 0 auto;
 }
 
-.attendance-announcements .student-announcements-stack .student-announcement-item {
-  max-height: 100%;
+.student-announcements-list {
+  display: grid;
+  gap: 8px;
 }
 
-.attendance-announcements .student-announcements-stack {
+.attendance-announcements .student-announcements-list {
+  min-height: 0;
+  flex: 1 1 auto;
   overflow: auto;
-  padding-right: 2px;
+  padding-right: 4px;
 }
 
-.attendance-announcements .student-announcements-stack::-webkit-scrollbar {
+.attendance-announcements .student-announcements-list::-webkit-scrollbar {
   width: 6px;
 }
 
-.attendance-announcements .student-announcements-stack::-webkit-scrollbar-thumb {
+.attendance-announcements .student-announcements-list::-webkit-scrollbar-thumb {
   background: rgba(148, 163, 184, 0.45);
   border-radius: 999px;
+}
+
+.student-announcement-item .cardx-body {
+  display: grid;
+  gap: 8px;
+}
+
+.student-announcement-item strong {
+  line-height: 1.28;
+  font-size: 1rem;
+}
+
+.student-announcement-item p {
+  margin: 0;
+  line-height: 1.45;
+  overflow-wrap: anywhere;
+}
+
+.student-announcement-message {
+  color: #334155;
 }
 
 .school-calendar {
@@ -6733,6 +6944,16 @@ html[data-educo-theme="dark"] .attendance-announcements .cardx {
   background: #162645 !important;
   border-color: rgba(120, 145, 196, 0.42) !important;
 }
+html[data-educo-theme="dark"] .course-dist-callout {
+  background: #162645 !important;
+  border-color: rgba(120, 145, 196, 0.42) !important;
+}
+html[data-educo-theme="dark"] .course-dist-callout-name {
+  color: #eaf2ff !important;
+}
+html[data-educo-theme="dark"] .course-dist-callout-sub {
+  color: #b8c7e3 !important;
+}
 
 html[data-educo-theme="dark"] .attendance-announcements .button {
   background: #1c2f54 !important;
@@ -6768,5 +6989,258 @@ html[data-educo-theme="dark"] .school-calendar-detail-row .schoolday {
 
 html[data-educo-theme="dark"] .school-calendar-detail-row .holiday {
   color: #fca5a5 !important;
+}
+
+/* Final dashboard-side announcements usability overrides */
+.attendance-announcements {
+  overflow: hidden;
+}
+
+.attendance-announcements .student-announcements-stack {
+  min-height: 0;
+  height: 100%;
+  gap: 8px;
+}
+
+.attendance-announcements .student-announcements-actions {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.attendance-announcements .student-announcements-actions .button {
+  min-height: 32px;
+  padding: 6px 11px;
+  font-size: 0.84rem;
+}
+
+.attendance-announcements .student-announcements-list {
+  min-height: 0;
+  height: 100%;
+  overflow-y: auto;
+  overflow-x: hidden;
+  scrollbar-gutter: stable;
+  padding-right: 6px;
+}
+
+.attendance-announcements .student-announcement-item .cardx-body {
+  padding: 9px !important;
+  gap: 6px;
+}
+
+.student-announcement-item {
+  cursor: pointer;
+}
+
+.student-announcement-item:focus-visible {
+  outline: 2px solid #60a5fa;
+  outline-offset: 2px;
+}
+
+.attendance-announcements .student-announcement-item strong {
+  font-size: 0.88rem;
+  line-height: 1.22;
+}
+
+.attendance-announcements .student-announcement-item .muted {
+  font-size: 0.76rem !important;
+}
+
+.attendance-announcements .student-announcement-item .student-announcement-message {
+  font-size: 0.79rem;
+  line-height: 1.28;
+  margin-top: 2px !important;
+  overflow-wrap: anywhere;
+}
+
+.student-announcement-message.collapsed {
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  position: relative;
+}
+
+.student-announcement-message.collapsed::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 1.2em;
+  pointer-events: none;
+  background: linear-gradient(to bottom, rgba(237, 243, 251, 0), rgba(237, 243, 251, 0.95));
+}
+
+.student-announcement-message.expanded {
+  display: block;
+}
+
+.student-announcement-toggle {
+  border: none;
+  background: transparent;
+  color: #2563eb;
+  padding: 0;
+  margin-top: -2px;
+  font-size: 0.76rem;
+  font-weight: 600;
+  cursor: pointer;
+  text-align: left;
+}
+
+.student-announcement-toggle:hover {
+  text-decoration: underline;
+}
+
+html[data-educo-theme="dark"] .student-announcement-message.collapsed::after {
+  background: linear-gradient(to bottom, rgba(22, 38, 69, 0), rgba(22, 38, 69, 0.96));
+}
+
+.attendance-announcements .student-announcement-item .button {
+  min-height: 28px;
+  padding: 4px 9px;
+  font-size: 0.76rem;
+}
+
+.attendance-announcements .student-announcements-list::-webkit-scrollbar {
+  width: 8px;
+}
+
+.attendance-announcements .student-announcements-list::-webkit-scrollbar-track {
+  background: rgba(203, 213, 225, 0.38);
+  border-radius: 999px;
+}
+
+.attendance-announcements .student-announcements-list::-webkit-scrollbar-thumb {
+  background: rgba(100, 116, 139, 0.58);
+  border-radius: 999px;
+}
+
+/* Unified hover style across interactive UI */
+:root {
+  --ui-hover-lift: translateY(-1px);
+  --ui-hover-shadow: 0 10px 18px rgba(15, 23, 42, 0.12);
+}
+
+.button,
+.admin-btn,
+.educo-header-icon-btn,
+.educo-sidebar-item,
+.admin-nav-item,
+.educo-header-search-item,
+.educo-header-dropdown-item,
+.student-announcement-item,
+.educo-notification-delete,
+.student-announcement-toggle {
+  transition: transform 0.18s ease, box-shadow 0.18s ease, background-color 0.18s ease, border-color 0.18s ease, color 0.18s ease;
+}
+
+.button:not(:disabled):hover,
+.admin-btn:not(:disabled):hover,
+.educo-header-icon-btn:not(:disabled):hover,
+.educo-sidebar-item:not(:disabled):hover,
+.admin-nav-item:not(:disabled):hover,
+.educo-header-search-item:not(:disabled):hover,
+.educo-header-dropdown-item:not(:disabled):hover,
+.student-announcement-item:hover,
+.educo-notification-delete:not(:disabled):hover,
+.student-announcement-toggle:not(:disabled):hover {
+  transform: var(--ui-hover-lift);
+  box-shadow: var(--ui-hover-shadow);
+}
+
+html[data-educo-theme="dark"] {
+  --ui-hover-shadow: 0 12px 20px rgba(2, 6, 23, 0.45);
+}
+
+/* Unified active + focus style */
+:root {
+  --ui-focus-ring: 0 0 0 3px rgba(59, 130, 246, 0.24);
+  --ui-active-lift: translateY(0);
+}
+
+.button:focus-visible,
+.admin-btn:focus-visible,
+.educo-header-icon-btn:focus-visible,
+.educo-sidebar-item:focus-visible,
+.admin-nav-item:focus-visible,
+.educo-header-search-item:focus-visible,
+.educo-header-dropdown-item:focus-visible,
+.student-announcement-item:focus-visible,
+.educo-notification-delete:focus-visible,
+.student-announcement-toggle:focus-visible {
+  outline: none;
+  box-shadow: var(--ui-focus-ring);
+}
+
+.button:not(:disabled):active,
+.admin-btn:not(:disabled):active,
+.educo-header-icon-btn:not(:disabled):active,
+.educo-sidebar-item:not(:disabled):active,
+.admin-nav-item:not(:disabled):active,
+.educo-header-search-item:not(:disabled):active,
+.educo-header-dropdown-item:not(:disabled):active,
+.student-announcement-item:active,
+.educo-notification-delete:not(:disabled):active,
+.student-announcement-toggle:not(:disabled):active {
+  transform: var(--ui-active-lift);
+  box-shadow: none;
+}
+
+html[data-educo-theme="dark"] {
+  --ui-focus-ring: 0 0 0 3px rgba(125, 211, 252, 0.28);
+}
+
+/* Final consistency lock: table hover + field focus */
+:root {
+  --ui-row-hover-bg: rgba(59, 130, 246, 0.08);
+  --ui-row-hover-bg-dark: rgba(56, 189, 248, 0.12);
+  --ui-field-focus-bg: #ffffff;
+}
+
+.admin-table tbody tr {
+  transition: background-color 0.18s ease;
+}
+
+.admin-table tbody tr:hover,
+.admin-table tbody tr:hover td,
+.educo-content .admin-table tbody tr:hover,
+.educo-content .admin-table tbody tr:hover td,
+.admin-layout .admin-table tbody tr:hover,
+.admin-layout .admin-table tbody tr:hover td {
+  background: var(--ui-row-hover-bg) !important;
+}
+
+.input:focus,
+.admin-input:focus,
+.educo-input:focus,
+.educo-content .input:focus,
+.educo-content .admin-input:focus,
+.admin-layout .admin-input:focus,
+select:focus,
+textarea:focus {
+  outline: none;
+  border-color: #3b82f6 !important;
+  background: var(--ui-field-focus-bg) !important;
+  box-shadow: var(--ui-focus-ring) !important;
+}
+
+html[data-educo-theme="dark"] .admin-table tbody tr:hover,
+html[data-educo-theme="dark"] .admin-table tbody tr:hover td,
+html[data-educo-theme="dark"] .educo-content .admin-table tbody tr:hover,
+html[data-educo-theme="dark"] .educo-content .admin-table tbody tr:hover td,
+html[data-educo-theme="dark"] .admin-layout .admin-table tbody tr:hover,
+html[data-educo-theme="dark"] .admin-layout .admin-table tbody tr:hover td {
+  background: var(--ui-row-hover-bg-dark) !important;
+}
+
+html[data-educo-theme="dark"] .input:focus,
+html[data-educo-theme="dark"] .admin-input:focus,
+html[data-educo-theme="dark"] .educo-input:focus,
+html[data-educo-theme="dark"] .educo-content .input:focus,
+html[data-educo-theme="dark"] .educo-content .admin-input:focus,
+html[data-educo-theme="dark"] .admin-layout .admin-input:focus,
+html[data-educo-theme="dark"] select:focus,
+html[data-educo-theme="dark"] textarea:focus {
+  --ui-field-focus-bg: #0f172a;
 }
 

@@ -6,7 +6,10 @@ const ENDPOINTS = ["/admin/school-days", "/school-days", "/attendance"];
 const WEEK_DAYS = ["sun", "mon", "tue", "wed", "thu", "fri", "sat"];
 
 function dateKey(date) {
-  return date.toISOString().slice(0, 10);
+  const year = date.getFullYear();
+  const month = String(date.getMonth() + 1).padStart(2, "0");
+  const day = String(date.getDate()).padStart(2, "0");
+  return `${year}-${month}-${day}`;
 }
 
 function normalizeRows(payload) {
@@ -77,7 +80,7 @@ const SchoolCalendarWidget = () => {
             setDaysMap(map);
             if (!selectedKey) {
               const today = dateKey(new Date());
-              setSelectedKey(map[today] ? today : Object.keys(map)[0] || today);
+              setSelectedKey(today);
             }
             return;
           } catch (err) {

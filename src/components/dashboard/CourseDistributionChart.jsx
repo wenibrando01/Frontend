@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from "react";
-import { PieChart, Pie, Cell, Tooltip, ResponsiveContainer } from "recharts";
+import React, { useEffect, useRef, useState } from "react";
+import { PieChart, Pie, Cell, Tooltip, ResponsiveContainer, Sector } from "recharts";
 import api from "../../services/api";
 import LoadingSpinner from "../common/LoadingSpinner";
 
@@ -13,6 +13,83 @@ const tooltipStyle = {
 };
 
 const DISTRIBUTION_ENDPOINTS = ["/courses/distribution", "/admin/courses/distribution"];
+const RADIAN = Math.PI / 180;
+
+const renderActiveSlice = (props) => {
+  const {
+    cx,
+    cy,
+    innerRadius,
+    outerRadius,
+    midAngle,
+    percent,
+    startAngle,
+    endAngle,
+    fill,
+  } = props;
+
+  const labelRadius = innerRadius + (outerRadius - innerRadius) * 0.58;
+  const lx = cx + labelRadius * Math.cos(-midAngle * RADIAN);
+  const ly = cy + labelRadius * Math.sin(-midAngle * RADIAN);
+  const pct = `${((percent || 0) * 100).toFixed(0)}%`;
+
+  return (
+    <g>
+      <Sector
+        cx={cx}
+        cy={cy}
+        innerRadius={outerRadius + 4}
+        outerRadius={outerRadius + 11}
+        startAngle={startAngle}
+        endAngle={endAngle}
+        fill={fill}
+        opacity={0.2}
+        className="course-dist-active-glow"
+      />
+      <Sector
+        cx={cx}
+        cy={cy}
+        innerRadius={innerRadius}
+        outerRadius={outerRadius + 8}
+        startAngle={startAngle}
+        endAngle={endAngle}
+        fill={fill}
+        stroke="#ffffff"
+        strokeWidth={1.6}
+        className="course-dist-active-slice"
+      />
+      <text
+        x={lx}
+        y={ly}
+        textAnchor="middle"
+        dominantBaseline="central"
+        className="course-dist-active-percent"
+      >
+        {pct}
+      </text>
+    </g>
+  );
+};
+
+const CustomTooltip = ({ active, payload, totalStudents, rankMap }) => {
+  if (!active || !payload?.length) return null;
+
+  const point = payload[0];
+  const name = point?.name || "Course";
+  const value = Number(point?.value || 0);
+  const percent = totalStudents > 0 ? (value / totalStudents) * 100 : 0;
+  const rank = rankMap.get(name) || "-";
+
+  return (
+    <div className="course-dist-tooltip">
+      <div className="course-dist-tooltip-title">{name}</div>
+      <div className="course-dist-tooltip-line">Students: {value.toLocaleString()}</div>
+      <div className="course-dist-tooltip-line">Share: {percent.toFixed(1)}%</div>
+      <div className="course-dist-tooltip-line">Rank: #{rank} most enrolled</div>
+      <div className="course-dist-tooltip-hint">Click to filter students</div>
+    </div>
+  );
+};
 
 function normalizeDistributionResponse(payload) {
   const rows = Array.isArray(payload) ? payload : payload?.data || [];
@@ -27,6 +104,31 @@ const CourseDistributionChart = () => {
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
+  const [activeIndex, setActiveIndex] = useState(-1);
+  const hoverIndexRef = useRef(-1);
+  const leaveTimerRef = useRef(null);
+
+  const handleSliceEnter = (_, index) => {
+    if (leaveTimerRef.current) {
+      clearTimeout(leaveTimerRef.current);
+      leaveTimerRef.current = null;
+    }
+    if (hoverIndexRef.current === index) return;
+    hoverIndexRef.current = index;
+    setActiveIndex(index);
+  };
+
+  const handleSliceLeave = () => {
+    if (leaveTimerRef.current) {
+      clearTimeout(leaveTimerRef.current);
+    }
+    // Slight delay avoids flicker when cursor sits on the donut inner edge.
+    leaveTimerRef.current = setTimeout(() => {
+      hoverIndexRef.current = -1;
+      setActiveIndex(-1);
+      leaveTimerRef.current = null;
+    }, 110);
+  };
 
   useEffect(() => {
     const fetchDistribution = async () => {
@@ -65,6 +167,12 @@ const CourseDistributionChart = () => {
       }
     };
     fetchDistribution();
+
+    return () => {
+      if (leaveTimerRef.current) {
+        clearTimeout(leaveTimerRef.current);
+      }
+    };
   }, []);
 
   if (loading)
@@ -81,66 +189,102 @@ const CourseDistributionChart = () => {
   const totalStudents = data.reduce((sum, item) => sum + item.value, 0);
   const totalCourses = data.length;
   const topShare = totalStudents > 0 ? (maxStudents / totalStudents) * 100 : 0;
-  const listData = data;
+  const listData = data.map((item) => ({
+    ...item,
+    percent: totalStudents > 0 ? (item.value / totalStudents) * 100 : 0,
+  }));
   const pieTop = data.slice(0, 10);
   const pieOthers = data.slice(10).reduce((sum, item) => sum + item.value, 0);
   const pieData = pieOthers > 0 ? [...pieTop, { name: "Others", value: pieOthers }] : pieTop;
+  const sortedByValue = [...pieData].sort((a, b) => b.value - a.value);
+  const rankMap = new Map(sortedByValue.map((item, index) => [item.name, index + 1]));
+  const hoveredSlice = activeIndex >= 0 ? pieData[activeIndex] : null;
+  const hoveredPercent = hoveredSlice && totalStudents > 0
+    ? (hoveredSlice.value / totalStudents) * 100
+    : 0;
+  const centerLabel = hoveredSlice ? hoveredSlice.name : "Total";
+  const centerValue = hoveredSlice ? hoveredSlice.value.toLocaleString() : totalStudents.toLocaleString();
+  const centerSub = hoveredSlice
+    ? `${hoveredPercent.toFixed(1)}% Share`
+    : `${totalCourses} Courses`;
+  const centerMeta = hoveredSlice
+    ? `Rank #${rankMap.get(hoveredSlice.name) || "-"}`
+    : `Top ${topShare.toFixed(1)}%`;
+  const pieClassName = activeIndex >= 0 ? "course-dist-live-pie is-paused" : "course-dist-live-pie";
 
   return (
     <div className="course-dist-wrap">
       <div className="course-dist-donut-wrap">
-        <ResponsiveContainer width="100%" height={214}>
+        <ResponsiveContainer width="100%" height={308}>
           <PieChart>
             <Pie
+              className={pieClassName}
               data={pieData}
               dataKey="value"
               nameKey="name"
-              innerRadius={44}
-              outerRadius={68}
+              activeIndex={activeIndex}
+              activeShape={renderActiveSlice}
+              innerRadius={74}
+              outerRadius={116}
               paddingAngle={1.5}
               stroke="#f8fafc"
               strokeWidth={1}
               labelLine={false}
               label={false}
+              onMouseEnter={handleSliceEnter}
+              onMouseLeave={handleSliceLeave}
             >
               {pieData.map((entry, index) => (
-                <Cell key={index} fill={COLORS[index % COLORS.length]} />
+                <Cell
+                  key={index}
+                  fill={COLORS[index % COLORS.length]}
+                  stroke={activeIndex === index ? "#ffffff" : "transparent"}
+                  strokeWidth={activeIndex === index ? 1.4 : 0}
+                  style={{
+                    cursor: "pointer",
+                    opacity: activeIndex === -1 || activeIndex === index ? 1 : 0.48,
+                    filter: activeIndex === index ? "saturate(1.12) brightness(1.06)" : "none",
+                    transition: "opacity 240ms ease, filter 240ms ease",
+                  }}
+                />
               ))}
             </Pie>
             <Tooltip
               contentStyle={tooltipStyle}
-              formatter={(value) => {
-                const count = Number(value || 0);
-                const pct = totalStudents > 0 ? (count / totalStudents) * 100 : 0;
-                return [`${count.toLocaleString()} (${pct.toFixed(1)}%)`, "Students"];
-              }}
+              cursor={{ stroke: "rgba(59, 130, 246, 0.35)", strokeWidth: 1.2 }}
+              content={<CustomTooltip totalStudents={totalStudents} rankMap={rankMap} />}
             />
           </PieChart>
         </ResponsiveContainer>
         <div className="course-dist-center-text">
           <div className="course-dist-center-core">
             <span className="course-dist-center-dot" aria-hidden="true" />
-            <div className="course-dist-center-label">Total</div>
-            <div className="course-dist-center-value">{totalStudents.toLocaleString()}</div>
-            <div className="course-dist-center-sub">{totalCourses} Courses</div>
-            <div className="course-dist-center-meta">Top {topShare.toFixed(1)}%</div>
+            <div className="course-dist-center-label">{centerLabel}</div>
+            <div className="course-dist-center-value">{centerValue}</div>
+            <div className="course-dist-center-sub">{centerSub}</div>
+            <div className="course-dist-center-meta">{centerMeta}</div>
           </div>
         </div>
       </div>
 
       <div className="course-dist-grid">
         {listData.map((item, index) => {
-          const percent = Math.max(8, Math.round((item.value / maxStudents) * 100));
           const color = COLORS[index % COLORS.length];
+          const isActive = hoveredSlice?.name === item.name;
+          const isDim = Boolean(hoveredSlice) && !isActive;
           return (
-            <div key={`${item.name}-${index}`} className="course-dist-row">
+            <div
+              key={`${item.name}-${index}`}
+              className={`course-dist-row${isActive ? " is-active" : ""}${isDim ? " is-dim" : ""}`}
+              title={item.name}
+            >
               <div className="course-dist-left">
-                <span className="course-dist-dot" style={{ backgroundColor: color }} />
-                <span className="course-dist-name" title={item.name}>{item.name}</span>
+                <span className="course-dist-dot" style={{ background: color }} />
+                <span className="course-dist-name">{item.name}</span>
               </div>
               <div className="course-dist-right">
-                <span className="course-dist-count">{item.value.toLocaleString()}</span>
-                <span className="course-dist-mini" style={{ width: `${percent}%` }} />
+                <span className="course-dist-mini" style={{ background: color }} />
+                <span className="course-dist-count">{item.percent.toFixed(0)}%</span>
               </div>
             </div>
           );

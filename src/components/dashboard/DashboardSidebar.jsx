@@ -13,6 +13,7 @@ import {
   GraduationCap,
   Megaphone,
   CalendarDays,
+  MessageSquare,
 } from "lucide-react";
 import { useAuth } from "../../context/AuthContext";
 import ConfirmDialog from "../common/ConfirmDialog";
@@ -25,6 +26,7 @@ const navItems = [
   { path: "/dashboard/grades", label: "Grades", icon: GraduationCap },
   { path: "/dashboard/schedule", label: "Schedule", icon: CalendarDays },
   { path: "/dashboard/events", label: "Events", icon: Calendar },
+  { path: "/dashboard/messages", label: "Messages", icon: MessageSquare },
   { path: "/dashboard/announcements", label: "Announcements", icon: Megaphone },
 ];
 
@@ -38,10 +40,12 @@ const DashboardSidebar = ({ isOpen = false, onClose }) => {
   const location = useLocation();
   const { logout, user } = useAuth();
   const [unreadAnnouncements, setUnreadAnnouncements] = React.useState(0);
+  const [unreadMessages, setUnreadMessages] = React.useState(0);
   const [logoutConfirmOpen, setLogoutConfirmOpen] = React.useState(false);
 
   const userKey = user?.id || user?.email || "student";
   const unreadStorageKey = `student_announcements_unread_${userKey}`;
+  const unreadMessagesStorageKey = `student_private_messages_unread_${userKey}`;
 
   React.useEffect(() => {
     const syncUnread = () => {
@@ -68,6 +72,32 @@ const DashboardSidebar = ({ isOpen = false, onClose }) => {
       window.removeEventListener("student-announcements-unread", onUnreadEvent);
     };
   }, [unreadStorageKey]);
+
+  React.useEffect(() => {
+    const syncUnread = () => {
+      try {
+        const value = Number(localStorage.getItem(unreadMessagesStorageKey) || 0);
+        setUnreadMessages(Number.isFinite(value) ? value : 0);
+      } catch {
+        setUnreadMessages(0);
+      }
+    };
+
+    const onUnreadEvent = (e) => {
+      if (e?.detail?.key === unreadMessagesStorageKey) {
+        setUnreadMessages(e.detail.count || 0);
+      }
+    };
+
+    syncUnread();
+    window.addEventListener("storage", syncUnread);
+    window.addEventListener("student-private-messages-unread", onUnreadEvent);
+
+    return () => {
+      window.removeEventListener("storage", syncUnread);
+      window.removeEventListener("student-private-messages-unread", onUnreadEvent);
+    };
+  }, [unreadMessagesStorageKey]);
 
   const handleNav = (item) => {
     if (item.action === "logout") {
@@ -103,6 +133,9 @@ const DashboardSidebar = ({ isOpen = false, onClose }) => {
               <span className="educo-sidebar-item-label">{item.label}</span>
               {item.label === "Announcements" && unreadAnnouncements > 0 && (
                 <span className="educo-sidebar-badge">{unreadAnnouncements > 99 ? "99+" : unreadAnnouncements}</span>
+              )}
+              {item.label === "Messages" && unreadMessages > 0 && (
+                <span className="educo-sidebar-badge">{unreadMessages > 99 ? "99+" : unreadMessages}</span>
               )}
             </button>
           );
